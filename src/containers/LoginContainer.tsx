@@ -1,9 +1,6 @@
-import { connect } from 'react-redux';
-import {
-  fetchAuthInfo,
-  hideLoginError
-} from '../actions';
-import Login from '../components/Login';
+import { connect } from "react-redux";
+import { fetchAuthInfo, hideLoginError } from "../actions";
+import Login from "../components/Login";
 
 const mapStateToProps = (state: any) => {
   return {
@@ -11,8 +8,8 @@ const mapStateToProps = (state: any) => {
     isFetchingAuth: state.LoginReducer.isFetchingAuth,
     isFetchedAuth: state.LoginReducer.isFetchedAuth,
     isShowLoginError: state.LoginReducer.isShowLoginError
-  }
-}
+  };
+};
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
@@ -23,12 +20,9 @@ const mapDispatchToProps = (dispatch: any) => {
     hideLoginError: () => {
       dispatch(hideLoginError());
     }
-  }
-}
+  };
+};
 
-const LoginContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Login);
+const LoginContainer = connect(mapStateToProps, mapDispatchToProps)(Login);
 
 export default LoginContainer;

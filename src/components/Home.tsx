@@ -1,259 +1,173 @@
-import React, { Component } from 'react';
-import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
-import Fab from '@material-ui/core/Fab';
-import HomeIcon from '@material-ui/icons/Home';
-// import Slider from 'react-animated-slider';
-import 'react-animated-slider/build/horizontal.css';
-import ChevronLeft from '@material-ui/icons/ChevronLeft';
-import ChevronRight from '@material-ui/icons/ChevronRight';
-import Grid from '@material-ui/core/Grid';
+import React, { Component } from "react";
+import Typography from "@material-ui/core/Typography";
+import { withStyles } from "@material-ui/core/styles";
+import "react-animated-slider/build/horizontal.css";
+import ChevronRight from "@material-ui/icons/ChevronRight";
+import Grid from "@material-ui/core/Grid";
+import Fade from "@material-ui/core/Fade";
 
-import FeaturedProduct from './home/FeaturedProduct';
-import TodayDealsProduct from './home/TodayDealsProduct';
-import RecommendProduct from './home/RecommendProduct';
 import ContentLoader from "react-content-loader";
-import _ from 'lodash';
-import IconButton from '@material-ui/core/IconButton';
-import AutorenewIcon from '@material-ui/icons/Autorenew';
+import _ from "lodash";
+import AutorenewIcon from "@material-ui/icons/Autorenew";
+
+import { Bar } from "react-chartjs-2";
+
+import { useTranslation } from "react-i18next";
+
+import Constants from "../utils/Constants";
 
 import { Theme, createStyles } from "@material-ui/core";
 
-import { default as Slider, Settings as SliderSettings } from 'react-slick';
-import 'slick-carousel/slick/slick-theme.css';
-import 'slick-carousel/slick/slick.css';
-
-
-const styles = (theme: Theme) => createStyles({
+const styles = (theme: Theme) =>
+createStyles({
   root: {
-    width: '100%',
-    marginTop: theme.spacing(3)
+    width: "100%"
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
-    fontWeight: theme.typography.fontWeightRegular,
+    fontWeight: theme.typography.fontWeightRegular
   },
   subHeader: {
     fontWeight: 600
   },
   promotionMetaContainer: {
-    textAlign: 'center',
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)'
+    textAlign: "center",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)"
   },
   title: {
-    color: '#3d3d3d'
+    color: "#3d3d3d"
   },
   nav: {
-    color: '#3d3d3d'
+    color: "#3d3d3d"
   },
   blockContainer: {
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(3)
   },
   productsHero: {
-    width: '100%',
-    borderBottom: '1px solid #d3d3d3',
-    display: 'flex',
-    justifyContent: 'space-between'
+    width: "100%",
+    borderBottom: "1px solid #d3d3d3",
+    display: "flex",
+    justifyContent: "space-between"
   },
   fetchedProductsContainer: {
     marginBottom: theme.spacing(3)
   },
   renewIcon: {
-    paddingTop: '4px',
-    textAlign: 'right',
+    paddingTop: "4px",
+    textAlign: "right",
     color: theme.palette.primary.main,
-    transition: 'all 0.5s',
-    '&:hover': {
-      color: '#d14d12',
-      transition: 'all 0.5s'
+    transition: "all 0.5s",
+    "&:hover": {
+      color: "#d14d12",
+      transition: "all 0.5s"
     }
+  },
+  wrapperTop: {
+    marginTop: theme.spacing(5)
+  },
+  moreIcon: {
+    fontSize: "0.75rem",
+    lineHeight: "1.66",
+    verticalAlign: "text-top"
+  },
+  // toolbar: theme.mixins.toolbar,
+  content: {
+    marginLeft: Constants.styles.sidebar.width,
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.default,
+    padding: theme.spacing(3)
   }
 });
 
-const RenderLoadingPlaceholder = () => {
-  return (
-    <ContentLoader
-      height={250}
-      width={400}
-      speed={2}
-      primaryColor="#f3f3f3"
-      secondaryColor="#ecebeb"
-    >
-      <rect x="0" y="0" rx="5" ry="5" width="100%" height="180" />
-      <rect x="0" y="190" rx="3" ry="3" width="100" height="10" />
-      <rect x="120" y="190" rx="3" ry="3" width="200" height="10" />
-      <rect x="0" y="210" rx="3" ry="3" width="100%" height="10" />
-      <rect x="0" y="230" rx="3" ry="3" width="200" height="10" />
-      <rect x="220" y="230" rx="3" ry="3" width="80" height="10" />
-    </ContentLoader>
-  );
-}
+type HomeState = {
+};
 
-const BlockComponent = (props: any) => {
-  const { classes, isFetchedProducts, items, title, error } = props;
-  const TagName = props.tag;
-  const contentLoadersArray = _.range(4);
-  const renewClicked = () => {
-
-  };
-
-  return (
-    <div>
-      <div className={classes.blockContainer}>
-        {/* <Fab
-                  variant="extended"
-                  size="medium"
-                  color="primary"
-                  aria-label="Add"
-                  href="/products"
-                >
-                  <HomeIcon />
-                  Products
-                </Fab> */}
-        <div className={classes.productsHero}>
-          <a href="/products" style={{ textDecoration: 'none' }}>
-            <Typography variant="h6" gutterBottom className={classes.nav}>
-              {title}
-            </Typography>
-          </a>
-          <span>
-            <AutorenewIcon className={classes.renewIcon} onClick={renewClicked} />
-          </span>
-        </div>
-      </div>
-
-      <Grid container spacing={4} className={classes.fetchedProductsContainer}>
-        {
-          error == null && isFetchedProducts && Array.isArray(items) ?
-            items.map((product, index) =>
-              <Grid item xs={12} sm={6} lg={3} key={index}>
-                <TagName product={product} />
-              </Grid>
-            ) : contentLoadersArray.map((item, index) =>
-              <Grid item xs={12} sm={6} lg={3} key={index}>
-                {RenderLoadingPlaceholder()}
-              </Grid>
-            )
-        }
-      </Grid>
-    </div>
-  )
-}
-
-type MyState = {
-
+type HomeProps = {
+  classes: any;
 };
 
 
-type MyProps = {
-  dispatch: any,
-  classes: any,
-  fetchHomeBannerInfo: any,
-  fetchFeaturedProducts: any,
-  info: any,
-  featuredProducts: any,
-  isFetchedProducts: any,
-  fetchProductsError: any,
-  fetchHomeBannerError: any
-};
-
-class Home extends React.Component<MyProps, MyState> {
+class Home extends React.Component<HomeProps, HomeState>{
+  constructor(props: any) {
+    super(props);
+  }
 
   componentDidMount() {
-    const { fetchHomeBannerInfo, fetchFeaturedProducts } = this.props;
-    fetchHomeBannerInfo();
-    fetchFeaturedProducts(1, 4);
   }
 
   render() {
+    const {
+      classes,
+    } = this.props;
 
-    var settings: SliderSettings = {
-      arrows: false,
-      lazyLoad: "ondemand",
-      dots: true,
-      infinite: true,
-      speed: 500,
-      slidesToShow: 1,
-      slidesToScroll: 1
+    const data = {
+      labels: ["January", "February", "March", "April", "May", "June", "July"],
+      datasets: [
+        {
+          label: "My First dataset",
+          backgroundColor: "rgba(255,99,132,0.2)",
+          borderColor: "rgba(255,99,132,1)",
+          borderWidth: 1,
+          hoverBackgroundColor: "rgba(255,99,132,0.4)",
+          hoverBorderColor: "rgba(255,99,132,1)",
+          data: [65, 59, 80, 81, 56, 55, 40]
+        }
+      ]
     };
-
-    const { classes, info, featuredProducts, isFetchedProducts, fetchProductsError, fetchHomeBannerError } = this.props;
 
     return (
       <div className={classes.root}>
- 
-          <Grid container spacing={0}>
-            <Grid item xs={1} md={2} xl={2}>
+        <Fade in={true} timeout={1000}>
+          <div>
+            <main className={classes.content}>
+              <div className={classes.toolbar} />
 
-            </Grid>
-            <Grid item xs={10} md={8} xl={8}>
-              <div>
-                <Slider {...settings}>
-                  {info.map((promotion: any, index: number) =>
-                    <div key={index}>
-                      {/* <img src={promotion.imageUrl} style={{height: 400, width: '100%'}}/> */}
-
-                      <div style={{ background: `url('${promotion.imageUrl}') no-repeat center center`, height: 400, textAlign: 'center', display: 'table', width: '100%' }}>
-                        <div style={{ display: 'table-cell', verticalAlign: 'middle' }}>
-                          <Typography variant="h3" gutterBottom className={classes.title}>
-                            {promotion.title}
-                          </Typography>
-                          <Typography variant="subtitle2" gutterBottom>
-                            {promotion.description}
-                          </Typography>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </Slider>
-              </div>
-              {/* <Slider autoplay={3000} previousButton={<ChevronLeft fontSize='large' className={classes.nav} />} nextButton={<ChevronRight fontSize='large' className={classes.nav} />}>
-                {info.map((promotion, index) =>
-                  <div key={index} style={{ background: `url('${promotion.imageUrl}') no-repeat center center` }}>
-                    <div className={classes.promotionMetaContainer}>
-                      <Typography variant="h3" gutterBottom className={classes.title}>
-                        {promotion.title}
-                      </Typography>
-                      <Typography variant="subtitle2" gutterBottom>
-                        {promotion.description}
-                      </Typography>
-                    </div>
-                  </div>
-                )}
-              </Slider>  */}
-              {fetchHomeBannerError == null ? '' : <ContentLoader
-                height={170}
-                width={400}
-                speed={2}
-                primaryColor="#f3f3f3"
-                secondaryColor="#ecebeb"
-              >
-                <rect x="0" y="10" width="400" height="160" rx="5" />
-              </ContentLoader>}
-
-              <BlockComponent classes={classes} title={'Featured Products'} isFetchedProducts={isFetchedProducts} items={featuredProducts} tag={FeaturedProduct} error={fetchProductsError}></BlockComponent>
-
-              <BlockComponent classes={classes} title={'Today\'s Deals'} isFetchedProducts={isFetchedProducts} items={featuredProducts} tag={TodayDealsProduct} error={fetchProductsError}></BlockComponent>
-
-              <BlockComponent classes={classes} title={'Recommend For You'} isFetchedProducts={isFetchedProducts} items={featuredProducts} tag={RecommendProduct} error={fetchProductsError}></BlockComponent>
-
-            </Grid>
-
-            <Grid item xs={1} md={2} xl={2}>
-
-            </Grid>
-          </Grid>
- 
-
-
-
-
+              <Bar
+                data={data}
+                width={100}
+                height={50}
+                options={{ maintainAspectRatio: false }}
+              />
+              <Typography paragraph>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Rhoncus dolor purus non enim praesent elementum facilisis leo
+                vel. Risus at ultrices mi tempus imperdiet. Semper risus in
+                hendrerit gravida rutrum quisque non tellus. Convallis convallis
+                tellus id interdum velit laoreet id donec ultrices. Odio morbi
+                quis commodo odio aenean sed adipiscing. Amet nisl suscipit
+                adipiscing bibendum est ultricies integer quis. Cursus euismod
+                quis viverra nibh cras. Metus vulputate eu scelerisque felis
+                imperdiet proin fermentum leo. Mauris commodo quis imperdiet
+                massa tincidunt. Cras tincidunt lobortis feugiat vivamus at
+                augue. At augue eget arcu dictum varius duis at consectetur
+                lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
+                sapien faucibus et molestie ac.
+              </Typography>
+              <Typography paragraph>
+                Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
+                ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
+                elementum integer enim neque volutpat ac tincidunt. Ornare
+                suspendisse sed nisi lacus sed viverra tellus. Purus sit amet
+                volutpat consequat mauris. Elementum eu facilisis sed odio
+                morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
+                tincidunt ornare massa eget egestas purus viverra accumsan in.
+                In hendrerit gravida rutrum quisque non tellus orci ac.
+                Pellentesque nec nam aliquam sem et tortor. Habitant morbi
+                tristique senectus et. Adipiscing elit duis tristique
+                sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
+                eleifend. Commodo viverra maecenas accumsan lacus vel facilisis.
+                Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
+              </Typography>
+            </main>
+          </div>
+        </Fade>
       </div>
-    )
+    );
   }
 }
 

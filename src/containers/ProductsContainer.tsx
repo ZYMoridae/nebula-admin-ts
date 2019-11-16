@@ -1,8 +1,6 @@
-import { connect } from 'react-redux';
-import {
-  fetchProductsInfo
-} from '../actions';
-import Products from '../components/Products';
+import { connect } from "react-redux";
+import { fetchProductsInfo } from "../actions";
+import Products from "../components/Products";
 
 const mapStateToProps = (state: any) => {
   return {
@@ -10,8 +8,8 @@ const mapStateToProps = (state: any) => {
     isFetchingProducts: state.ProductsReducer.isFetchingProducts,
     isFetchedProducts: state.ProductsReducer.isFetchedProducts,
     totalPages: state.ProductsReducer.totalPages
-  }
-}
+  };
+};
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
@@ -19,8 +17,8 @@ const mapDispatchToProps = (dispatch: any) => {
     fetchProductsInfo: (page: number, perPage: number, orderBy: string) => {
       dispatch(fetchProductsInfo(page, perPage, orderBy));
     }
-  }
-}
+  };
+};
 
 const ProductsContainer = connect(
   mapStateToProps,

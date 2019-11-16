@@ -18,37 +18,38 @@ import SubToolBar from "../utils/SubToolBar";
 
 import { Theme, createStyles } from "@material-ui/core";
 
-const styles = (theme: Theme) => createStyles({
-  productsContainer: {
-    marginLeft: theme.spacing(10),
-    marginRight: theme.spacing(10),
-    marginBottom: theme.spacing(7)
-  },
-  pagination: {
-    marginTop: theme.spacing(5),
-    textAlign: "center"
-  },
-  prodcutContainer: {
-    marginTop: theme.spacing(2),
-    marginLeft: 340
-  },
-  idClick: {
-    textDecoration: "underline",
-    color: "#0044ff",
-    "&:hover": {
-      cursor: "pointer"
+const styles = (theme: Theme) =>
+  createStyles({
+    productsContainer: {
+      marginLeft: theme.spacing(10),
+      marginRight: theme.spacing(10),
+      marginBottom: theme.spacing(7)
+    },
+    pagination: {
+      marginTop: theme.spacing(5),
+      textAlign: "center"
+    },
+    prodcutContainer: {
+      marginTop: theme.spacing(2),
+      marginLeft: 340
+    },
+    idClick: {
+      textDecoration: "underline",
+      color: "#0044ff",
+      "&:hover": {
+        cursor: "pointer"
+      }
+    },
+    table: {
+      width: "100%"
+    },
+    newButton: {
+      float: "right"
+    },
+    paginationWrapper: {
+      textAlign: "center"
     }
-  },
-  table: {
-    width: "100%"
-  },
-  newButton: {
-    float: "right"
-  },
-  paginationWrapper: {
-    textAlign: "center"
-  }
-});
+  });
 
 type IndexState = {
   offset: number;
@@ -77,7 +78,7 @@ class Index extends React.Component<IndexProps, IndexState> {
     this.handleClick(currentOffset);
   }
 
-  updateUrlParmas(page: number, perPage: number, orderBy:string) {
+  updateUrlParmas(page: number, perPage: number, orderBy: string) {
     if (history.pushState) {
       let url = `${window.location.protocol}//${window.location.host}${window.location.pathname}?page=${page}&perPage=${perPage}&orderBy=${orderBy}`;
       window.history.pushState(
@@ -130,10 +131,7 @@ class Index extends React.Component<IndexProps, IndexState> {
             <Grid item xs={10} lg={12}>
               <Grid>
                 <Grid item xs={12}>
-                  <SubToolBar
-                    title="User"
-                    href="/users/new"
-                  />
+                  <SubToolBar title="User" href="/users/new" />
                 </Grid>
 
                 {fetchAllUserPending ? (
@@ -151,40 +149,36 @@ class Index extends React.Component<IndexProps, IndexState> {
                       </TableHead>
                       <TableBody>
                         {Array.isArray(users) &&
-                          users.map(
-                            (user, index) => (
-                              <TableRow key={index}>
-                                <TableCell component="th" scope="row">
-                                  <a
-                                    className={classes.idClick}
-                                    onClick={() => {
-                                      onDeleteClick(user);
-                                    }}
-                                  >
-                                    {user.id}
-                                  </a>
-                                </TableCell>
-                                <TableCell align="right">
-                                  {user.username}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {user.email}
-                                </TableCell>
-                                <TableCell align="right">
-                                  <IconButton
-                                    aria-label="delete"
-                                    className={classes.margin}
-                                    size="small"
-                                    onClick={() => {
-                                      onDeleteClick(user);
-                                    }}
-                                  >
-                                    <DeleteIcon fontSize="inherit" />
-                                  </IconButton>
-                                </TableCell>
-                              </TableRow>
-                            )
-                          )}
+                          users.map((user, index) => (
+                            <TableRow key={index}>
+                              <TableCell component="th" scope="row">
+                                <a
+                                  className={classes.idClick}
+                                  onClick={() => {
+                                    onDeleteClick(user);
+                                  }}
+                                >
+                                  {user.id}
+                                </a>
+                              </TableCell>
+                              <TableCell align="right">
+                                {user.username}
+                              </TableCell>
+                              <TableCell align="right">{user.email}</TableCell>
+                              <TableCell align="right">
+                                <IconButton
+                                  aria-label="delete"
+                                  className={classes.margin}
+                                  size="small"
+                                  onClick={() => {
+                                    onDeleteClick(user);
+                                  }}
+                                >
+                                  <DeleteIcon fontSize="inherit" />
+                                </IconButton>
+                              </TableCell>
+                            </TableRow>
+                          ))}
                       </TableBody>
                     </Table>
                   </Grid>

@@ -1,15 +1,15 @@
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
 const NebulaTheme = createMuiTheme({
-//   typography: {
-//     useNextVariants: true
-//   },
+  //   typography: {
+  //     useNextVariants: true
+  //   },
   palette: {
     primary: {
       // light: will be calculated from palette.primary.main,
-      main: "#2b8eff",
+      main: "#2b8eff"
       // footerDark: '#401500',
-    //   footerDark: "#1d1d1d"
+      //   footerDark: "#1d1d1d"
       // dark: will be calculated from palette.primary.main,
       // contrastText: will be calculated to contrast with palette.primary.main
     },
@@ -23,12 +23,12 @@ const NebulaTheme = createMuiTheme({
   },
   overrides: {
     MuiInputBase: {
-      input: {
+      root: {
         fontSize: "12px"
       }
-    //   inputType: {
-    //     height: "inherit"
-    //   }
+      //   inputType: {
+      //     height: "inherit"
+      //   }
     },
     MuiOutlinedInput: {
       multiline: {
@@ -43,9 +43,14 @@ const NebulaTheme = createMuiTheme({
         fontSize: "12px"
       }
     },
+    MuiTableCell: {
+      root: {
+        fontSize: "12px"
+      }
+    },
     MuiInputLabel: {
       outlined: {
-        transform: "translate(14px, 16px) scale(1)"
+        transform: "translate(14px, 13px) scale(1)"
       }
     },
     // MuiPrivateTextarea: {
@@ -64,6 +69,9 @@ const NebulaTheme = createMuiTheme({
         fontSize: "20px"
       },
       subtitle2: {
+        fontSize: "12px"
+      },
+      paragraph: {
         fontSize: "12px"
       }
     },
@@ -88,16 +96,19 @@ const NebulaTheme = createMuiTheme({
         marginTop: "4px",
         backgroundColor: "#2b8eff",
         borderRadius: "5px",
-        color: "white"
+        color: "white",
+        "&$expanded": {
+          borderRadius: "5px 5px 0px 0px"
+        }
       },
       content: {
         color: "white !important",
         fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
         fontSize: "12px"
       },
-      expanded: {
-        borderRadius: "5px 5px 0px 0px"
-      },
+      // expanded: {
+      //   borderRadius: "5px 5px 0px 0px"
+      // },
       expandIcon: {
         color: "white"
       }

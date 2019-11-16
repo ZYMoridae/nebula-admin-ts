@@ -181,7 +181,7 @@ class ProductForm extends React.Component<ProductFormProps, ProductFormState> {
    * @param {*} event
    */
   handleSkusChange(event: any) {
-    let nameSplit = event.target.name.split("_");
+    let nameSplit: Array<any> = event.target.name.split("_");
 
     let nextSkus = this.state.skus;
 
@@ -207,8 +207,8 @@ class ProductForm extends React.Component<ProductFormProps, ProductFormState> {
     });
   }
 
-  handleSkuAttributeCategoryChange(name: any, categoryOption: any) {
-    let split = name.split("_");
+  handleSkuAttributeCategoryChange(name: string, categoryOption: any) {
+    let split: Array<any> = name.split("_");
 
     let nextState = this.state.skus;
 
@@ -407,7 +407,7 @@ class ProductForm extends React.Component<ProductFormProps, ProductFormState> {
 
     return (
       <div>
-        <Grid container spacing={8}>
+        <Grid container spacing={1}>
           <Grid item xs={12} sm={12}>
             <Typography variant="h4" gutterBottom className={classes.title}>
               Product

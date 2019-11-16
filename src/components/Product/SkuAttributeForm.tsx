@@ -16,15 +16,15 @@ import SkuAttribute from "./SkuAttribute";
 const styles = (theme: Theme) => createStyles({});
 
 type SkuAttributeFormState = {
-  skuAttributeExpanded: boolean
+  skuAttributeExpanded: boolean;
 };
 
 type SkuAttributeFormProps = {
-  classes: any,
-  parentClasses: any,
-  skuIndex: number,
-  skus: Array<any>,
-  addSkuAttributeOnClickHandler: any
+  classes: any;
+  parentClasses: any;
+  skuIndex: number;
+  skus: Array<any>;
+  addSkuAttributeOnClickHandler: any;
 };
 
 class SkuAttributeForm extends React.Component<
@@ -79,7 +79,9 @@ class SkuAttributeForm extends React.Component<
             className={parentClasses.skuAttributePanelDetails}
           >
             {Array.isArray(skus[skuIndex].skuAttributes) &&
-              skus[skuIndex].skuAttributes.map((skuAttribute: any, index: number) => (
+              skus[
+                skuIndex
+              ].skuAttributes.map((skuAttribute: any, index: number) => (
                 <SkuAttribute
                   key={index}
                   {...this.props}

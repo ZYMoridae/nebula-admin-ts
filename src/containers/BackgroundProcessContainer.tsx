@@ -1,16 +1,14 @@
-import { connect } from 'react-redux';
-import {
-  fetchTokenAliveInfo
-} from '../actions';
-import BackgroundProcessComponent from '../components/utils/BackbgroundProcessComponent';
+import { connect } from "react-redux";
+import { fetchTokenAliveInfo } from "../actions";
+import BackgroundProcessComponent from "../components/utils/BackbgroundProcessComponent";
 
 const mapStateToProps = (state: any) => {
   return {
     info: state.TokenReducer.info,
     isFetchingTokenAlive: state.TokenReducer.isFetchingTokenAlive,
     isFetchedTokenAlive: state.TokenReducer.isFetchedTokenAlive
-  }
-}
+  };
+};
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
@@ -18,8 +16,8 @@ const mapDispatchToProps = (dispatch: any) => {
     fetchTokenAliveInfo: () => {
       dispatch(fetchTokenAliveInfo());
     }
-  }
-}
+  };
+};
 
 const BackgroundProcessContainer = connect(
   mapStateToProps,

@@ -42,7 +42,7 @@ export const fetchAllProductCategory = (
     dispatch(fetchAllProductCategoryPending());
 
     let options = {
-      method: "get"
+      method: Zjax.HTTP.METHOD.GET
     };
 
     Zjax.request({

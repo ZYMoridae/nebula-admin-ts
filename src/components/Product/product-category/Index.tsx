@@ -73,7 +73,7 @@ class Index extends React.Component<IndexProps, IndexState> {
   }
 
   componentDidMount() {
-    const { page, perPage, orderBy } = this.props;
+    const { page, perPage } = this.props;
     let currentOffset = (page - 1) * perPage;
     this.handleClick(currentOffset);
   }

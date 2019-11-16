@@ -1,36 +1,42 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import WarningIcon from '@material-ui/icons/WarningRounded';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
+import React, { Component } from "react";
+import { withStyles } from "@material-ui/core/styles";
+import WarningIcon from "@material-ui/icons/WarningRounded";
+import Typography from "@material-ui/core/Typography";
+import Paper from "@material-ui/core/Paper";
 import { Theme, createStyles } from "@material-ui/core";
 
-const styles = (theme: Theme) => createStyles({
-  warningText: {
-    color: '#a9a9a9',
-    marginLeft: theme.spacing(1)
-  },
-  warningIcon: {
-    verticalAlign: 'middle'
-  }
-});
+const styles = (theme: Theme) =>
+  createStyles({
+    warningText: {
+      color: "#a9a9a9",
+      marginLeft: theme.spacing(1)
+    },
+    warningIcon: {
+      verticalAlign: "middle"
+    }
+  });
 
 type MyState = {
-  expanded: boolean
+  expanded: boolean;
 };
 
-
 type MyProps = {
-  classes: any,
-  theme: any,
-  warningText?: string,
-  paddingTop?: number,
-  paddingBottom?: number
+  classes: any;
+  theme: any;
+  warningText?: string;
+  paddingTop?: number;
+  paddingBottom?: number;
 };
 
 class ContentNotFound extends React.Component<MyProps, MyState> {
   render() {
-    const { theme, warningText, classes, paddingTop, paddingBottom } = this.props;
+    const {
+      theme,
+      warningText,
+      classes,
+      paddingTop,
+      paddingBottom
+    } = this.props;
 
     let defaultStyle = {
       emptyCartCaptionContainer: {
@@ -41,7 +47,7 @@ class ContentNotFound extends React.Component<MyProps, MyState> {
         marginBottom: theme.spacing(3),
         marginTop: theme.spacing(3),
         // FIXME:
-        textAlign: 'center' as 'center'
+        textAlign: "center" as "center"
       }
     };
 
@@ -55,14 +61,23 @@ class ContentNotFound extends React.Component<MyProps, MyState> {
 
     return (
       <Paper style={defaultStyle.emptyCartCaptionContainer}>
-        <WarningIcon fontSize="large" color="primary" className={classes.warningIcon} />
+        <WarningIcon
+          fontSize="large"
+          color="primary"
+          className={classes.warningIcon}
+        />
 
-        <Typography variant="caption" gutterBottom className={classes.warningText}>
-          {warningText && warningText != '' ? warningText : 'Content was not found!'}
+        <Typography
+          variant="caption"
+          gutterBottom
+          className={classes.warningText}
+        >
+          {warningText && warningText != ""
+            ? warningText
+            : "Content was not found!"}
         </Typography>
-
       </Paper>
-    )
+    );
   }
 }
 

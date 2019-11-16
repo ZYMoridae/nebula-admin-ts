@@ -1,11 +1,11 @@
-import ActionType from '../actions/ActionType';
+import ActionType from "../actions/ActionType";
 
 let initState = {
   isFetchingAuth: false,
   isFetchedAuth: false,
   isShowLoginError: false,
-  info: 'null'
-}
+  info: "null"
+};
 
 const loginReducer = (state = initState, action: any) => {
   switch (action.type) {
@@ -15,14 +15,14 @@ const loginReducer = (state = initState, action: any) => {
         isFetchedAuth: action.isFetchedAuth,
         isFetchingAuth: action.isFetchingAuth,
         isShowLoginError: action.isShowLoginError
-      }
+      };
     case ActionType.AUTH_PENDING:
       return {
         ...state,
         isFetchedAuth: action.isFetchedAuth,
         isFetchingAuth: action.isFetchingAuth,
         isShowLoginError: action.isShowLoginError
-      }
+      };
     case ActionType.AUTH_SUCCESS:
       return {
         ...state,
@@ -30,15 +30,15 @@ const loginReducer = (state = initState, action: any) => {
         isFetchingAuth: action.isFetchingAuth,
         isShowLoginError: action.isShowLoginError,
         info: action.info
-      }
+      };
     case ActionType.HIDE_ERROR:
       return {
         ...state,
         isShowLoginError: action.isShowLoginError
-      }
+      };
     default:
-      return state
+      return state;
   }
-}
+};
 
 export default loginReducer;

@@ -8,14 +8,12 @@ import { Theme, createStyles } from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({});
 
-type FormState = {
-};
-
+type FormState = {};
 
 type FormProps = {
-  classes: any,
-  user: any,
-  mode: string
+  classes: any;
+  user: any;
+  mode: string;
 };
 
 class Form extends React.Component<FormProps, FormState> {
@@ -25,14 +23,9 @@ class Form extends React.Component<FormProps, FormState> {
   }
 
   render() {
-    const {
-      classes,
-      user
-    } = this.props;
+    const { classes, user } = this.props;
 
-    return (
-        <div></div>
-    );
+    return <div></div>;
   }
 }
 

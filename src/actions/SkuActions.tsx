@@ -2,6 +2,7 @@ import Zjax from "../utils/zjax";
 import Utils from "../utils/Utils";
 import ActionType from "./ActionType";
 
+// ANCHOR Fetch all sku attribute category
 export const fetchAllSkuAttributeCategoryFulfilled = (
   results: any,
   totalPages: number
@@ -42,7 +43,7 @@ export const fetchAllSkuAttributeCategory = (
     dispatch(fetchAllSkuAttributeCategoryPending());
 
     let options = {
-      method: "get"
+      method: Zjax.HTTP.METHOD.GET
     };
 
     Zjax.request({

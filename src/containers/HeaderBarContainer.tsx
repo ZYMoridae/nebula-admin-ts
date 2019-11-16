@@ -22,7 +22,7 @@ import Routes from "../utils/Routes";
 
 // import ProductSearchComponent from '../components/ProductSearchComponent';
 
-import { withTranslation } from "react-i18next";
+import { withTranslation, WithTranslation } from "react-i18next";
 
 import Constants from "../utils/Constants";
 
@@ -173,10 +173,13 @@ type AppHeadBarState = {
 
 type AppHeadBarProps = {
   classes: any;
-  t: any
+  t: any;
 };
 
-class AppHeadBar extends React.Component<AppHeadBarProps, AppHeadBarState> {
+class AppHeadBar extends React.Component<
+  AppHeadBarProps & WithTranslation,
+  AppHeadBarState
+> {
   componentWillMount() {
     // TODO: user login check wrongly when network disconnected
     this.setState({
@@ -373,8 +376,8 @@ class AppHeadBar extends React.Component<AppHeadBarProps, AppHeadBarState> {
   }
 }
 
-AppHeadBar.propTypes = {
-  classes: PropTypes.object.isRequired
-};
+// AppHeadBar.propTypes = {
+//   classes: PropTypes.object.isRequired
+// };
 
 export default withTranslation()(withStyles(styles)(AppHeadBar));

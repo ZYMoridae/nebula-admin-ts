@@ -1,8 +1,8 @@
-import Zjax from '../utils/zjax';
-import ActionType from './ActionType';
-import Utils from '../utils/Utils';
+import Zjax from "../utils/zjax";
+import ActionType from "./ActionType";
+import Utils from "../utils/Utils";
 
-// ------ Auth Actions ------
+// ANCHOR SSO Authentication
 export const receieveAuth = (json: any) => {
   return {
     type: ActionType.AUTH_SUCCESS,
@@ -10,8 +10,8 @@ export const receieveAuth = (json: any) => {
     isFetchedAuth: true,
     isShowLoginError: false,
     info: json
-  }
-}
+  };
+};
 
 export const fetchingAuth = () => {
   return {
@@ -19,8 +19,8 @@ export const fetchingAuth = () => {
     isFetchingAuth: true,
     isFetchedAuth: false,
     isShowLoginError: false
-  }
-}
+  };
+};
 
 export const fetchingAuthError = () => {
   return {
@@ -28,18 +28,11 @@ export const fetchingAuthError = () => {
     isFetchingAuth: false,
     isFetchedAuth: true,
     isShowLoginError: true
-  }
-}
-
-export const hideLoginError = () => {
-  return {
-    type: ActionType.HIDE_ERROR,
-    isShowLoginError: false
-  }
-}
+  };
+};
 
 export const fetchAuthInfo = (data: any) => {
-  return function (dispatch: any) {
+  return function(dispatch: any) {
     dispatch(fetchingAuth());
     var headers = {};
     if (data.headers) {
@@ -47,61 +40,67 @@ export const fetchAuthInfo = (data: any) => {
     }
     delete data.headers;
     Zjax.request({
-      url: '/api/sso/authorize',
+      url: "/api/sso/auth",
       option: {
-        method: 'post',
+        method: Zjax.HTTP.METHOD.POST,
         data: data,
         headers: headers
       },
       successCallback: (response: any) => {
         // Set auth token
-        sessionStorage.setItem('user', response.data);
-        sessionStorage.setItem('token', response.data.token);
+        sessionStorage.setItem("user", JSON.stringify(response.data));
+        sessionStorage.setItem("token", response.data.token);
         dispatch(receieveAuth(response.data));
       },
       failureCallback: (error: any) => {
         dispatch(fetchingAuthError());
       }
     });
-  }
-}
+  };
+};
 
+export const hideLoginError = () => {
+  return {
+    type: ActionType.HIDE_ERROR,
+    isShowLoginError: false
+  };
+};
 
-// ------ Check token is alive ------
+// ANCHOR Check token live
 export const receieveTokenAlive = (json: any) => {
   return {
     type: ActionType.TOKEN.HEART.FULLFILLED,
     isFetchingTokenAlive: false,
     isFetchedTokenAlive: true,
     info: json
-  }
-}
+  };
+};
 
 export const fetchingTokenAlive = () => {
   return {
     type: ActionType.TOKEN.HEART.PENDING,
     isFetchingTokenAlive: true,
-    isFetchedTokenAlive: false,
-  }
-}
+    isFetchedTokenAlive: false
+  };
+};
 
 export const fetchingTokenAliveError = () => {
   return {
     type: ActionType.TOKEN.HEART.REJECTED,
     isFetchingTokenAlive: false,
-    isFetchedTokenAlive: true,
-  }
-}
+    isFetchedTokenAlive: true
+  };
+};
 
 export const fetchTokenAliveInfo = () => {
-  return function (dispatch: any) {
+  return function(dispatch: any) {
     dispatch(fetchingTokenAlive());
     let options = {
-      method: 'get'
+      method: Zjax.HTTP.METHOD.GET
     };
     options = Utils.addToken(options);
     Zjax.request({
-      url: `/api/token/${sessionStorage.getItem('token')}`,
+      url: `/api/token/${sessionStorage.getItem("token")}`,
       option: Utils.addToken(options),
       successCallback: (response: any) => {
         dispatch(receieveTokenAlive(response.data));
@@ -110,5 +109,5 @@ export const fetchTokenAliveInfo = () => {
         dispatch(fetchingTokenAliveError());
       }
     });
-  }
-}
+  };
+};

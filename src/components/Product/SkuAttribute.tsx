@@ -29,7 +29,7 @@ const styles = (theme: Theme) =>
       marginTop: theme.spacing(1)
     },
     categorySelect: {
-      marginTop: "16px",
+      marginTop: "8px",
       height: "43px",
       marginBottom: theme.spacing(1)
     }

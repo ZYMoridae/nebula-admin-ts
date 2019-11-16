@@ -2,6 +2,7 @@ import Zjax from "../utils/zjax";
 import Utils from "../utils/Utils";
 import ActionType from "./ActionType";
 
+import _ from "lodash";
 // ------ User Actions ------
 
 /**
@@ -216,6 +217,58 @@ export const updateProduct = (product: any) => {
       },
       failureCallback: (error: any) => {
         dispatch(updateProductError(error));
+      }
+    });
+  };
+};
+
+export const createProductFulfilled = (result: any) => {
+  return {
+    type: ActionType.PRODUCT.CREATE.FULFILLED,
+    isCreatingProduct: false,
+    isCreatedProdudct: true,
+    info: result
+  };
+};
+
+export const createProductPending = () => {
+  return {
+    type: ActionType.PRODUCT.CREATE.PENDING,
+    isCreatingProduct: true,
+    isCreatedProdudct: false
+  };
+};
+
+export const createProductError = (error: any) => {
+  return {
+    type: ActionType.PRODUCT.CREATE.ERROR,
+    isCreatingProduct: false,
+    isCreatedProdudct: true,
+    error: error
+  };
+};
+
+export const createProduct = (product: any) => {
+  return function(dispatch: any) {
+    dispatch(createProductPending());
+
+    let options = {
+      method: "post",
+      data: product
+    };
+
+    Zjax.request({
+      url: "/api/products",
+      option: Utils.addToken(options),
+      successCallback: (response: any) => {
+        if (!_.isNil(response.data.id)) {
+          window.location.href = `/products/${response.data.id}`;
+        }
+        dispatch(createProductFulfilled(response.data));
+      },
+      failureCallback: (error: any) => {
+        console.log(error);
+        dispatch(createProductError(error));
       }
     });
   };

@@ -5,7 +5,7 @@ import { Theme, createStyles } from "@material-ui/core";
 
 const styles = (theme: Theme) =>
   createStyles({
-    indicatorClass: {
+    indicator: {
       backgroundColor: "#2b8eff",
       color: "white",
       fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',

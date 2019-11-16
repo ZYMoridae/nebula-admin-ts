@@ -1,12 +1,12 @@
-const path = require('path');
+const path = require("path");
 // var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: "./index.tsx",
   output: {
     filename: "bundle.js",
-    path: path.resolve('nebula_admin'),
-    publicPath: '/'
+    path: path.resolve("nebula_admin"),
+    publicPath: "/"
   },
 
   // Enable sourcemaps for debugging webpack's output.
@@ -22,7 +22,7 @@ module.exports = {
     historyApiFallback: true,
     proxy: {
       // '/api': 'http://ec2-13-54-77-173.ap-southeast-2.compute.amazonaws.com:8080',
-      '/api': 'http://localhost:8080'
+      "/api": "http://localhost:8080"
     }
   },
   resolve: {
@@ -41,56 +41,53 @@ module.exports = {
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
+        loader: "babel-loader",
         query: {
-          presets: ['es2017', 'react'],
-          plugins: [
-            "transform-object-rest-spread"
-          ]
+          presets: ["es2017", "react"],
+          plugins: ["transform-object-rest-spread"]
         }
       },
       {
         test: /\.css$/,
-        use: [
-          { loader: "style-loader" },
-          { loader: "css-loader" }
-        ]
+        use: [{ loader: "style-loader" }, { loader: "css-loader" }]
       },
       {
         test: /\.(jpg|png)$/,
         use: {
           loader: "url-loader",
           options: {
-            limit: 25000,
-          },
+            limit: 25000
+          }
         }
       },
       {
         test: /\.(png|jpg|gif)$/,
         use: [
           {
-            loader: 'file-loader',
-            options: {},
-          },
-        ],
+            loader: "file-loader",
+            options: {}
+          }
+        ]
       },
       {
         test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-        use: [{
-          loader: 'file-loader',
-          options: {
-            name: '[name].[ext]',
-            outputPath: 'fonts/'
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              name: "[name].[ext]",
+              outputPath: "fonts/"
+            }
           }
-        }]
+        ]
       },
       {
         test: /\.(jpg|png|svg)$/,
         use: {
           loader: "file-loader",
           options: {
-            name: "[path][name].[hash].[ext]",
-          },
+            name: "[path][name].[hash].[ext]"
+          }
         }
       }
     ]

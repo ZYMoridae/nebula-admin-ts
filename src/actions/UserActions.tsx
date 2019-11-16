@@ -41,7 +41,7 @@ export const fetchAllUser = (
     dispatch(fetchAllUserPending());
 
     let options = {
-      method: "get"
+      method: Zjax.HTTP.METHOD.GET
     };
 
     Zjax.request({
@@ -104,7 +104,7 @@ export const fetchUser = (id: any) => {
     dispatch(fetchUserPending());
 
     let options = {
-      method: "get"
+      method: Zjax.HTTP.METHOD.GET
     };
 
     Zjax.request({

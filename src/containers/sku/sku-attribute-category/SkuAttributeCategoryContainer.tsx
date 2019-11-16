@@ -17,7 +17,11 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     dispatch,
-    fetchAllSkuAttributeCategory: (page: number, perPage: number, orderBy: string) => {
+    fetchAllSkuAttributeCategory: (
+      page: number,
+      perPage: number,
+      orderBy: string
+    ) => {
       dispatch(fetchAllSkuAttributeCategory(page, perPage, orderBy));
     }
   };

@@ -30,23 +30,23 @@ import { USER, VENDOR, TEACHER, ADMIN } from "../utils/Role";
 
 const drawerWidth = Constants.styles.sidebar.width;
 
-const styles = (theme: Theme) => createStyles({
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0
-  },
-  drawerPaper: {
-    width: drawerWidth
-  },
-  toolbar: {
-    height: 64
-  },
-  itemText: {
-    fontSize: "12px",
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
-  }
-});
-
+const styles = (theme: Theme) =>
+  createStyles({
+    drawer: {
+      width: drawerWidth,
+      flexShrink: 0
+    },
+    drawerPaper: {
+      width: drawerWidth
+    },
+    toolbar: {
+      height: 64
+    },
+    itemText: {
+      fontSize: "12px",
+      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
+    }
+  });
 
 const userBlock = [
   {
@@ -103,12 +103,10 @@ const supportBlock = [
   }
 ];
 
-type SideDrawerState = {
-};
-
+type SideDrawerState = {};
 
 type SideDrawerProps = {
-	classes: any
+  classes: any;
 };
 
 class SideDrawer extends React.Component<SideDrawerProps, SideDrawerState> {

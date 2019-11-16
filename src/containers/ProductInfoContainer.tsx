@@ -1,11 +1,13 @@
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 import {
   fetchProductInfo,
-  addCartItem,
   hideSuccessToast,
   fetchProductComments
-} from '../actions/ProductInfoActions';
-import ProductInfo from '../components/ProductInfo';
+} from "../actions/ProductInfoActions";
+
+import { updateProduct, createProduct } from "../actions/ProductsActions";
+
+import ProductInfo from "../components/Product/ProductInfo";
 
 const mapStateToProps = (state: any) => {
   return {
@@ -16,11 +18,21 @@ const mapStateToProps = (state: any) => {
     isAddedCartItem: state.ProductInfoReducer.isAddedCartItem,
     isAddingCartItem: state.ProductInfoReducer.isAddingCartItem,
     isShowSuccessToast: state.ProductInfoReducer.isShowSuccessToast,
-    isFetchingProductComments: state.ProductInfoReducer.isFetchingProductComments,
+    isFetchingProductComments:
+      state.ProductInfoReducer.isFetchingProductComments,
     isFetchedProductComments: state.ProductInfoReducer.isFetchedProductComments,
-    productComments: state.ProductInfoReducer.productComments
-  }
-}
+    productComments: state.ProductInfoReducer.productComments,
+
+    isUpdatingProduct: state.ProductInfoReducer.isUpdatingProduct,
+    isUpdatedProduct: state.ProductInfoReducer.isUpdatedProduct,
+    // SKU attribute category
+    isFetchingAllSkuAttributeCategory:
+      state.ProductInfoReducer.isFetchingAllSkuAttributeCategory,
+    isFetchedAllSkuAttributeCategory:
+      state.ProductInfoReducer.isFetchedAllSkuAttributeCategory,
+    skuAttributeCategory: state.ProductInfoReducer.skuAttributeCategory
+  };
+};
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
@@ -28,17 +40,17 @@ const mapDispatchToProps = (dispatch: any) => {
     fetchProductInfo: (productId: number) => {
       dispatch(fetchProductInfo(productId));
     },
-    addCartItem: (productInfo: any) => {
-      dispatch(addCartItem(productInfo));
-    },
     hideSuccessToast: () => {
       dispatch(hideSuccessToast());
     },
     fetchProductComments: (productId: number) => {
-      dispatch(fetchProductComments(productId))
+      dispatch(fetchProductComments(productId));
+    },
+    updateProduct: (product: any) => {
+      dispatch(updateProduct(product));
     }
-  }
-}
+  };
+};
 
 const ProductInfoContainer = connect(
   mapStateToProps,

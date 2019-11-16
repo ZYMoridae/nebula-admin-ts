@@ -1,9 +1,9 @@
-import { connect } from 'react-redux';
-import Home from '../components/Home';
+import { connect } from "react-redux";
+import Home from "../components/Home";
 import {
-  fetchHomeBannerInfo,
+  // fetchHomeBannerInfo,
   fetchProductsInfo
-} from '../actions';
+} from "../actions";
 
 const mapStateToProps = (state: any) => {
   return {
@@ -15,24 +15,21 @@ const mapStateToProps = (state: any) => {
     isFetchedProducts: state.HomeReducer.isFetchedProducts,
     fetchProductsError: state.HomeReducer.fetchProductsError,
     fetchHomeBannerError: state.HomeReducer.fetchHomeBannerError
-  }
-}
+  };
+};
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
     dispatch,
-    fetchHomeBannerInfo: () => {
-      dispatch(fetchHomeBannerInfo());
-    },
+    // fetchHomeBannerInfo: () => {
+    //   dispatch(fetchHomeBannerInfo());
+    // },
     fetchFeaturedProducts: (page: number, perPage: number) => {
-      dispatch(fetchProductsInfo(page, perPage, 'updatedAt'));
+      dispatch(fetchProductsInfo(page, perPage, "updatedAt"));
     }
-  }
-}
+  };
+};
 
-const HomeContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Home);
+const HomeContainer = connect(mapStateToProps, mapDispatchToProps)(Home);
 
 export default HomeContainer;

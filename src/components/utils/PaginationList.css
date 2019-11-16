@@ -18,11 +18,10 @@
   cursor: pointer;
   vertical-align: middle;
   z-index: 1;
-  
 }
 
 .pagination-container .pagination-block:hover {
-  transition: all .5s;
+  transition: all 0.5s;
   border: 1px solid #ff5000;
   color: #ff5000;
   z-index: 999;
@@ -34,7 +33,6 @@
   color: white;
   z-index: 999;
 }
-
 
 .pagination-container .page-number {
   line-height: 19px;
@@ -62,7 +60,7 @@
   border: none;
 }
 
-.pagination-container .previousBtn svg{
+.pagination-container .previousBtn svg {
   height: 35px;
 }
 
@@ -84,5 +82,5 @@
   vertical-align: middle;
   z-index: 1;
   margin-left: 15px;
-  transition: all .5s;
+  transition: all 0.5s;
 }

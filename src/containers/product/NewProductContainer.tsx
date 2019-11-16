@@ -1,12 +1,11 @@
 import { connect } from "react-redux";
 import {
   fetchProductInfo,
-  addCartItem,
   hideSuccessToast,
   fetchProductComments
 } from "../../actions/ProductInfoActions";
 
-import { updateProduct } from "../../actions/ProductsActions";
+import { updateProduct, createProduct } from "../../actions/ProductsActions";
 
 import NewProduct from "../../components/Product/New";
 
@@ -45,9 +44,6 @@ const mapDispatchToProps = (dispatch: any) => {
     fetchProductInfo: (productId: number) => {
       dispatch(fetchProductInfo(productId));
     },
-    addCartItem: (productInfo: any) => {
-      dispatch(addCartItem(productInfo));
-    },
     hideSuccessToast: () => {
       dispatch(hideSuccessToast());
     },
@@ -58,7 +54,7 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch(updateProduct(product));
     },
     createProduct: (product: number) => {
-    //   dispatch(createProduct(product));
+      dispatch(createProduct(product));
     }
   };
 };

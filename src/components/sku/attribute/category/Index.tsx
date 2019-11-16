@@ -18,38 +18,38 @@ import SubToolBar from "../../../utils/SubToolBar";
 
 import { Theme, createStyles } from "@material-ui/core";
 
-const styles = (theme: Theme) => createStyles({
-  productsContainer: {
-    marginLeft: theme.spacing(10),
-    marginRight: theme.spacing(10),
-    marginBottom: theme.spacing(7)
-  },
-  pagination: {
-    marginTop: theme.spacing(5),
-    textAlign: "center"
-  },
-  prodcutContainer: {
-    marginTop: theme.spacing(2),
-    marginLeft: 340
-  },
-  idClick: {
-    textDecoration: "underline",
-    color: "#0044ff",
-    "&:hover": {
-      cursor: "pointer"
+const styles = (theme: Theme) =>
+  createStyles({
+    productsContainer: {
+      marginLeft: theme.spacing(10),
+      marginRight: theme.spacing(10),
+      marginBottom: theme.spacing(7)
+    },
+    pagination: {
+      marginTop: theme.spacing(5),
+      textAlign: "center"
+    },
+    prodcutContainer: {
+      marginTop: theme.spacing(2),
+      marginLeft: 340
+    },
+    idClick: {
+      textDecoration: "underline",
+      color: "#0044ff",
+      "&:hover": {
+        cursor: "pointer"
+      }
+    },
+    table: {
+      width: "100%"
+    },
+    newButton: {
+      float: "right"
+    },
+    paginationWrapper: {
+      textAlign: "center"
     }
-  },
-  table: {
-    width: "100%"
-  },
-  newButton: {
-    float: "right"
-  },
-  paginationWrapper: {
-    textAlign: "center"
-  }
-});
-
+  });
 
 type IndexState = {
   offset: number;
