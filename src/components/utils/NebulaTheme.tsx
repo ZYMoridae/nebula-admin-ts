@@ -62,6 +62,9 @@ const NebulaTheme = createMuiTheme({
       marginNormal: {
         marginTop: "8px",
         marginBottom: "8px"
+      },
+      root: {
+        width: "100%"
       }
     },
     MuiTypography: {

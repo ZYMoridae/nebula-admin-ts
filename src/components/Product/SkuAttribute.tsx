@@ -128,7 +128,6 @@ class SkuAttribute extends React.Component<
       this.setState({
         categoryOptions: newValue
       });
-      console.log(newValue, action);
       this.props.handleSkuAttributeCategoryChange(action.name, newValue);
     };
 

@@ -137,12 +137,10 @@ class ProductForm extends React.Component<ProductFormProps, ProductFormState> {
       skus: [],
       skuExpanded: false
     };
-    // this.setState.bind(this);
   }
 
   componentDidMount() {
     const { product, mode } = this.props;
-    // console.log(product);
     if (mode != "new") {
       this.setState({
         name: product.name,
@@ -230,7 +228,7 @@ class ProductForm extends React.Component<ProductFormProps, ProductFormState> {
    */
   handleSubmit() {
     if (this.props.mode == "update") {
-      console.log(this.state);
+      // console.log(this.state);
 
       let _product = {
         ...this.props.product,
@@ -240,7 +238,7 @@ class ProductForm extends React.Component<ProductFormProps, ProductFormState> {
       _product.vendorId = this.props.product.vendor.id;
       _product.categoryId = this.state.categoryOptions[0].value;
 
-      console.log(_product.vendorId, _product.categoryId);
+      // console.log(_product.vendorId, _product.categoryId);
 
       delete _product.categoryOptions;
 
@@ -389,7 +387,7 @@ class ProductForm extends React.Component<ProductFormProps, ProductFormState> {
 
         return json;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
       console.log(json);
       return json;
@@ -397,7 +395,6 @@ class ProductForm extends React.Component<ProductFormProps, ProductFormState> {
 
     const handlePanelChange = (name: any) => {
       let expandFieldName: string = name + "Expanded";
-      console.log(expandFieldName, this.state);
       let value: any = !this.state[expandFieldName];
 
       this.setState({

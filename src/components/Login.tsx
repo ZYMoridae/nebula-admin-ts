@@ -64,7 +64,8 @@ const styles = (theme: Theme) =>
     },
     copyRight: {
       color: "#6c757d",
-      marginTop: theme.spacing(5)
+      marginTop: theme.spacing(5),
+      fontSize: "10px"
     },
     accountIcon: {
       verticalAlign: "middle",
@@ -105,6 +106,9 @@ const styles = (theme: Theme) =>
       height: "100vh",
       width: "100vw",
       objectFit: "cover"
+    },
+    copyrightContainer: {
+      marginTop: theme.spacing(2)
     }
   });
 
@@ -272,6 +276,7 @@ class Login extends React.Component<LoginProps, LoginState> {
               alignItems="center"
               justify="center"
               // direction="row"
+              className={classes.copyrightContainer}
             >
               <Grid>
                 <Typography

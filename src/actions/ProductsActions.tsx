@@ -267,7 +267,6 @@ export const createProduct = (product: any) => {
         dispatch(createProductFulfilled(response.data));
       },
       failureCallback: (error: any) => {
-        console.log(error);
         dispatch(createProductError(error));
       }
     });
