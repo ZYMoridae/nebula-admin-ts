@@ -14,40 +14,20 @@ let initState: any = {
 
 const homeReducer = (state = initState, action: any) => {
   switch (action.type) {
-    case ActionType.FETCHING_HOMEBANNER_REJECTED:
-      return {
-        ...state,
-        isFetchedHomeBanner: action.isFetchedHomeBanner,
-        isFetchingHomeBanner: action.isFetchingHomeBanner,
-        fetchHomeBannerError: action.error
-      };
-    case ActionType.FETCHING_HOMEBANNER_PENDING:
-      return {
-        ...state,
-        isFetchedHomeBanner: action.isFetchedHomeBanner,
-        isFetchingHomeBanner: action.isFetchingHomeBanner
-      };
-    case ActionType.RECEIVE_HOMEBANNER:
-      return {
-        ...state,
-        isFetchedHomeBanner: action.isFetchedHomeBanner,
-        isFetchingHomeBanner: action.isFetchingHomeBanner,
-        info: action.info
-      };
-    case ActionType.FETCHING_PRODUCTS_REJECTED:
+    case ActionType.PRODUCT.GET_ALL.ERROR:
       return {
         ...state,
         isFetchedProducts: action.isFetchedProducts,
         isFetchingProducts: action.isFetchingProducts,
         fetchProductsError: action.error
       };
-    case ActionType.FETCHING_PRODUCTS_PENDING:
+    case ActionType.PRODUCT.GET_ALL.PENDING:
       return {
         ...state,
         isFetchedProducts: action.isFetchedProducts,
         isFetchingProducts: action.isFetchingProducts
       };
-    case ActionType.RECEIVE_PRODUCTS:
+    case ActionType.PRODUCT.GET_ALL.FULFILLED:
       return {
         ...state,
         isFetchedProducts: action.isFetchedProducts,

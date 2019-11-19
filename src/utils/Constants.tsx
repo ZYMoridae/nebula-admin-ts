@@ -3,6 +3,12 @@ const Constants = {
     sidebar: {
       width: 300
     }
+  },
+  FORM: {
+    MODE: {
+      NEW: "new",
+      UPDATE: "update"
+    }
   }
 };
 

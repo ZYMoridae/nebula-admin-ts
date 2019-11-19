@@ -5,7 +5,6 @@ import Grid from "@material-ui/core/Grid";
 import _ from "lodash";
 import { Theme, createStyles } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-// import Constants from "../../utils/Contants";
 
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -15,10 +14,10 @@ import Routes from "../../utils/Routes";
 import Utils from "../../utils/Utils";
 
 import "../utils/Select.css";
+import Constants from "./../../utils/Constants";
 const styles = (theme: Theme) =>
   createStyles({
     reactSelect: {
-      // width: "100%",
       marginTop: "8px",
       height: "43px"
     }
@@ -41,6 +40,10 @@ type FormProps = {
   classes: any;
   user: any;
   mode: string;
+
+  action?: any;
+  actionPending?: boolean;
+  actionFulfilled?: boolean;
 };
 
 class Form extends React.Component<FormProps, FormState> {
@@ -98,7 +101,30 @@ class Form extends React.Component<FormProps, FormState> {
     this.setState({ [name]: value } as Pick<FormState, keyof FormState>);
   }
 
-  handleSubmit() {}
+  validateForm() {
+
+  }
+
+  handleSubmit() {
+    if (this.props.mode == Constants.FORM.MODE.UPDATE) {
+      let _user: any = _.cloneDeep(this.state);
+      console.log(_user);
+
+      _user.gender = _user.genderOptions.value;
+      delete _user["genderOptions"];
+
+      _user.roles = _user.roleOptions.map((roleOption: any) => {
+        return {
+          id: roleOption.value,
+          code: roleOption.label
+        };
+      });
+
+      delete _user["roleOptions"];
+
+      this.props.action(_user);
+    }
+  }
 
   handleGenderOptionChange = (newValue: any) => {
     this.setState({
@@ -112,6 +138,7 @@ class Form extends React.Component<FormProps, FormState> {
     });
   };
 
+  // FIXME Should we load gender dynamically
   loadGenderOptions = async (inputValue: any, callback: any) => {
     return [
       {
@@ -164,7 +191,7 @@ class Form extends React.Component<FormProps, FormState> {
   };
 
   render() {
-    const { classes, user, mode } = this.props;
+    const { classes, user, mode, actionPending, actionFulfilled } = this.props;
 
     return (
       <div>
@@ -174,7 +201,7 @@ class Form extends React.Component<FormProps, FormState> {
               User
             </Typography>
           </Grid>
-          {mode != "new" && (
+          {mode != Constants.FORM.MODE.NEW && (
             <Grid item xs={12} sm={12}>
               <TextField
                 disabled
@@ -295,7 +322,7 @@ class Form extends React.Component<FormProps, FormState> {
             <TextField
               id="outlined-number"
               label="Address1"
-              name="Address1"
+              name="address1"
               type="text"
               className={classes.textField}
               InputLabelProps={{
@@ -343,6 +370,7 @@ class Form extends React.Component<FormProps, FormState> {
             <Button
               variant="contained"
               color="primary"
+              disabled={actionPending}
               className={classes.button}
               onClick={this.handleSubmit.bind(this)}
             >

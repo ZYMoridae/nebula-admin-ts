@@ -12,7 +12,7 @@ export const hideSuccessToast = () => {
 // ------ ProductInfo Actions ------
 export const receieveProductInfo = (result: any) => {
   return {
-    type: ActionType.RECEIVE_PRODUCT_INFO,
+    type: ActionType.PRODUCT.GET.FULFILLED,
     isFetchingProductInfo: false,
     isFetchedProductInfo: true,
     info: result
@@ -21,7 +21,7 @@ export const receieveProductInfo = (result: any) => {
 
 export const fetchingProductInfo = () => {
   return {
-    type: ActionType.FETCHING_PRODUCT_INFO_PENDING,
+    type: ActionType.PRODUCT.GET.PENDING,
     isFetchingProductInfo: true,
     isFetchedProductInfo: false
   }
@@ -29,7 +29,7 @@ export const fetchingProductInfo = () => {
 
 export const fetchingProductInfoError = (error: any) => {
   return {
-    type: ActionType.FETCHING_PRODUCT_INFO_REJECTED,
+    type: ActionType.PRODUCT.GET.ERROR,
     isFetchingProductInfo: false,
     isFetchedProductInfo: true,
     error: error
@@ -53,55 +53,6 @@ export const fetchProductInfo = (productId: number) => {
       },
       failureCallback: (error: any) => {
         dispatch(fetchingProductInfoError(error));
-      }
-    });
-  }
-}
-
-// ------ Product Comments Actions ------
-export const receieveProductComments = (result: any) => {
-  return {
-    type: ActionType.RECEIVE_PRODUCT_COMMENTS,
-    isFetchingProductComments: false,
-    isFetchedProductComments: true,
-    info: result.content
-  }
-}
-
-export const fetchingProductComments = () => {
-  return {
-    type: ActionType.FETCHING_PRODUCT_COMMENTS_PENDING,
-    isFetchingProductComments: true,
-    isFetchedProductComments: false
-  }
-}
-
-export const fetchingProductCommentsError = (error: any) => {
-  return {
-    type: ActionType.FETCHING_PRODUCT_COMMENTS_REJECTED,
-    isFetchingProductComments: false,
-    isFetchedProductComments: true,
-    error: error
-  }
-}
-
-
-export const fetchProductComments = (productId: number) => {
-  return function (dispatch: any) {
-    dispatch(fetchingProductComments());
-
-    let options = {
-      method: 'get'
-    };
-
-    Zjax.request({
-      url: `/api/products/${productId}/comments`,
-      option: Utils.addToken(options),
-      successCallback: (response: any) => {
-        dispatch(receieveProductComments(response.data));
-      },
-      failureCallback: (error: any) => {
-        dispatch(fetchingProductCommentsError(error));
       }
     });
   }

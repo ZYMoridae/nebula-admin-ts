@@ -9,18 +9,18 @@ let initState: any = {
 };
 const productsReducer = (state = initState, action: any) => {
   switch (action.type) {
-    case ActionType.FETCHING_PRODUCTS_REJECTED:
+    case ActionType.PRODUCT.GET_ALL.ERROR:
       return Object.assign({}, state, {
         isFetchedProducts: action.isFetchedProducts,
         isFetchingProducts: action.isFetchingProducts,
         error: action.error
       });
-    case ActionType.FETCHING_PRODUCTS_PENDING:
+    case ActionType.PRODUCT.GET_ALL.PENDING:
       return Object.assign({}, state, {
         isFetchedProducts: action.isFetchedProducts,
         isFetchingProducts: action.isFetchingProducts
       });
-    case ActionType.RECEIVE_PRODUCTS:
+    case ActionType.PRODUCT.GET_ALL.FULFILLED:
       return Object.assign({}, state, {
         isFetchedProducts: action.isFetchedProducts,
         isFetchingProducts: action.isFetchingProducts,

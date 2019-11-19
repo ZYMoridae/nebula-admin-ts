@@ -13,7 +13,7 @@ import _ from "lodash";
  */
 export const receieveProducts = (results: any, totalPages: number) => {
   return {
-    type: ActionType.RECEIVE_PRODUCTS,
+    type: ActionType.PRODUCT.GET_ALL.FULFILLED,
     isFetchingProducts: false,
     isFetchedProducts: true,
     info: results,
@@ -26,7 +26,7 @@ export const receieveProducts = (results: any, totalPages: number) => {
  */
 export const fetchingProducts = () => {
   return {
-    type: ActionType.FETCHING_PRODUCTS_PENDING,
+    type: ActionType.PRODUCT.GET_ALL.PENDING,
     isFetchingProducts: true,
     isFetchedProducts: false
   };
@@ -39,7 +39,7 @@ export const fetchingProducts = () => {
  */
 export const fetchingProductsError = (error: any) => {
   return {
-    type: ActionType.FETCHING_PRODUCTS_REJECTED,
+    type: ActionType.PRODUCT.GET_ALL.ERROR,
     isFetchingProducts: false,
     isFetchedProducts: true,
     error: error
@@ -79,76 +79,6 @@ export const fetchProductsInfo = (
       },
       failureCallback: (error: any) => {
         dispatch(fetchingProductsError(error));
-      }
-    });
-  };
-};
-
-// ------ Fetch product by ids ------
-
-/**
- * Receieve products by ids
- *
- * @param {*} results
- */
-export const receieveProductsByIds = (results: any) => {
-  return {
-    type: ActionType.RECEIEVE_PRODUCTS_BY_IDS,
-    isFetchingProductsByIds: false,
-    isFetchedProductsByIds: true,
-    info: results
-  };
-};
-
-/**
- * Fetching products by ids
- */
-export const fetchingProductsByIds = () => {
-  return {
-    type: ActionType.FETCHING_PRODUCTS_BY_IDS_PENDING,
-    isFetchingProductsByIds: true,
-    isFetchedProductsByIds: false
-  };
-};
-
-/**
- * Fetching products by ids failed
- *
- * @param {object} error
- */
-export const fetchingProductsByIdsError = (error: any) => {
-  return {
-    type: ActionType.FETCHING_PRODUCTS_BY_IDS_REJECTED,
-    isFetchingProductsByIds: false,
-    isFetchedProductsByIds: true,
-    error: error
-  };
-};
-
-/**
- * Fetch products by ids
- *
- * @param {array} ids
- */
-export const fetchProductsByIds = (ids: any) => {
-  return function(dispatch: any) {
-    dispatch(fetchingProductsByIds());
-
-    let options = {
-      method: "post",
-      data: {
-        ids: ids
-      }
-    };
-
-    Zjax.request({
-      url: "/api/products/ids",
-      option: Utils.addToken(options),
-      successCallback: (response: any) => {
-        dispatch(receieveProductsByIds(response.data));
-      },
-      failureCallback: (error: any) => {
-        dispatch(fetchingProductsByIdsError(error));
       }
     });
   };

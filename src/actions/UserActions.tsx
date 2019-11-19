@@ -119,3 +119,53 @@ export const fetchUser = (id: any) => {
     });
   };
 };
+
+// ANCHOR Update user based on id
+
+export const updateUserFulfilled = (user: any) => {
+  return {
+    type: ActionType.USER.UPDATE.FULFILLED,
+    updateUserPending: false,
+    updateUserFulfilled: true
+    // user: user
+  };
+};
+
+export const updateUserPending = () => {
+  return {
+    type: ActionType.USER.UPDATE.PENDING,
+    updateUserPending: true,
+    updateUserFulfilled: false
+  };
+};
+
+export const updateUserError = (error: any) => {
+  return {
+    type: ActionType.USER.UPDATE.ERROR,
+    updateUserPending: false,
+    updateUserFulfilled: true,
+    error: error
+  };
+};
+
+export const updateUser = (user: any) => {
+  return function(dispatch: any) {
+    dispatch(updateUserPending());
+
+    let options = {
+      method: Zjax.HTTP.METHOD.PUT,
+      data: user
+    };
+
+    Zjax.request({
+      url: `/api/users/${user.id}`,
+      option: Utils.addToken(options),
+      successCallback: (response: any) => {
+        dispatch(updateUserFulfilled(response.data));
+      },
+      failureCallback: (error: any) => {
+        dispatch(updateUserError(error));
+      }
+    });
+  };
+};

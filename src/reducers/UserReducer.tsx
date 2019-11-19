@@ -8,7 +8,10 @@ let initState: any = {
   // Below for user GET action
   user: null,
   fetchUserPending: false,
-  fetchUserFulfilled: false
+  fetchUserFulfilled: false,
+
+  updateUserPending: false,
+  updateUserFulfilled: false
 };
 const UserReducer = (state = initState, action: any) => {
   switch (action.type) {
@@ -45,6 +48,23 @@ const UserReducer = (state = initState, action: any) => {
         fetchUserFulfilled: action.fetchUserFulfilled,
         fetchUserPending: action.fetchUserPending,
         user: action.user
+      });
+    // UPDATE user action
+    case ActionType.USER.UPDATE.PENDING:
+      return Object.assign({}, state, {
+        updateUserFulfilled: action.updateUserFulfilled,
+        updateUserPending: action.updateUserPending
+      });
+    case ActionType.USER.UPDATE.ERROR:
+      return Object.assign({}, state, {
+        updateUserFulfilled: action.updateUserFulfilled,
+        updateUserPending: action.updateUserPending
+      });
+    case ActionType.USER.UPDATE.FULFILLED:
+      return Object.assign({}, state, {
+        updateUserFulfilled: action.updateUserFulfilled,
+        updateUserPending: action.updateUserPending
+        // user: action.user
       });
     default:
       return state;

@@ -67,6 +67,9 @@ type EditProps = {
   user: any;
   fetchUserPending: boolean;
   fetchUserFulfilled: boolean;
+  updateUser: any;
+  updateUserPending: boolean;
+  updateUserFulfilled: boolean;
 };
 
 class Edit extends React.Component<EditProps, EditState> {
@@ -76,7 +79,15 @@ class Edit extends React.Component<EditProps, EditState> {
   }
 
   render() {
-    const { classes, user, fetchUserPending, fetchUserFulfilled } = this.props;
+    const {
+      classes,
+      user,
+      fetchUserPending,
+      fetchUserFulfilled,
+      updateUser,
+      updateUserPending,
+      updateUserFulfilled
+    } = this.props;
 
     return (
       <Fade in={true} timeout={1000}>
@@ -85,7 +96,13 @@ class Edit extends React.Component<EditProps, EditState> {
           <Grid item xs={10} sm={8} className={classes.container}>
             {fetchUserPending && <CircularProgress />}
             {fetchUserFulfilled && user && (
-              <Form user={user} mode="edit"></Form>
+              <Form
+                user={user}
+                mode={Constants.FORM.MODE.UPDATE}
+                action={updateUser}
+                actionPending={updateUserPending}
+                actionFulfilled={updateUserFulfilled}
+              ></Form>
             )}
           </Grid>
           <Grid item xs={1} sm={1}></Grid>

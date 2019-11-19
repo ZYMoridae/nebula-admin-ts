@@ -20,8 +20,6 @@ import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import NebulaIcon from "../components/NebulaIcon";
 import Routes from "../utils/Routes";
 
-// import ProductSearchComponent from '../components/ProductSearchComponent';
-
 import { withTranslation, WithTranslation } from "react-i18next";
 
 import Constants from "../utils/Constants";

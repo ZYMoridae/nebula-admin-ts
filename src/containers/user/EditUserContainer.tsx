@@ -1,12 +1,15 @@
 import { connect } from "react-redux";
 import Edit from "../../components/user/Edit";
-import { fetchUser } from "../../actions";
+import { fetchUser, updateUser } from "../../actions";
+import UserReducer from '../../reducers/UserReducer';
 
 const mapStateToProps = (state: any) => {
   return {
     user: state.UserReducer.user,
     fetchUserPending: state.UserReducer.fetchUserPending,
-    fetchUserFulfilled: state.UserReducer.fetchUserFulfilled
+    fetchUserFulfilled: state.UserReducer.fetchUserFulfilled,
+    updateUserPending: state.UserReducer.updateUserPending,
+    updateUserFulfilled: state.UserReducer.updateUserFulfilled
   };
 };
 
@@ -15,6 +18,9 @@ const mapDispatchToProps = (dispatch: any) => {
     dispatch,
     fetchUser: (id: number) => {
       dispatch(fetchUser(id));
+    },
+    updateUser: (user: any) => {
+      dispatch(updateUser(user));
     }
   };
 };
