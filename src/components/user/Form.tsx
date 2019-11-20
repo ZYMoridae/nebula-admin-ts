@@ -15,11 +15,16 @@ import Utils from "../../utils/Utils";
 
 import "../utils/Select.css";
 import Constants from "./../../utils/Constants";
+import ZTextField from "../utils/form/ZTextField";
+
 const styles = (theme: Theme) =>
   createStyles({
     reactSelect: {
       marginTop: "8px",
       height: "43px"
+    },
+    resetButton: {
+      width: "100%"
     }
   });
 
@@ -34,6 +39,7 @@ type FormState = {
   telephone: string;
   genderOptions: any;
   roleOptions: any;
+  validationErrors: any;
 };
 
 type FormProps = {
@@ -59,7 +65,8 @@ class Form extends React.Component<FormProps, FormState> {
       address2: "",
       telephone: "",
       genderOptions: [],
-      roleOptions: []
+      roleOptions: [],
+      validationErrors: {}
     };
   }
   componentDidMount() {
@@ -88,7 +95,8 @@ class Form extends React.Component<FormProps, FormState> {
             label: user.gender.toUpperCase()
           }
         ],
-        roleOptions: roleOptions
+        roleOptions: roleOptions,
+        validationErrors: {}
       });
     }
   }
@@ -98,11 +106,49 @@ class Form extends React.Component<FormProps, FormState> {
       target: { name, value }
     } = event;
     // Ref: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/26635
-    this.setState({ [name]: value } as Pick<FormState, keyof FormState>);
+    this.setState({ [name]: value } as Pick<FormState, keyof FormState>, () => {
+      // this.validateForm(name);
+    });
   }
 
-  validateForm() {
+  validateForm(field: string) {
+    if (field === "username") {
+      if (_.isNil(this.state.username) || this.state.username === "") {
+        this.setFormError("username", "Username can not by empty!");
+      } else {
+        this.setFormError("username", undefined);
+      }
+    }
 
+    if (field === "email") {
+      if (_.isNil(this.state.email) || this.state.email === "") {
+        this.setFormError("email", "Email can not by empty!");
+      } else {
+        this.setFormError("email", undefined);
+      }
+    }
+  }
+
+  validationCallback({
+    name,
+    isValid,
+    errorMsg
+  }: {
+    name: string;
+    isValid: boolean;
+    errorMsg: string;
+  }) {
+    this.setFormError(name, errorMsg);
+  }
+
+  setFormError(field: string, errorMsg: string) {
+    let next: any = this.state.validationErrors;
+
+    next[field] = errorMsg;
+
+    this.setState({
+      validationErrors: next
+    });
   }
 
   handleSubmit() {
@@ -189,7 +235,9 @@ class Form extends React.Component<FormProps, FormState> {
     console.log(json);
     return json;
   };
-
+  hasError(field: string) {
+    return !_.isNil(this.state.validationErrors[field]);
+  }
   render() {
     const { classes, user, mode, actionPending, actionFulfilled } = this.props;
 
@@ -221,10 +269,11 @@ class Form extends React.Component<FormProps, FormState> {
           )}
 
           <Grid item xs={12} sm={6}>
-            <TextField
+            <ZTextField
               id="outlined-number"
               label="Username"
               name="username"
+              error={this.hasError("username")}
               type="text"
               className={classes.textField}
               InputLabelProps={{
@@ -233,6 +282,12 @@ class Form extends React.Component<FormProps, FormState> {
               margin="normal"
               variant="outlined"
               value={this.state.username}
+              validator={["isRequired"]}
+              validationCallback={this.validationCallback.bind(this)}
+              helperText={
+                this.hasError("username") &&
+                this.state.validationErrors["username"]
+              }
               onChange={this.handleChange.bind(this)}
             />
           </Grid>
@@ -242,7 +297,8 @@ class Form extends React.Component<FormProps, FormState> {
               id="outlined-number"
               label="Email"
               name="email"
-              type="text"
+              type="email"
+              error={this.hasError("email")}
               className={classes.textField}
               InputLabelProps={{
                 shrink: true
@@ -364,6 +420,18 @@ class Form extends React.Component<FormProps, FormState> {
               value={this.state.roleOptions}
               onChange={this.handleRoleOptionChange.bind(this)}
             />
+          </Grid>
+
+          <Grid item xs={12} sm={4}>
+            <Button
+              variant="outlined"
+              color="primary"
+              disabled={actionPending}
+              className={classes.resetButton}
+              // onClick={this.handleSubmit.bind(this)}
+            >
+              Reset password
+            </Button>
           </Grid>
 
           <Grid item xs={12} sm={12}>
