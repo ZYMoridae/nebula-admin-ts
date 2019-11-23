@@ -28,6 +28,8 @@ import UserContainer from "../containers/user/UserContainer";
 import EditUserContainer from "../containers/user/EditUserContainer";
 
 import NewUserContainer from "../containers/user/NewUserContainer";
+import LoginForm from './LoginForm';
+
 
 const Home = () => (
   <div>
@@ -126,11 +128,13 @@ class App extends React.Component {
               <HeaderBarContainer></HeaderBarContainer>
             )}
 
-            {location.pathname !== Routes.USER.LOGIN &&
-              location.pathname !== "/" && <SideDrawer></SideDrawer>}
+            {/* {location.pathname !== Routes.USER.LOGIN &&
+              location.pathname !== "/" && <SideDrawer></SideDrawer>} */}
 
             <Switch>
               <Route exact path={Routes.USER.LOGIN} component={Login} />
+              
+              
 
               <PrivateRoute exact path={Routes.HOME} component={Home} />
 
@@ -173,7 +177,7 @@ class App extends React.Component {
                 path={Routes.PRODUCT.EDIT}
                 component={ProductInfo}
               />
-
+              <Route exact path="/test" component={LoginForm} />
               <Route exact path={Routes.USER.LOGIN} component={Login} />
               <Redirect to={Routes.USER.LOGIN} />
             </Switch>
