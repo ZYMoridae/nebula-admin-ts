@@ -27,6 +27,8 @@ import SkuAttributeCategoryContainer from "../containers/sku/sku-attribute-categ
 import UserContainer from "../containers/user/UserContainer";
 import EditUserContainer from "../containers/user/EditUserContainer";
 
+import NewUserContainer from "../containers/user/NewUserContainer";
+
 const Home = () => (
   <div>
     {/* <UserContainer></UserContainer> */}
@@ -106,6 +108,14 @@ const EditUser = ({ match }: { match: any }) => {
   );
 };
 
+const NewUser = () => {
+  return (
+    <div>
+      <NewUserContainer />
+    </div>
+  );
+};
+
 class App extends React.Component {
   render() {
     return (
@@ -125,6 +135,8 @@ class App extends React.Component {
               <PrivateRoute exact path={Routes.HOME} component={Home} />
 
               <PrivateRoute exact path={Routes.USER.INDEX} component={Users} />
+
+              <PrivateRoute exact path={Routes.USER.NEW} component={NewUser} />
 
               <PrivateRoute
                 exact

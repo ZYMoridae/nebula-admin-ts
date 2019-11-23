@@ -1,7 +1,6 @@
 import { connect } from "react-redux";
 import Edit from "../../components/user/Edit";
 import { fetchUser, updateUser } from "../../actions";
-import UserReducer from '../../reducers/UserReducer';
 
 const mapStateToProps = (state: any) => {
   return {

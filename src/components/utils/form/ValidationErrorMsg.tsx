@@ -1,5 +1,6 @@
 const ValidationErrorMsg = {
-  IS_EMPTY: "~~field~~ can not be empty"
+  EMPTY: "~~field~~ can not be empty",
+  NOT_NUMBER: "~~field~~ is not number"
 };
 
 export default ValidationErrorMsg;

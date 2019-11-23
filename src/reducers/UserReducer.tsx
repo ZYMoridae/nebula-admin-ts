@@ -11,7 +11,10 @@ let initState: any = {
   fetchUserFulfilled: false,
 
   updateUserPending: false,
-  updateUserFulfilled: false
+  updateUserFulfilled: false,
+
+  createUserPending: false,
+  createUserFulfilled: false
 };
 const UserReducer = (state = initState, action: any) => {
   switch (action.type) {
@@ -64,6 +67,23 @@ const UserReducer = (state = initState, action: any) => {
       return Object.assign({}, state, {
         updateUserFulfilled: action.updateUserFulfilled,
         updateUserPending: action.updateUserPending
+        // user: action.user
+      });
+    // CREATE user action
+    case ActionType.USER.CREATE.PENDING:
+      return Object.assign({}, state, {
+        createUserFulfilled: action.createUserFulfilled,
+        createUserPending: action.createUserPending
+      });
+    case ActionType.USER.CREATE.ERROR:
+      return Object.assign({}, state, {
+        createUserFulfilled: action.createUserFulfilled,
+        createUserPending: action.createUserPending
+      });
+    case ActionType.USER.CREATE.FULFILLED:
+      return Object.assign({}, state, {
+        createUserFulfilled: action.createUserFulfilled,
+        createUserPending: action.createUserPending
         // user: action.user
       });
     default:

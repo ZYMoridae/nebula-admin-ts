@@ -17,6 +17,10 @@ import "../utils/Select.css";
 import Constants from "./../../utils/Constants";
 import ZTextField from "../utils/form/ZTextField";
 
+import ZValidator from "../utils/form/ZValidator";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+
 const styles = (theme: Theme) =>
   createStyles({
     reactSelect: {
@@ -39,12 +43,16 @@ type FormState = {
   telephone: string;
   genderOptions: any;
   roleOptions: any;
+  gender: any;
   validationErrors: any;
+  isFormValid: boolean;
+  useDefaultPwd: boolean;
+  password?: string;
 };
 
 type FormProps = {
   classes: any;
-  user: any;
+  user?: any;
   mode: string;
 
   action?: any;
@@ -66,7 +74,11 @@ class Form extends React.Component<FormProps, FormState> {
       telephone: "",
       genderOptions: [],
       roleOptions: [],
-      validationErrors: {}
+      gender: "",
+      validationErrors: {},
+      isFormValid: true,
+      useDefaultPwd: true,
+      password: ""
     };
   }
   componentDidMount() {
@@ -84,6 +96,7 @@ class Form extends React.Component<FormProps, FormState> {
         username: user.username,
         email: user.email,
         id: user.id,
+        gender: user.gender,
         firstname: user.firstname,
         lastname: user.lastname,
         address1: user.address1,
@@ -102,9 +115,14 @@ class Form extends React.Component<FormProps, FormState> {
   }
 
   handleChange(event: any) {
-    const {
+    let {
       target: { name, value }
     } = event;
+
+    if (name === "useDefaultPwd") {
+      value = event.target.checked;
+    }
+
     // Ref: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/26635
     this.setState({ [name]: value } as Pick<FormState, keyof FormState>, () => {
       // this.validateForm(name);
@@ -139,6 +157,20 @@ class Form extends React.Component<FormProps, FormState> {
     errorMsg: string;
   }) {
     this.setFormError(name, errorMsg);
+
+    let prevValidationErrors = this.state.validationErrors;
+
+    prevValidationErrors[name] = isValid;
+
+    let isFormValid = true;
+
+    Object.keys(prevValidationErrors).forEach(key => {
+      isFormValid = isFormValid && prevValidationErrors[key];
+    });
+
+    this.setState({
+      isFormValid: isFormValid
+    });
   }
 
   setFormError(field: string, errorMsg: string) {
@@ -152,11 +184,18 @@ class Form extends React.Component<FormProps, FormState> {
   }
 
   handleSubmit() {
+    console.log(this.state);
+    if (!this.state.isFormValid) {
+      return;
+    }
     if (this.props.mode == Constants.FORM.MODE.UPDATE) {
       let _user: any = _.cloneDeep(this.state);
       console.log(_user);
 
-      _user.gender = _user.genderOptions.value;
+      if (!_.isNil(_user.genderOptions.value)) {
+        _user.gender = _user.genderOptions.value;
+      }
+
       delete _user["genderOptions"];
 
       _user.roles = _user.roleOptions.map((roleOption: any) => {
@@ -167,6 +206,34 @@ class Form extends React.Component<FormProps, FormState> {
       });
 
       delete _user["roleOptions"];
+
+      delete _user["password"];
+
+      this.props.action(_user);
+    }
+
+    if (this.props.mode == Constants.FORM.MODE.NEW) {
+      let _user: any = _.cloneDeep(this.state);
+      console.log(_user);
+
+      if (!_.isNil(_user.genderOptions.value)) {
+        _user.gender = _user.genderOptions.value;
+      }
+
+      delete _user["genderOptions"];
+
+      _user.roles = _user.roleOptions.map((roleOption: any) => {
+        return {
+          id: roleOption.value,
+          code: roleOption.label
+        };
+      });
+
+      delete _user["roleOptions"];
+
+      if (this.state.useDefaultPwd) {
+        _user.password = `welcome@${new Date().getFullYear()}`;
+      }
 
       this.props.action(_user);
     }
@@ -253,7 +320,6 @@ class Form extends React.Component<FormProps, FormState> {
             <Grid item xs={12} sm={12}>
               <TextField
                 disabled
-                id="outlined-number"
                 label="Id"
                 name="id"
                 type="text"
@@ -267,13 +333,10 @@ class Form extends React.Component<FormProps, FormState> {
               />
             </Grid>
           )}
-
           <Grid item xs={12} sm={6}>
             <ZTextField
-              id="outlined-number"
               label="Username"
               name="username"
-              error={this.hasError("username")}
               type="text"
               className={classes.textField}
               InputLabelProps={{
@@ -282,27 +345,22 @@ class Form extends React.Component<FormProps, FormState> {
               margin="normal"
               variant="outlined"
               value={this.state.username}
-              validator={["isRequired"]}
+              validator={[ZValidator.IS_REQUIRED]}
               validationCallback={this.validationCallback.bind(this)}
-              helperText={
-                this.hasError("username") &&
-                this.state.validationErrors["username"]
-              }
               onChange={this.handleChange.bind(this)}
             />
           </Grid>
-
           <Grid item xs={12} sm={6}>
-            <TextField
-              id="outlined-number"
+            <ZTextField
               label="Email"
               name="email"
               type="email"
-              error={this.hasError("email")}
               className={classes.textField}
               InputLabelProps={{
                 shrink: true
               }}
+              validator={[ZValidator.IS_REQUIRED]}
+              validationCallback={this.validationCallback.bind(this)}
               margin="normal"
               variant="outlined"
               value={this.state.email}
@@ -310,9 +368,57 @@ class Form extends React.Component<FormProps, FormState> {
             />
           </Grid>
 
+          {mode === Constants.FORM.MODE.NEW && (
+            <Grid item xs={12} sm={12}>
+              <Grid item xs={12} sm={12}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="useDefaultPwd"
+                      checked={this.state.useDefaultPwd}
+                      onChange={this.handleChange.bind(this)}
+                      value="checkedB"
+                      color="primary"
+                      inputProps={{
+                        "aria-label": "secondary checkbox"
+                      }}
+                    />
+                  }
+                  label={
+                    <span>
+                      Use default password (default password is{" "}
+                      <b>welcome@{new Date().getFullYear()}</b>)
+                    </span>
+                  }
+                />
+              </Grid>
+              {!this.state.useDefaultPwd && (
+                <Fade in={!this.state.useDefaultPwd} timeout={1000}>
+                  <Grid item xs={12} sm={12}>
+                    <ZTextField
+                      id="password"
+                      label="Password"
+                      name="password"
+                      type="password"
+                      className={classes.textField}
+                      InputLabelProps={{
+                        shrink: true
+                      }}
+                      margin="normal"
+                      variant="outlined"
+                      value={this.state.password}
+                      validator={[ZValidator.IS_REQUIRED]}
+                      validationCallback={this.validationCallback.bind(this)}
+                      onChange={this.handleChange.bind(this)}
+                    />
+                  </Grid>
+                </Fade>
+              )}
+            </Grid>
+          )}
+
           <Grid item xs={12} sm={6}>
-            <TextField
-              id="outlined-number"
+            <ZTextField
               label="Telephone"
               name="telephone"
               type="text"
@@ -323,10 +429,11 @@ class Form extends React.Component<FormProps, FormState> {
               margin="normal"
               variant="outlined"
               value={this.state.telephone}
+              validator={[ZValidator.IS_REQUIRED, ZValidator.NUMBER]}
+              validationCallback={this.validationCallback.bind(this)}
               onChange={this.handleChange.bind(this)}
             />
           </Grid>
-
           <Grid item xs={12} sm={6}>
             <AsyncSelect
               className={classes.reactSelect}
@@ -339,10 +446,8 @@ class Form extends React.Component<FormProps, FormState> {
               onChange={this.handleGenderOptionChange.bind(this)}
             />
           </Grid>
-
           <Grid item xs={12} sm={6}>
-            <TextField
-              id="outlined-number"
+            <ZTextField
               label="First Name"
               name="firstname"
               type="text"
@@ -353,13 +458,13 @@ class Form extends React.Component<FormProps, FormState> {
               margin="normal"
               variant="outlined"
               value={this.state.firstname}
+              validator={[ZValidator.IS_REQUIRED]}
+              validationCallback={this.validationCallback.bind(this)}
               onChange={this.handleChange.bind(this)}
             />
           </Grid>
-
           <Grid item xs={12} sm={6}>
-            <TextField
-              id="outlined-number"
+            <ZTextField
               label="Last Name"
               name="lastname"
               type="text"
@@ -370,13 +475,13 @@ class Form extends React.Component<FormProps, FormState> {
               margin="normal"
               variant="outlined"
               value={this.state.lastname}
+              validator={[ZValidator.IS_REQUIRED]}
+              validationCallback={this.validationCallback.bind(this)}
               onChange={this.handleChange.bind(this)}
             />
           </Grid>
-
           <Grid item xs={12} sm={12}>
-            <TextField
-              id="outlined-number"
+            <ZTextField
               label="Address1"
               name="address1"
               type="text"
@@ -387,13 +492,13 @@ class Form extends React.Component<FormProps, FormState> {
               margin="normal"
               variant="outlined"
               value={this.state.address1}
+              validator={[ZValidator.IS_REQUIRED]}
+              validationCallback={this.validationCallback.bind(this)}
               onChange={this.handleChange.bind(this)}
             />
           </Grid>
-
           <Grid item xs={12} sm={12}>
-            <TextField
-              id="outlined-number"
+            <ZTextField
               label="Address2"
               name="address2"
               type="text"
@@ -404,10 +509,11 @@ class Form extends React.Component<FormProps, FormState> {
               margin="normal"
               variant="outlined"
               value={this.state.address2}
+              validator={[ZValidator.IS_REQUIRED]}
+              validationCallback={this.validationCallback.bind(this)}
               onChange={this.handleChange.bind(this)}
             />
           </Grid>
-
           <Grid item xs={12} sm={12}>
             <AsyncSelect
               className={classes.reactSelect}
@@ -422,17 +528,20 @@ class Form extends React.Component<FormProps, FormState> {
             />
           </Grid>
 
-          <Grid item xs={12} sm={4}>
-            <Button
-              variant="outlined"
-              color="primary"
-              disabled={actionPending}
-              className={classes.resetButton}
-              // onClick={this.handleSubmit.bind(this)}
-            >
-              Reset password
-            </Button>
-          </Grid>
+          {/* TODO: Implement reset password */}
+          {mode === Constants.FORM.MODE.UPDATE && (
+            <Grid item xs={12} sm={4}>
+              <Button
+                variant="outlined"
+                color="primary"
+                disabled={actionPending}
+                className={classes.resetButton}
+                // onClick={this.handleSubmit.bind(this)}
+              >
+                Reset password
+              </Button>
+            </Grid>
+          )}
 
           <Grid item xs={12} sm={12}>
             <Button

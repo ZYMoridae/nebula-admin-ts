@@ -169,3 +169,55 @@ export const updateUser = (user: any) => {
     });
   };
 };
+
+// ANCHOR Create user
+
+export const createUserFulfilled = (user: any) => {
+  return {
+    type: ActionType.USER.CREATE.FULFILLED,
+    createUserPending: false,
+    createUserFulfilled: true
+    // user: user
+  };
+};
+
+export const createUserPending = () => {
+  return {
+    type: ActionType.USER.CREATE.PENDING,
+    createUserPending: true,
+    createUserFulfilled: false
+  };
+};
+
+export const createUserError = (error: any) => {
+  return {
+    type: ActionType.USER.CREATE.ERROR,
+    createUserPending: false,
+    createUserFulfilled: true,
+    error: error
+  };
+};
+
+export const createUser = (user: any) => {
+  return function(dispatch: any) {
+    dispatch(createUserPending());
+
+    let options = {
+      method: Zjax.HTTP.METHOD.POST,
+      data: user
+    };
+
+    Zjax.request({
+      url: `/api/users?isIncludeToken=false`,
+      option: Utils.addToken(options),
+      successCallback: (response: any) => {
+        window.location.href = `/users/${response.data.id}`;
+
+        dispatch(createUserFulfilled(response.data));
+      },
+      failureCallback: (error: any) => {
+        dispatch(createUserError(error));
+      }
+    });
+  };
+};

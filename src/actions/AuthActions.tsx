@@ -47,10 +47,14 @@ export const fetchAuthInfo = (data: any) => {
         headers: headers
       },
       successCallback: (response: any) => {
-        // Set auth token
-        sessionStorage.setItem("user", JSON.stringify(response.data));
-        sessionStorage.setItem("token", response.data.token);
-        dispatch(receieveAuth(response.data));
+        if (!response.data.user.admin) {
+          dispatch(fetchingAuthError());
+        } else {
+          // Set auth token
+          sessionStorage.setItem("user", JSON.stringify(response.data));
+          sessionStorage.setItem("token", response.data.token);
+          dispatch(receieveAuth(response.data));
+        }
       },
       failureCallback: (error: any) => {
         dispatch(fetchingAuthError());

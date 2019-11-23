@@ -4,7 +4,7 @@ const Routes = {
     LOGIN: "/login",
     INDEX: "/users",
     NEW: "/users/new",
-    EDIT: "/users/:id"
+    EDIT: "/users/:id(\\d+)"
   },
   PRODUCT: {
     INDEX: "/products",

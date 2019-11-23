@@ -76,6 +76,9 @@ const NebulaTheme = createMuiTheme({
       },
       paragraph: {
         fontSize: "12px"
+      },
+      body1: {
+        fontSize: "12px"
       }
     },
     MuiButton: {
@@ -92,6 +95,11 @@ const NebulaTheme = createMuiTheme({
     MuiMenuItem: {
       root: {
         fontSize: "12px"
+      }
+    },
+    MuiCheckbox: {
+      root: {
+        padding: "0px"
       }
     },
     MuiExpansionPanelSummary: {
@@ -124,6 +132,18 @@ const NebulaTheme = createMuiTheme({
       },
       rounded: {
         borderRadius: "5px !important"
+      }
+    },
+    MuiFormControlLabel: {
+      root: {
+        marginLeft: "0px",
+        // marginTop: "8px",
+        marginBottom: "8px"
+      },
+      label: {
+        fontSzie: "12px",
+        color: "hsl(0,0%,50%)",
+        marginLeft: "8px"
       }
     }
   }
