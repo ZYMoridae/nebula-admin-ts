@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 import Badge from "@material-ui/core/Badge";
 import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
+// import Menu from "@material-ui/core/Menu";
 import { fade } from "@material-ui/core/styles/colorManipulator";
 import { withStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -27,6 +27,14 @@ import Constants from "../utils/Constants";
 import { Theme, createStyles } from "@material-ui/core";
 
 const drawerWidth = Constants.styles.sidebar.width;
+
+// Ant design
+
+import { Layout, Menu, Breadcrumb, Icon } from 'antd';
+
+const { SubMenu } = Menu;
+const { Header, Content, Sider } = Layout;
+
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -222,56 +230,58 @@ class AppHeadBar extends React.Component<
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
     const renderMenu = (
-      <Menu
-        anchorEl={anchorEl}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
-        open={isMenuOpen}
-        onClose={this.handleMenuClose}
-      >
-        <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
-        <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
-        <MenuItem onClick={this.handleLogout}>Log Out</MenuItem>
-      </Menu>
+      ""
+      // <Menu
+      //   anchorEl={anchorEl}
+      //   anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      //   transformOrigin={{ vertical: "top", horizontal: "right" }}
+      //   open={isMenuOpen}
+      //   onClose={this.handleMenuClose}
+      // >
+      //   <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
+      //   <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
+      //   <MenuItem onClick={this.handleLogout}>Log Out</MenuItem>
+      // </Menu>
     );
 
     const renderMobileMenu = (
-      <Menu
-        anchorEl={mobileMoreAnchorEl}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
-        open={isMobileMenuOpen}
-        onClose={this.handleMenuClose}
-      >
-        <MenuItem onClick={this.handleMobileMenuClose}>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <MailIcon />
-            </Badge>
-          </IconButton>
-          <p>Messages</p>
-        </MenuItem>
-        <MenuItem onClick={this.handleMobileMenuClose}>
-          <IconButton color="inherit">
-            <Badge badgeContent={11} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <p>Notifications</p>
-        </MenuItem>
-        <MenuItem onClick={this.handleProfileMenuOpen}>
-          <IconButton color="inherit">
-            <AccountCircle />
-          </IconButton>
-          <p>Profile</p>
-        </MenuItem>
-        <MenuItem onClick={this.handleLogout}>
-          <IconButton color="inherit">
-            <AccountCircle />
-          </IconButton>
-          <p>Log Out</p>
-        </MenuItem>
-      </Menu>
+      ""
+      // <Menu
+      //   anchorEl={mobileMoreAnchorEl}
+      //   anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      //   transformOrigin={{ vertical: "top", horizontal: "right" }}
+      //   open={isMobileMenuOpen}
+      //   onClose={this.handleMenuClose}
+      // >
+      //   <MenuItem onClick={this.handleMobileMenuClose}>
+      //     <IconButton color="inherit">
+      //       <Badge badgeContent={4} color="secondary">
+      //         <MailIcon />
+      //       </Badge>
+      //     </IconButton>
+      //     <p>Messages</p>
+      //   </MenuItem>
+      //   <MenuItem onClick={this.handleMobileMenuClose}>
+      //     <IconButton color="inherit">
+      //       <Badge badgeContent={11} color="secondary">
+      //         <NotificationsIcon />
+      //       </Badge>
+      //     </IconButton>
+      //     <p>Notifications</p>
+      //   </MenuItem>
+      //   <MenuItem onClick={this.handleProfileMenuOpen}>
+      //     <IconButton color="inherit">
+      //       <AccountCircle />
+      //     </IconButton>
+      //     <p>Profile</p>
+      //   </MenuItem>
+      //   <MenuItem onClick={this.handleLogout}>
+      //     <IconButton color="inherit">
+      //       <AccountCircle />
+      //     </IconButton>
+      //     <p>Log Out</p>
+      //   </MenuItem>
+      // </Menu>
     );
 
     const cartIconButtonClickHandler = (event: any) => {
@@ -279,97 +289,110 @@ class AppHeadBar extends React.Component<
     };
 
     return (
-      <div className={classes.root}>
-        <AppBar position="static" className={classes.myAppBar}>
-          <Toolbar>
-            {/* {isUserLogin ? <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
-              <MenuIcon />
-            </IconButton> : ''} */}
-            <Typography
-              className={classes.title}
-              variant="h6"
-              color="inherit"
-              noWrap
-            >
-              <Toolbar>
-                {/* <NebulaIcon /> */}
-                <Typography variant="h6" color="inherit" noWrap>
-                  <a href="/" className={classes.homeButton}>
-                    {t("max_studio")}
-                  </a>
-                </Typography>
-              </Toolbar>
-            </Typography>
-            {/* <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-              />
-            </div> */}
-            <div className={classes.grow} />
-            {isUserLogin ? (
-              <div className={classes.sectionDesktop}>
-                {/* <ProductSearchComponent /> */}
-                {/* <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-              />
-            </div> */}
-                {/* <IconButton color="inherit" onClick={cartIconButtonClickHandler}>
-                  <ShoppingCartIcon />
-                </IconButton>
-                <IconButton color="inherit">
-                  <Badge badgeContent={1} color="primary" className={classes.notificationBadge}>
-                    <NotificationsIcon />
-                  </Badge>
-                </IconButton> */}
-                <IconButton
-                  aria-owns={isMenuOpen ? "material-appbar" : undefined}
-                  aria-haspopup="true"
-                  onClick={e => {
-                    this.handleProfileMenuOpen(e);
-                  }}
-                  color="inherit"
-                >
-                  <AccountCircle />
-                </IconButton>
-              </div>
-            ) : (
-              renderLoginButton(this.props)
-            )}
-            {isUserLogin ? (
-              <div className={classes.sectionMobile}>
-                <IconButton
-                  aria-haspopup="true"
-                  onClick={e => {
-                    this.handleMobileMenuOpen(e);
-                  }}
-                  color="inherit"
-                >
-                  <MoreIcon />
-                </IconButton>
-              </div>
-            ) : (
-              ""
-            )}
-          </Toolbar>
-        </AppBar>
-        {renderMenu}
-        {renderMobileMenu}
-      </div>
+      // <div className={classes.root}>
+      //   <AppBar position="static" className={classes.myAppBar}>
+      //     <Toolbar>
+      //       {/* {isUserLogin ? <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
+      //         <MenuIcon />
+      //       </IconButton> : ''} */}
+      //       <Typography
+      //         className={classes.title}
+      //         variant="h6"
+      //         color="inherit"
+      //         noWrap
+      //       >
+      //         <Toolbar>
+      //           {/* <NebulaIcon /> */}
+      //           <Typography variant="h6" color="inherit" noWrap>
+      //             <a href="/" className={classes.homeButton}>
+      //               {t("max_studio")}
+      //             </a>
+      //           </Typography>
+      //         </Toolbar>
+      //       </Typography>
+      //       {/* <div className={classes.search}>
+      //         <div className={classes.searchIcon}>
+      //           <SearchIcon />
+      //         </div>
+      //         <InputBase
+      //           placeholder="Search…"
+      //           classes={{
+      //             root: classes.inputRoot,
+      //             input: classes.inputInput,
+      //           }}
+      //         />
+      //       </div> */}
+      //       <div className={classes.grow} />
+      //       {isUserLogin ? (
+      //         <div className={classes.sectionDesktop}>
+      //           {/* <ProductSearchComponent /> */}
+      //           {/* <div className={classes.search}>
+      //         <div className={classes.searchIcon}>
+      //           <SearchIcon />
+      //         </div>
+      //         <InputBase
+      //           placeholder="Search…"
+      //           classes={{
+      //             root: classes.inputRoot,
+      //             input: classes.inputInput,
+      //           }}
+      //         />
+      //       </div> */}
+      //           {/* <IconButton color="inherit" onClick={cartIconButtonClickHandler}>
+      //             <ShoppingCartIcon />
+      //           </IconButton>
+      //           <IconButton color="inherit">
+      //             <Badge badgeContent={1} color="primary" className={classes.notificationBadge}>
+      //               <NotificationsIcon />
+      //             </Badge>
+      //           </IconButton> */}
+      //           <IconButton
+      //             aria-owns={isMenuOpen ? "material-appbar" : undefined}
+      //             aria-haspopup="true"
+      //             onClick={e => {
+      //               this.handleProfileMenuOpen(e);
+      //             }}
+      //             color="inherit"
+      //           >
+      //             <AccountCircle />
+      //           </IconButton>
+      //         </div>
+      //       ) : (
+      //         renderLoginButton(this.props)
+      //       )}
+      //       {isUserLogin ? (
+      //         <div className={classes.sectionMobile}>
+      //           <IconButton
+      //             aria-haspopup="true"
+      //             onClick={e => {
+      //               this.handleMobileMenuOpen(e);
+      //             }}
+      //             color="inherit"
+      //           >
+      //             <MoreIcon />
+      //           </IconButton>
+      //         </div>
+      //       ) : (
+      //         ""
+      //       )}
+      //     </Toolbar>
+      //   </AppBar>
+      //   {renderMenu}
+      //   {renderMobileMenu}
+      // </div>
+      <Header className="header">
+        {/* <div className="logo" /> */}
+        <Menu
+          theme="dark"
+          mode="horizontal"
+          defaultSelectedKeys={["2"]}
+          style={{ lineHeight: "64px" }}
+        >
+          <Menu.Item key="1">nav 1</Menu.Item>
+          <Menu.Item key="2">nav 2</Menu.Item>
+          <Menu.Item key="3">nav 3</Menu.Item>
+        </Menu>
+      </Header>
     );
   }
 }

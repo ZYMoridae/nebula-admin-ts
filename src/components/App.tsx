@@ -28,11 +28,17 @@ import UserContainer from "../containers/user/UserContainer";
 import EditUserContainer from "../containers/user/EditUserContainer";
 
 import NewUserContainer from "../containers/user/NewUserContainer";
-import LoginForm from './LoginForm';
+import LoginForm from "./LoginForm";
 
+import "./App.css";
+// Ant Design
+import { Layout, Menu, Breadcrumb, Icon } from "antd";
+
+const { SubMenu } = Menu;
+const { Header, Content, Sider } = Layout;
 
 const Home = () => (
-  <div>
+  <div className="content-wrapper">
     {/* <UserContainer></UserContainer> */}
     <HomeContainer></HomeContainer>
   </div>
@@ -122,19 +128,18 @@ class App extends React.Component {
   render() {
     return (
       <Router>
-        <MuiThemeProvider theme={NebulaTheme}>
-          <div>
+        {/* <MuiThemeProvider theme={NebulaTheme}> */}
+        <Layout>
+          {location.pathname !== Routes.USER.LOGIN &&
+            location.pathname !== "/" && <SideDrawer></SideDrawer>}
+
+          <Layout id="content-sidebar-wrapper">
             {location.pathname !== Routes.USER.LOGIN && (
               <HeaderBarContainer></HeaderBarContainer>
             )}
 
-            {/* {location.pathname !== Routes.USER.LOGIN &&
-              location.pathname !== "/" && <SideDrawer></SideDrawer>} */}
-
             <Switch>
               <Route exact path={Routes.USER.LOGIN} component={Login} />
-              
-              
 
               <PrivateRoute exact path={Routes.HOME} component={Home} />
 
@@ -182,9 +187,10 @@ class App extends React.Component {
               <Redirect to={Routes.USER.LOGIN} />
             </Switch>
 
-            {location.pathname !== Routes.USER.LOGIN && <Footer></Footer>}
-          </div>
-        </MuiThemeProvider>
+            {/* {location.pathname !== Routes.USER.LOGIN && <Footer></Footer>} */}
+          </Layout>
+          {/* </MuiThemeProvider> */}
+        </Layout>
       </Router>
     );
   }

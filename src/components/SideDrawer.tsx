@@ -28,6 +28,13 @@ import _ from "lodash";
 
 import { USER, VENDOR, TEACHER, ADMIN } from "../utils/Role";
 
+// Ant Design
+import { Layout, Menu, Breadcrumb, Icon } from "antd";
+import "./SideDrawer.css";
+
+const { SubMenu } = Menu;
+const { Header, Content, Sider } = Layout;
+
 const drawerWidth = Constants.styles.sidebar.width;
 
 const styles = (theme: Theme) =>
@@ -51,67 +58,99 @@ const styles = (theme: Theme) =>
 const userBlock = [
   {
     name: "User",
-    icon: <PersonRoundedIcon fontSize="small" />
+    icon: <PersonRoundedIcon fontSize="small" />,
+    key: 2
   },
   {
     name: "Teacher",
-    icon: <SchoolRoundedIcon fontSize="small" />
+    icon: <SchoolRoundedIcon fontSize="small" />,
+    key: 3
   },
   {
     name: "Role",
-    icon: <VerifiedUserRoundedIcon fontSize="small" />
+    icon: <VerifiedUserRoundedIcon fontSize="small" />,
+    key: 4
   }
 ];
 
 const productBlock = [
   {
     name: "Product",
-    icon: <LocalGroceryStoreRoundedIcon fontSize="small" />
+    icon: <LocalGroceryStoreRoundedIcon fontSize="small" />,
+    key: 5
   },
   {
     name: "Product Category",
     icon: <CategoryRoundedIcon fontSize="small" />,
-    path: "/products/categories"
+    path: "/products/categories",
+    key: 6
   },
   {
     name: "Sku Category",
     icon: <CategoryRoundedIcon fontSize="small" />,
-    path: "/skus/attributes/categories"
+    path: "/skus/attributes/categories",
+    key: 7
   },
   {
     name: "Class",
-    icon: <ClassRoundedIcon fontSize="small" />
+    icon: <ClassRoundedIcon fontSize="small" />,
+    key: 8
   }
 ];
 
 const supportBlock = [
   {
     name: "Order",
-    icon: <ShoppingCartRoundedIcon fontSize="small" />
+    icon: <ShoppingCartRoundedIcon fontSize="small" />,
+    key: 9
   },
   {
     name: "Invoice",
-    icon: <DescriptionRoundedIcon fontSize="small" />
+    icon: <DescriptionRoundedIcon fontSize="small" />,
+    key: 10
   },
   {
     name: "Shipper",
-    icon: <LocalShippingRoundedIcon fontSize="small" />
+    icon: <LocalShippingRoundedIcon fontSize="small" />,
+    key: 11
   },
   {
     name: "Membership",
-    icon: <CardMembershipRoundedIcon fontSize="small" />
+    icon: <CardMembershipRoundedIcon fontSize="small" />,
+    key: 12
   }
 ];
 
-type SideDrawerState = {};
+type SideDrawerState = {
+  selectedKeys: Array<any>,
+  collapsed: boolean
+};
 
 type SideDrawerProps = {
   classes: any;
 };
 
 class SideDrawer extends React.Component<SideDrawerProps, SideDrawerState> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      collapsed: false,
+      selectedKeys: []
+    };
+  }
+
+  onCollapse = (collapsed: any) => {
+    console.log(collapsed);
+    this.setState({ collapsed });
+  };
+
+  componentDidUpdate() {
+    
+  }
+
+
   render() {
-    const { classes } = this.props;
+    // const { classes } = this.props;
 
     const itemClickHandler = (item: any) => {
       if (item.name == "home") {
@@ -125,103 +164,175 @@ class SideDrawer extends React.Component<SideDrawerProps, SideDrawerState> {
       }
     };
 
-    //FIXME: Use regular expression check the status
-    const checkSelected = (item: any) => {
-      let isSelected = false;
+    // //FIXME: Use regular expression check the status
+    // const checkSelected = (item: any) => {
+    //   let isSelected = false;
 
-      if (_.isNil(item.path)) {
-        isSelected = window.location.pathname == `/${item.name.toLowerCase()}s`;
-      } else {
-        isSelected = window.location.pathname.startsWith(`${item.path}`);
-      }
+    //   if (_.isNil(item.path)) {
+    //     isSelected = window.location.pathname == `/${item.name.toLowerCase()}s`;
+    //   } else {
+    //     isSelected = window.location.pathname.startsWith(`${item.path}`);
+    //   }
 
-      return isSelected;
-    };
+    //   return isSelected;
+    // };
 
     return (
-      <div>
-        <Drawer
-          className={classes.drawer}
-          variant="permanent"
-          classes={{
-            paper: classes.drawerPaper
-          }}
-          anchor="left"
-        >
-          <div className={classes.toolbar}></div>
-          <Divider />
-          <List>
-            <ListItem
-              button
-              selected={checkSelected({
-                name: "Home"
-              })}
+      // <div>
+      //   <Drawer
+      //     className={classes.drawer}
+      //     variant="permanent"
+      //     classes={{
+      //       paper: classes.drawerPaper
+      //     }}
+      //     anchor="left"
+      //   >
+      //     <div className={classes.toolbar}></div>
+      //     <Divider />
+      //     <List>
+      //       <ListItem
+      //         button
+      //         selected={checkSelected({
+      //           name: "Home"
+      //         })}
+      //         onClick={() => {
+      //           itemClickHandler({
+      //             name: "Home"
+      //           });
+      //         }}
+      //       >
+      //         <ListItemIcon>
+      //           <HomeRoundedIcon fontSize="small" />
+      //         </ListItemIcon>
+      //         {/* <ListItemText primary="Home" className={classes.itemText}/> */}
+      //         <span className={classes.itemText}>Home</span>
+      //       </ListItem>
+      //     </List>
+      //     <Divider />
+      //     <List>
+      //       {userBlock.map((item, index) => (
+      //         <ListItem
+      //           button
+      //           selected={checkSelected(item)}
+      //           key={index}
+      //           onClick={() => {
+      //             itemClickHandler(item);
+      //           }}
+      //         >
+      //           <ListItemIcon>{item.icon}</ListItemIcon>
+      //           <span className={classes.itemText}>{item.name}</span>
+      //           {/* <ListItemText primary={item.name} /> */}
+      //         </ListItem>
+      //       ))}
+      //     </List>
+      //     <Divider />
+      //     <List>
+      //       {productBlock.map((item, index) => (
+      //         <ListItem
+      //           button
+      //           key={index}
+      //           selected={checkSelected(item)}
+      //           onClick={() => {
+      //             itemClickHandler(item);
+      //           }}
+      //         >
+      //           <ListItemIcon>{item.icon}</ListItemIcon>
+      //           {/* <ListItemText primary={item.name} /> */}
+      //           <span className={classes.itemText}>{item.name}</span>
+      //         </ListItem>
+      //       ))}
+      //     </List>
+      //     <Divider />
+      //     <List>
+      //       {supportBlock.map((item, index) => (
+      //         <ListItem
+      //           button
+      //           selected={checkSelected(item)}
+      //           key={index}
+      //           onClick={() => {
+      //             itemClickHandler(item);
+      //           }}
+      //         >
+      //           <ListItemIcon>{item.icon}</ListItemIcon>
+      //           {/* <ListItemText primary={item.name} /> */}
+      //           <span className={classes.itemText}>{item.name}</span>
+      //         </ListItem>
+      //       ))}
+      //     </List>
+      //   </Drawer>
+      // </div>
+      <Sider
+        collapsible
+        collapsed={this.state.collapsed}
+        onCollapse={this.onCollapse}
+      >
+        <div className="logo" />
+        <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline" selectedKeys={this.state.selectedKeys}>
+          <Menu.Item key="1">
+            <Icon type="pie-chart" />
+            <span>Home</span>
+          </Menu.Item>
+          {/* <Menu.Item key="2">
+          <Icon type="desktop" />
+          <span>User Management</span>
+        </Menu.Item> */}
+          <SubMenu
+            key="sub1"
+            title={
+              <span>
+                <Icon type="user" />
+                <span>User</span>
+              </span>
+            }
+          >
+            {userBlock.map((item, index) => (
+              <Menu.Item
+                key={item.key}
+                onClick={() => {
+                  itemClickHandler(item);
+                }}
+              >
+                {item.name}
+              </Menu.Item>
+            ))}
+
+            {/* <Menu.Item key="3">User</Menu.Item>
+            <Menu.Item key="4">Teacher</Menu.Item>
+            <Menu.Item key="5">Role</Menu.Item> */}
+          </SubMenu>
+          <SubMenu
+            key="sub2"
+            title={
+              <span>
+                <Icon type="team" />
+                <span>Product</span>
+              </span>
+            }
+          >
+            {productBlock.map((item, index) => (
+              <Menu.Item
+                key={item.key}
+                onClick={() => {
+                  itemClickHandler(item);
+                }}
+              >
+                {item.name}
+              </Menu.Item>
+            ))}
+          </SubMenu>
+          {productBlock.map((item, index) => (
+            <Menu.Item
+              key={item.key}
               onClick={() => {
-                itemClickHandler({
-                  name: "Home"
-                });
+                itemClickHandler(item);
               }}
             >
-              <ListItemIcon>
-                <HomeRoundedIcon fontSize="small" />
-              </ListItemIcon>
-              {/* <ListItemText primary="Home" className={classes.itemText}/> */}
-              <span className={classes.itemText}>Home</span>
-            </ListItem>
-          </List>
-          <Divider />
-          <List>
-            {userBlock.map((item, index) => (
-              <ListItem
-                button
-                selected={checkSelected(item)}
-                key={index}
-                onClick={() => {
-                  itemClickHandler(item);
-                }}
-              >
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <span className={classes.itemText}>{item.name}</span>
-                {/* <ListItemText primary={item.name} /> */}
-              </ListItem>
-            ))}
-          </List>
-          <Divider />
-          <List>
-            {productBlock.map((item, index) => (
-              <ListItem
-                button
-                key={index}
-                selected={checkSelected(item)}
-                onClick={() => {
-                  itemClickHandler(item);
-                }}
-              >
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                {/* <ListItemText primary={item.name} /> */}
-                <span className={classes.itemText}>{item.name}</span>
-              </ListItem>
-            ))}
-          </List>
-          <Divider />
-          <List>
-            {supportBlock.map((item, index) => (
-              <ListItem
-                button
-                selected={checkSelected(item)}
-                key={index}
-                onClick={() => {
-                  itemClickHandler(item);
-                }}
-              >
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                {/* <ListItemText primary={item.name} /> */}
-                <span className={classes.itemText}>{item.name}</span>
-              </ListItem>
-            ))}
-          </List>
-        </Drawer>
-      </div>
+              <Icon type="file" />
+              <span>{item.name}</span>
+            </Menu.Item>
+          ))}
+        </Menu>
+      </Sider>
     );
   }
 }

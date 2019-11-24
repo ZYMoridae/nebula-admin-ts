@@ -5,6 +5,11 @@ import { withStyles } from "@material-ui/core/styles";
 import { Theme, createStyles } from "@material-ui/core";
 import Constants from "../utils/Constants";
 
+import { Layout, Menu, Breadcrumb, Icon } from 'antd';
+
+const { Header, Content, Footer, Sider } = Layout;
+
+
 const styles = (theme: Theme) =>
   createStyles({
     container: {
@@ -43,49 +48,50 @@ const styles = (theme: Theme) =>
     }
   });
 
-type FooterState = {};
+// type FooterState = {};
 
-type FooterProps = {
-  classes: any;
-};
+// type FooterProps = {
+//   classes: any;
+// };
 
-class Footer extends React.Component<FooterProps, FooterState> {
+class MyFooter extends React.Component{
   render() {
-    const { classes } = this.props;
+    // const { classes } = this.props;
 
     return (
-      <div className={classes.container}>
-        <div>
-          <Typography
-            variant="caption"
-            gutterBottom
-            align="center"
-            className={classes.footerText}
-          >
-            <a href="/" className={classes.linkItem}>
-              Condition of Use
-            </a>
-            <a href="/" className={classes.linkItem}>
-              Privacy Notice
-            </a>
-            <a href="/" className={classes.linkItem}>
-              Cookies
-            </a>
-          </Typography>
-        </div>
-        <div className={classes.footerTextContainer}>
-          <Typography
-            variant="caption"
-            gutterBottom
-            align="center"
-            className={classes.footerText}
-          >
-            © 2019, Max Studio
-          </Typography>
-        </div>
-      </div>
+      // <div className={classes.container}>
+      //   <div>
+      //     <Typography
+      //       variant="caption"
+      //       gutterBottom
+      //       align="center"
+      //       className={classes.footerText}
+      //     >
+      //       <a href="/" className={classes.linkItem}>
+      //         Condition of Use
+      //       </a>
+      //       <a href="/" className={classes.linkItem}>
+      //         Privacy Notice
+      //       </a>
+      //       <a href="/" className={classes.linkItem}>
+      //         Cookies
+      //       </a>
+      //     </Typography>
+      //   </div>
+      //   <div className={classes.footerTextContainer}>
+      //     <Typography
+      //       variant="caption"
+      //       gutterBottom
+      //       align="center"
+      //       className={classes.footerText}
+      //     >
+      //       © 2019, Max Studio
+      //     </Typography>
+      //   </div>
+      // </div>
+      <Footer style={{ textAlign: 'center' }}>Max Studio ©2018</Footer>
     );
   }
 }
 
-export default withStyles(styles)(Footer);
+export default withStyles(styles)(MyFooter);
