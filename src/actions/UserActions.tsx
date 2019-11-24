@@ -4,13 +4,14 @@ import ActionType from "./ActionType";
 
 // ANCHOR Fetch all users by pagination
 
-export const fetchAllUserFulfilled = (results: any, totalPages: number) => {
+export const fetchAllUserFulfilled = (results: any, totalPages: number, totalElements: number) => {
   return {
     type: ActionType.USER.GET_ALL.FULFILLED,
     fetchAllUserPending: false,
     fetchAllUserFulfilled: true,
     users: results,
     totalPages: totalPages,
+    totalElements: totalElements,
     receivedAt: Date.now()
   };
 };
@@ -61,7 +62,7 @@ export const fetchAllUser = (
         });
 
         dispatch(
-          fetchAllUserFulfilled(userList, response.data.page.totalPages)
+          fetchAllUserFulfilled(userList, response.data.page.totalPages, response.data.page.totalElements)
         );
       },
       failureCallback: (error: any) => {

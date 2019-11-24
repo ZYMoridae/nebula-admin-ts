@@ -7,7 +7,8 @@ const mapStateToProps = (state: any) => {
     users: state.UserReducer.users,
     fetchAllUserPending: state.UserReducer.fetchAllUserPending,
     fetchAllUserFulfilled: state.UserReducer.fetchAllUserFulfilled,
-    totalPages: state.UserReducer.totalPages
+    totalPages: state.UserReducer.totalPages,
+    totalElements: state.UserReducer.totalElements
   };
 };
 

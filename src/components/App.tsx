@@ -134,7 +134,8 @@ class App extends React.Component {
             location.pathname !== "/" && <SideDrawer></SideDrawer>}
 
           <Layout id="content-sidebar-wrapper">
-            {location.pathname !== Routes.USER.LOGIN && (
+            {location.pathname !== Routes.USER.LOGIN &&
+            location.pathname !== "/" && (
               <HeaderBarContainer></HeaderBarContainer>
             )}
 

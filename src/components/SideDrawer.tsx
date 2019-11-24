@@ -55,21 +55,35 @@ const styles = (theme: Theme) =>
     }
   });
 
+const homeBlock = [
+  {
+    name: "Home",
+    path: "/home",
+    key: 1
+  }
+];
+
 const userBlock = [
   {
     name: "User",
     icon: <PersonRoundedIcon fontSize="small" />,
-    key: 2
+    path: "/users",
+    key: 2,
+    subKey: "sub1"
   },
   {
     name: "Teacher",
     icon: <SchoolRoundedIcon fontSize="small" />,
-    key: 3
+    path: "/teachers",
+    key: 3,
+    subKey: "sub1"
   },
   {
     name: "Role",
     icon: <VerifiedUserRoundedIcon fontSize="small" />,
-    key: 4
+    path: "/roles",
+    key: 4,
+    subKey: "sub1"
   }
 ];
 
@@ -77,24 +91,30 @@ const productBlock = [
   {
     name: "Product",
     icon: <LocalGroceryStoreRoundedIcon fontSize="small" />,
-    key: 5
+    path: "/products",
+    key: 5,
+    subKey: "sub2"
   },
   {
     name: "Product Category",
     icon: <CategoryRoundedIcon fontSize="small" />,
     path: "/products/categories",
-    key: 6
+    key: 6,
+    subKey: "sub2"
   },
   {
     name: "Sku Category",
     icon: <CategoryRoundedIcon fontSize="small" />,
     path: "/skus/attributes/categories",
-    key: 7
+    key: 7,
+    subKey: "sub2"
   },
   {
     name: "Class",
     icon: <ClassRoundedIcon fontSize="small" />,
-    key: 8
+    path: "/classes",
+    key: 8,
+    subKey: "sub2"
   }
 ];
 
@@ -102,28 +122,33 @@ const supportBlock = [
   {
     name: "Order",
     icon: <ShoppingCartRoundedIcon fontSize="small" />,
+    path: "/orders",
     key: 9
   },
   {
     name: "Invoice",
     icon: <DescriptionRoundedIcon fontSize="small" />,
+    path: "/invoices",
     key: 10
   },
   {
     name: "Shipper",
     icon: <LocalShippingRoundedIcon fontSize="small" />,
+    path: "/shippers",
     key: 11
   },
   {
     name: "Membership",
     icon: <CardMembershipRoundedIcon fontSize="small" />,
+    path: "/memberships",
     key: 12
   }
 ];
 
 type SideDrawerState = {
-  selectedKeys: Array<any>,
-  collapsed: boolean
+  selectedKeys: Array<any>;
+  collapsed: boolean;
+  openKeys: Array<any>;
 };
 
 type SideDrawerProps = {
@@ -135,7 +160,8 @@ class SideDrawer extends React.Component<SideDrawerProps, SideDrawerState> {
     super(props);
     this.state = {
       collapsed: false,
-      selectedKeys: []
+      selectedKeys: [],
+      openKeys: []
     };
   }
 
@@ -144,10 +170,51 @@ class SideDrawer extends React.Component<SideDrawerProps, SideDrawerState> {
     this.setState({ collapsed });
   };
 
-  componentDidUpdate() {
-    
+  componentDidMount() {
+    // this.checkSelectedItem();
+    console.log(this.state);
   }
 
+  componentWillMount() {
+    this.checkSelectedItem();
+  }
+
+  componentDidUpdate() {
+    // this.checkSelectedItem();
+  }
+
+  checkSelectedItem() {
+    const allItems: any = [
+      ...homeBlock,
+      ...userBlock,
+      ...productBlock,
+      ...supportBlock
+    ];
+
+    let i = 0;
+    for (i = 0; i < allItems.length; i++) {
+      console.log(allItems[i].path);
+      if (window.location.pathname.startsWith(`${allItems[i].path}`)) {
+        let selectedKeys = [`${allItems[i].key}`];
+        let openKeys = [allItems[i].subKey];
+        console.log(selectedKeys, openKeys);
+        this.setState({
+          selectedKeys,
+          openKeys
+        });
+        console.log(this.state);
+        break;
+      }
+    }
+  }
+
+
+  // handleClick = (e: any) => {
+  //   console.log('click ', e);
+  //   this.setState({
+  //     selectedKeys: e.key,
+  //   });
+  // };
 
   render() {
     // const { classes } = this.props;
@@ -176,7 +243,7 @@ class SideDrawer extends React.Component<SideDrawerProps, SideDrawerState> {
 
     //   return isSelected;
     // };
-
+    console.log(this.state);
     return (
       // <div>
       //   <Drawer
@@ -261,13 +328,21 @@ class SideDrawer extends React.Component<SideDrawerProps, SideDrawerState> {
       //     </List>
       //   </Drawer>
       // </div>
+      
       <Sider
         collapsible
         collapsed={this.state.collapsed}
         onCollapse={this.onCollapse}
       >
         <div className="logo" />
-        <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline" selectedKeys={this.state.selectedKeys}>
+        <Menu
+          theme="dark"
+          defaultSelectedKeys={["1"]}
+          mode="inline"
+          selectedKeys={this.state.selectedKeys}
+          defaultOpenKeys={this.state.openKeys}
+          // onClick={this.handleClick}
+        >
           <Menu.Item key="1">
             <Icon type="pie-chart" />
             <span>Home</span>
@@ -320,7 +395,7 @@ class SideDrawer extends React.Component<SideDrawerProps, SideDrawerState> {
               </Menu.Item>
             ))}
           </SubMenu>
-          {productBlock.map((item, index) => (
+          {supportBlock.map((item, index) => (
             <Menu.Item
               key={item.key}
               onClick={() => {

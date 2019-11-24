@@ -89,7 +89,7 @@ class MyFooter extends React.Component{
       //     </Typography>
       //   </div>
       // </div>
-      <Footer style={{ textAlign: 'center' }}>Max Studio ©2018</Footer>
+    <Footer style={{ textAlign: 'center' }}>Max Studio ©{new Date().getFullYear()}</Footer>
     );
   }
 }

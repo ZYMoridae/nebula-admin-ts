@@ -4,6 +4,7 @@ let initState: any = {
   fetchAllUserPending: false,
   fetchAllUserFulfilled: false,
   totalPages: 1,
+  totalElements: 0,
   users: [],
   // Below for user GET action
   user: null,
@@ -33,7 +34,8 @@ const UserReducer = (state = initState, action: any) => {
         fetchAllUserFulfilled: action.fetchAllUserFulfilled,
         fetchAllUserPending: action.fetchAllUserPending,
         users: action.users,
-        totalPages: action.totalPages
+        totalPages: action.totalPages,
+        totalElements: action.totalElements
       });
     // GET user action
     case ActionType.USER.GET.PENDING:

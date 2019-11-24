@@ -26,6 +26,8 @@ import Constants from "../utils/Constants";
 
 import { Theme, createStyles } from "@material-ui/core";
 
+import "./HeaderBar.css";
+
 const drawerWidth = Constants.styles.sidebar.width;
 
 // Ant design
@@ -383,7 +385,7 @@ class AppHeadBar extends React.Component<
       <Header className="header">
         {/* <div className="logo" /> */}
         <Menu
-          theme="dark"
+          theme="light"
           mode="horizontal"
           defaultSelectedKeys={["2"]}
           style={{ lineHeight: "64px" }}
