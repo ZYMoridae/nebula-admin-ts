@@ -5,7 +5,8 @@ import ActionType from "./ActionType";
 // ANCHOR Fetch all product category
 export const fetchAllProductCategoryFulfilled = (
   results: any,
-  totalPages: number
+  totalPages: number,
+  totalElements: number
 ) => {
   return {
     type: ActionType.PRODUCT.CATEGORY.GET_ALL.FULFILLED,
@@ -13,6 +14,7 @@ export const fetchAllProductCategoryFulfilled = (
     fetchAllProductCategoryFulfilled: true,
     productCategories: results,
     totalPages: totalPages,
+    totalElements: totalElements,
     receivedAt: Date.now()
   };
 };
@@ -53,7 +55,8 @@ export const fetchAllProductCategory = (
         dispatch(
           fetchAllProductCategoryFulfilled(
             response.data._embedded.productCategoryList,
-            response.data.page.totalPages
+            response.data.page.totalPages,
+            response.data.page.totalElements
           )
         );
       },

@@ -1,41 +1,17 @@
 import * as React from "react";
-import PropTypes from "prop-types";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
-import Badge from "@material-ui/core/Badge";
-import MenuItem from "@material-ui/core/MenuItem";
-// import Menu from "@material-ui/core/Menu";
-import { fade } from "@material-ui/core/styles/colorManipulator";
-import { withStyles } from "@material-ui/core/styles";
-import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import MailIcon from "@material-ui/icons/Mail";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import MoreIcon from "@material-ui/icons/MoreVert";
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import NebulaIcon from "../components/NebulaIcon";
 import Routes from "../utils/Routes";
 
 import { withTranslation, WithTranslation } from "react-i18next";
 
-import Constants from "../utils/Constants";
-
-import { Theme, createStyles } from "@material-ui/core";
-
+import Utils from "../utils/Utils";
 import "./HeaderBar.css";
-
-const drawerWidth = Constants.styles.sidebar.width;
+import _ from "lodash";
 
 // Ant design
 
-import { Layout, Menu, Breadcrumb, Icon, Avatar, Dropdown } from "antd";
+import { Layout, Menu, Avatar, Dropdown } from "antd";
 
-const { SubMenu } = Menu;
-const { Header, Content, Sider } = Layout;
+const { Header } = Layout;
 
 type AppHeadBarState = {};
 
@@ -60,7 +36,7 @@ class AppHeadBar extends React.Component<
               marginRight: "8px"
             }}
           >
-            U
+            {_.capitalize(Utils.getCurrentUser().user.firstname.charAt(0))}
           </Avatar>
         </Dropdown>
       </Header>

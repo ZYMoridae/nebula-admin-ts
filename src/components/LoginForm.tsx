@@ -1,8 +1,11 @@
 import * as React from "react";
-import { Form, Icon, Input, Button, Checkbox } from "antd";
+import { Layout, Form, Icon, Input, Button, Checkbox } from "antd";
 import { FormComponentProps } from "antd/lib/form/Form";
 import "antd/dist/antd.css";
 import "./LoginForm.css";
+
+const { Footer } = Layout;
+
 
 interface LoginFormProps extends FormComponentProps {
   test: string;
@@ -60,6 +63,7 @@ class LoginForm extends React.Component<LoginFormProps> {
           </Button>
           Or <a href="">register now!</a>
         </Form.Item>
+        <Footer style={{ textAlign: 'center' }}>Nebula Tech ©{new Date().getFullYear()}</Footer>
       </Form>
     );
   }

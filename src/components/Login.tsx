@@ -1,13 +1,15 @@
 import * as React from "react";
 import { fetchAuthInfo } from "../actions";
 
-import { Form, Icon, Input, Button, Checkbox, Typography } from "antd";
+import { Layout, Form, Icon, Input, Button, Checkbox, Typography } from "antd";
 import { FormComponentProps } from "antd/lib/form/Form";
 import "antd/dist/antd.css";
 import "./LoginForm.css";
 import { Row, Col } from "antd";
 
 const { Title } = Typography;
+
+const { Footer } = Layout;
 
 interface LoginProps extends FormComponentProps {
   dispatch: any;
@@ -111,6 +113,9 @@ class Login extends React.Component<LoginProps> {
                 Log in
               </Button>
               {/* Or <a href="">register now!</a> */}
+              <Footer style={{ textAlign: "center" }}>
+                Nebula Tech ©{new Date().getFullYear()}
+              </Footer>
             </Form.Item>
           </Form>
         </Col>

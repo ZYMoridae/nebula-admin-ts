@@ -1,11 +1,13 @@
 import Zjax from "../utils/zjax";
 import Utils from "../utils/Utils";
 import ActionType from "./ActionType";
+import _ from "lodash";
 
 // ANCHOR Fetch all sku attribute category
 export const fetchAllSkuAttributeCategoryFulfilled = (
   results: any,
-  totalPages: number
+  totalPages: number,
+  totalElements: number
 ) => {
   return {
     type: ActionType.SKU.ATTRIBUTE.CATEGORY.GET_ALL.FULFILLED,
@@ -13,6 +15,7 @@ export const fetchAllSkuAttributeCategoryFulfilled = (
     isFetchedAllSkuAttributeCategory: true,
     skuAttributeCategories: results,
     totalPages: totalPages,
+    totalElements: totalElements,
     receivedAt: Date.now()
   };
 };
@@ -53,8 +56,11 @@ export const fetchAllSkuAttributeCategory = (
       successCallback: (response: any) => {
         dispatch(
           fetchAllSkuAttributeCategoryFulfilled(
-            response.data._embedded.skuAttributeCategoryList,
-            response.data.page.totalPages
+            _.isNil(response.data._embedded) || _.isNil(response.data._embedded.skuAttributeCategoryList)
+              ? []
+              : response.data._embedded.skuAttributeCategoryList,
+            response.data.page.totalPages,
+            response.data.page.totalElements
           )
         );
       },

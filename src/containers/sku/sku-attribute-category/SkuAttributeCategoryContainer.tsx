@@ -10,7 +10,8 @@ const mapStateToProps = (state: any) => {
       state.SkuAttributeCategoryReducer.fetchAllSkuAttributeCategoryPending,
     fetchAllSkuAttributeCategoryFulfilled:
       state.SkuAttributeCategoryReducer.fetchAllSkuAttributeCategoryFulfilled,
-    totalPages: state.SkuAttributeCategoryReducer.totalPages
+    totalPages: state.SkuAttributeCategoryReducer.totalPages,
+    totalElements: state.SkuAttributeCategoryReducer.totalElements
   };
 };
 

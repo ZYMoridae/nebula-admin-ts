@@ -9,7 +9,8 @@ const mapStateToProps = (state: any) => {
       state.ProductCategoryReducer.fetchAllProductCategoryPending,
     fetchAllProductCategoryFulfilled:
       state.ProductCategoryReducer.fetchAllProductCategoryFulfilled,
-    totalPages: state.ProductCategoryReducer.totalPages
+    totalPages: state.ProductCategoryReducer.totalPages,
+    totalElements: state.ProductCategoryReducer.totalElements
   };
 };
 

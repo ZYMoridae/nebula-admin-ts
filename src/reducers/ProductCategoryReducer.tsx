@@ -4,7 +4,8 @@ let initState: any = {
   fetchAllProductCategoryPending: false,
   fetchAllProductCategoryFulfilled: false,
   productCategories: [],
-  totalPages: 1
+  totalPages: 1,
+  totalElements: 0
 };
 const ProductCategoryReducer = (state = initState, action: any) => {
   switch (action.type) {
@@ -26,7 +27,8 @@ const ProductCategoryReducer = (state = initState, action: any) => {
           action.fetchAllProductCategoryFulfilled,
         fetchAllProductCategoryPending: action.fetchAllProductCategoryPending,
         productCategories: action.productCategories,
-        totalPages: action.totalPages
+        totalPages: action.totalPages,
+        totalElements: action.totalElements
       });
     default:
       return state;

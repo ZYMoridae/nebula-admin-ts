@@ -4,6 +4,7 @@ let initState: any = {
   fetchAllSkuAttributeCategoryPending: false,
   fetchAllSkuAttributeCategoryFulfilled: false,
   skuAttributeCategories: [],
+  totalElements: 0,
   totalPages: 1
 };
 const SkuAttributeCategoryReducer = (state = initState, action: any) => {
@@ -29,7 +30,8 @@ const SkuAttributeCategoryReducer = (state = initState, action: any) => {
         fetchAllSkuAttributeCategoryPending:
           action.fetchAllSkuAttributeCategoryPending,
         skuAttributeCategories: action.skuAttributeCategories,
-        totalPages: action.totalPages
+        totalPages: action.totalPages,
+        totalElements: action.totalElements
       });
     default:
       return state;

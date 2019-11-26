@@ -1,17 +1,12 @@
 import * as React from "react";
-import Constants from "../utils/Constants";
-import NebulaIcon from "./NebulaIcon";
-
 import _ from "lodash";
 
-import { USER, VENDOR, TEACHER, ADMIN } from "../utils/Role";
-
 // Ant Design
-import { Layout, Menu, Breadcrumb, Icon } from "antd";
+import { Layout, Menu, Icon } from "antd";
 import "./SideDrawer.css";
 
 const { SubMenu } = Menu;
-const { Header, Content, Sider } = Layout;
+const { Sider } = Layout;
 
 const homeBlock = [
   {
@@ -56,16 +51,19 @@ const productBlock = [
     subKey: "sub2"
   },
   {
-    name: "Sku Category",
-    path: "/skus/attributes/categories",
-    key: 7,
-    subKey: "sub2"
-  },
-  {
     name: "Class",
     path: "/classes",
     key: 8,
     subKey: "sub2"
+  }
+];
+
+const skuBlock = [
+  {
+    name: "Sku Category",
+    path: "/skus/attributes/categories",
+    key: 7,
+    subKey: "sub3"
   }
 ];
 
@@ -98,9 +96,7 @@ type SideDrawerState = {
   openKeys: Array<any>;
 };
 
-type SideDrawerProps = {
-
-};
+type SideDrawerProps = {};
 
 class SideDrawer extends React.Component<SideDrawerProps, SideDrawerState> {
   constructor(props: any) {
@@ -134,25 +130,43 @@ class SideDrawer extends React.Component<SideDrawerProps, SideDrawerState> {
     const allItems: any = [
       ...homeBlock,
       ...userBlock,
+      ...skuBlock,
       ...productBlock,
       ...supportBlock
     ];
 
     let i = 0;
+
+    let selectedKeys: any = [];
+    let openKeys: any = [];
+
     for (i = 0; i < allItems.length; i++) {
-      console.log(allItems[i].path);
-      if (window.location.pathname.startsWith(`${allItems[i].path}`)) {
-        let selectedKeys = [`${allItems[i].key}`];
-        let openKeys = [allItems[i].subKey];
+      console.log(window.location.pathname, allItems[i].path);
+      if (window.location.pathname === allItems[i].path) {
+        selectedKeys = [`${allItems[i].key}`];
+        openKeys = [allItems[i].subKey];
         console.log(selectedKeys, openKeys);
-        this.setState({
-          selectedKeys,
-          openKeys
-        });
+        // this.setState({
+        //   selectedKeys,
+        //   openKeys
+        // });
         console.log(this.state);
         break;
       }
+      if (window.location.pathname.startsWith(`${allItems[i].path}`)) {
+        selectedKeys = [`${allItems[i].key}`];
+        openKeys = [allItems[i].subKey];
+        console.log(selectedKeys, openKeys);
+
+        console.log(this.state);
+        // break;
+      }
     }
+
+    this.setState({
+      selectedKeys,
+      openKeys
+    });
   }
 
   render() {
@@ -170,15 +184,12 @@ class SideDrawer extends React.Component<SideDrawerProps, SideDrawerState> {
 
     console.log(this.state);
     return (
-      
       <Sider
         collapsible
         collapsed={this.state.collapsed}
         onCollapse={this.onCollapse}
       >
-        <div className="logo">
-          Max Studio
-        </div>
+        <div className="logo">Nebula</div>
         <Menu
           theme="dark"
           defaultSelectedKeys={["1"]}
@@ -223,7 +234,7 @@ class SideDrawer extends React.Component<SideDrawerProps, SideDrawerState> {
             key="sub2"
             title={
               <span>
-                <Icon type="team" />
+                <Icon type="shopping" />
                 <span>Product</span>
               </span>
             }
@@ -239,6 +250,27 @@ class SideDrawer extends React.Component<SideDrawerProps, SideDrawerState> {
               </Menu.Item>
             ))}
           </SubMenu>
+          <SubMenu
+            key="sub3"
+            title={
+              <span>
+                <Icon type="hdd" />
+                <span>Sku</span>
+              </span>
+            }
+          >
+            {skuBlock.map((item, index) => (
+              <Menu.Item
+                key={item.key}
+                onClick={() => {
+                  itemClickHandler(item);
+                }}
+              >
+                {item.name}
+              </Menu.Item>
+            ))}
+          </SubMenu>
+
           {supportBlock.map((item, index) => (
             <Menu.Item
               key={item.key}
@@ -246,7 +278,7 @@ class SideDrawer extends React.Component<SideDrawerProps, SideDrawerState> {
                 itemClickHandler(item);
               }}
             >
-              <Icon type="file" />
+              <Icon type="container" />
               <span>{item.name}</span>
             </Menu.Item>
           ))}

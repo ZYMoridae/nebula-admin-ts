@@ -1,28 +1,10 @@
 import * as React from "react";
-import { withStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
-import Pagination from "material-ui-flat-pagination";
-import CssBaseline from "@material-ui/core/CssBaseline";
-// import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import DeleteIcon from "@material-ui/icons/Delete";
-import CircularProgress from "@material-ui/core/CircularProgress";
-
-import IconButton from "@material-ui/core/IconButton";
-
-import SubToolBar from "../utils/SubToolBar";
-
-import { Theme, createStyles } from "@material-ui/core";
 
 // Ant Design
 import Footer from "../Footer";
-import { Layout, Table, Divider, Tag, Breadcrumb } from "antd";
+import { Layout, Table, Breadcrumb } from "antd";
 
-const { Header, Content, Sider } = Layout;
+const { Content } = Layout;
 
 const columns = [
   {
