@@ -7,7 +7,8 @@ const mapStateToProps = (state: any) => {
     info: state.ProductsReducer.info,
     isFetchingProducts: state.ProductsReducer.isFetchingProducts,
     isFetchedProducts: state.ProductsReducer.isFetchedProducts,
-    totalPages: state.ProductsReducer.totalPages
+    totalPages: state.ProductsReducer.totalPages,
+    totalElements: state.ProductsReducer.totalElements
   };
 };
 

@@ -4,7 +4,8 @@ let initState: any = {
   isFetchingProducts: false,
   isFetchedProducts: false,
   totalPages: 1,
-  info: "null",
+  totalElements: 0,
+  info: [],
   error: null
 };
 const productsReducer = (state = initState, action: any) => {
@@ -25,7 +26,8 @@ const productsReducer = (state = initState, action: any) => {
         isFetchedProducts: action.isFetchedProducts,
         isFetchingProducts: action.isFetchingProducts,
         info: action.info,
-        totalPages: action.totalPages
+        totalPages: action.totalPages,
+        totalElements: action.totalElements
       });
     default:
       return state;

@@ -1,5 +1,8 @@
 .logo {
   height: 28px;
-  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  /* background: rgba(255, 255, 255, 0.2); */
   margin: 16px;
+  font-family: Megrim, cursive;
+  font-size: 25px;
 }

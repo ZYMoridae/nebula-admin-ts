@@ -11,13 +11,14 @@ import _ from "lodash";
  * @param {array} results
  * @param {int} totalPages
  */
-export const receieveProducts = (results: any, totalPages: number) => {
+export const receieveProducts = (results: any, totalPages: number, totalElements: number) => {
   return {
     type: ActionType.PRODUCT.GET_ALL.FULFILLED,
     isFetchingProducts: false,
     isFetchedProducts: true,
     info: results,
-    totalPages: totalPages
+    totalPages: totalPages,
+    totalElements: totalElements
   };
 };
 
@@ -73,7 +74,8 @@ export const fetchProductsInfo = (
         dispatch(
           receieveProducts(
             response.data._embedded.productList,
-            response.data.page.totalPages
+            response.data.page.totalPages,
+            response.data.page.totalElements
           )
         );
       },

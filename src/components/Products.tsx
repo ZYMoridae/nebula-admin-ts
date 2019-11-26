@@ -1,91 +1,56 @@
 import * as React from "react";
-import { withStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
-import Pagination from "material-ui-flat-pagination";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import DeleteIcon from "@material-ui/icons/Delete";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import Footer from "./Footer";
+import { Layout, Table, Divider, Tag, Breadcrumb } from "antd";
 
-import IconButton from "@material-ui/core/IconButton";
+const { Header, Content, Sider } = Layout;
 
-import SubToolBar from "./utils/SubToolBar";
-
-import { Theme, createStyles } from "@material-ui/core";
-
-const styles = (theme: Theme) =>
-  createStyles({
-    container: {
-      display: "flex",
-      flexWrap: "wrap"
-    },
-    textField: {},
-    dense: {
-      marginTop: 16
-    },
-    menu: {
-      width: 200
-    },
-    root: {
-      flexGrow: 1
-    },
-    paper: {
-      padding: theme.spacing(2),
-      textAlign: "center",
-      color: theme.palette.text.secondary
-    },
-    loginContainer: {
-      padding: theme.spacing(3),
-      marginTop: theme.spacing(12),
-      display: "flex",
-      flexWrap: "wrap",
-      width: 350
-    },
-    loginButton: {
-      marginTop: theme.spacing(2)
-    },
-    productsContainer: {
-      marginLeft: theme.spacing(10),
-      marginRight: theme.spacing(10),
-      marginBottom: theme.spacing(7)
-    },
-    pagination: {
-      marginTop: theme.spacing(5),
-      textAlign: "center"
-    },
-    prodcutContainer: {
-      marginTop: theme.spacing(2),
-      marginLeft: 340
-    },
-    idClick: {
-      textDecoration: "underline",
-      color: "#0044ff",
-      "&:hover": {
-        cursor: "pointer"
-      }
-    },
-    table: {
-      width: "100%"
-    },
-    newButton: {
-      float: "right"
-    },
-    paginationWrapper: {
-      textAlign: "center"
-    }
-  });
+const columns = [
+  {
+    title: "Id",
+    dataIndex: "id",
+    key: "id",
+    render: (text: any, record: any) => (
+      <a href={`/products/${record.id}`}>{text}</a>
+    )
+  },
+  {
+    title: "Name",
+    dataIndex: "name",
+    key: "name"
+  },
+  {
+    title: "Category",
+    dataIndex: "category",
+    key: "category",
+    render: (text: any, record: any) => (
+      <span>{record.productCategory.name}</span>
+    )
+  },
+  {
+    title: "Created At",
+    dataIndex: "createdAt",
+    key: "createdAt"
+  },
+  {
+    title: "Action",
+    key: "action",
+    render: (text: any, record: any) => (
+      <span>
+        {/* <a>Invite {record.name}</a>
+        <Divider type="vertical" /> */}
+        <a>Delete</a>
+      </span>
+    )
+  }
+];
 
 type ProductsState = {
   offset: number;
+  pagination: any;
 };
 
 type ProductsProps = {
-  classes: any;
+  totalElements: number;
   perPage: number;
   orderBy: string;
   fetchProductsInfo: any;
@@ -99,7 +64,7 @@ type ProductsProps = {
 class Products extends React.Component<ProductsProps, ProductsState> {
   constructor(props: any) {
     super(props);
-    this.state = { offset: 0 };
+    this.state = { offset: 0, pagination: {} };
   }
 
   componentDidMount() {
@@ -121,6 +86,16 @@ class Products extends React.Component<ProductsProps, ProductsState> {
     }
   }
 
+  handleTableChange = (pagination: any, filters: any, sorter: any) => {
+    const { fetchProductsInfo } = this.props;
+    const pager = { ...this.state.pagination };
+    pager.current = pagination.current;
+    this.setState({
+      pagination: pager
+    });
+    fetchProductsInfo(pagination.current, pagination.pageSize, "id");
+  };
+
   /**
    * Handle pagination click
    *
@@ -137,112 +112,50 @@ class Products extends React.Component<ProductsProps, ProductsState> {
   render() {
     const {
       info,
-      classes,
       perPage,
       totalPages,
       page,
       isFetchingProducts,
-      isFetchedProducts
+      isFetchedProducts,
+      totalElements
     } = this.props;
-
-    const theme = createMuiTheme({
-      // typography: {
-      //   useNextVariants: true
-      // }
-    });
 
     const onDeleteClick = (product: any) => {
       window.location.href = "/products/" + product.id;
     };
 
     return (
-      <div className={classes.productsContainer}>
-        <main className={classes.content}>
-          <Grid className={classes.prodcutContainer}>
-            <Grid item xs={1} lg={2}></Grid>
-            <Grid item xs={10} lg={12}>
-              <Grid>
-                <Grid item xs={12}>
-                  <SubToolBar title="Products" href="/products/new" />
-                </Grid>
-
-                {isFetchingProducts ? (
-                  <CircularProgress />
-                ) : (
-                  <Grid item xs={12}>
-                    <Table className={classes.table} aria-label="simple table">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>ID</TableCell>
-                          <TableCell align="right">Name</TableCell>
-                          <TableCell align="right">Category</TableCell>
-                          <TableCell align="right">Created At</TableCell>
-                          <TableCell align="right">Action</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {Array.isArray(info) &&
-                          info.map((product, index) => (
-                            <TableRow key={index}>
-                              <TableCell component="th" scope="row">
-                                <a
-                                  className={classes.idClick}
-                                  onClick={() => {
-                                    onDeleteClick(product);
-                                  }}
-                                >
-                                  {product.id}
-                                </a>
-                              </TableCell>
-                              <TableCell align="right">
-                                {product.name}
-                              </TableCell>
-                              <TableCell align="right">
-                                {product.productCategory.name}
-                              </TableCell>
-                              <TableCell align="right">
-                                {product.createdAt}
-                              </TableCell>
-                              <TableCell align="right">
-                                <IconButton
-                                  aria-label="delete"
-                                  className={classes.margin}
-                                  size="small"
-                                  onClick={() => {
-                                    onDeleteClick(product);
-                                  }}
-                                >
-                                  <DeleteIcon fontSize="inherit" />
-                                </IconButton>
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                      </TableBody>
-                    </Table>
-                  </Grid>
-                )}
-
-                <Grid item xs={12}>
-                  <div className={classes.paginationWrapper}>
-                    <MuiThemeProvider theme={theme}>
-                      <CssBaseline />
-                      <Pagination
-                        limit={perPage}
-                        offset={this.state.offset}
-                        total={totalPages * perPage}
-                        onClick={(e, offset) => this.handleClick(offset)}
-                      />
-                    </MuiThemeProvider>
-                  </div>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item xs={1} lg={2}></Grid>
-          </Grid>
-        </main>
-      </div>
+      <Layout style={{ padding: "0 24px 24px" }}>
+        <Breadcrumb style={{ margin: "16px 0" }}>
+          <Breadcrumb.Item>Product</Breadcrumb.Item>
+          <Breadcrumb.Item>List</Breadcrumb.Item>
+        </Breadcrumb>
+        <Content
+          style={{
+            background: "#fff",
+            padding: 24,
+            margin: 0,
+            minHeight: 280
+          }}
+        >
+          <Table
+            columns={columns}
+            dataSource={info}
+            rowKey={record => record.id}
+            pagination={{
+              defaultPageSize: 10,
+              showSizeChanger: true,
+              pageSizeOptions: ["10", "20", "30"],
+              total: totalElements
+            }}
+            onChange={this.handleTableChange}
+            loading={isFetchingProducts}
+          />
+        </Content>
+        <Footer></Footer>
+      </Layout>
     );
   }
 }
 
-export default withStyles(styles)(Products);
+export default Products;
