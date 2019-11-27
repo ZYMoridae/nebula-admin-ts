@@ -11,3 +11,8 @@
   margin-top: 25vh;
   /* background: white; */
 }
+
+.login-title {
+  color: rgba(0, 0, 0, 0.4) !important;
+  margin-bottom: 18px !important;
+}

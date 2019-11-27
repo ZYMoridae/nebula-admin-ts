@@ -67,7 +67,7 @@ class Login extends React.Component<LoginProps> {
       <Row id="form-container" type="flex" justify="center">
         <Col span={4}>
           <Form onSubmit={this.handleSubmit} className="login-form">
-            <Title level={4}>Nebula Admin</Title>
+            <Title className="login-title" level={4}>Plato Admin</Title>
             <Form.Item>
               {getFieldDecorator("username", {
                 rules: [
@@ -114,7 +114,7 @@ class Login extends React.Component<LoginProps> {
               </Button>
               {/* Or <a href="">register now!</a> */}
               <Footer style={{ textAlign: "center" }}>
-                Nebula Tech ©{new Date().getFullYear()}
+                Plato Tech ©{new Date().getFullYear()}
               </Footer>
             </Form.Item>
           </Form>

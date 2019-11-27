@@ -189,7 +189,7 @@ class SideDrawer extends React.Component<SideDrawerProps, SideDrawerState> {
         collapsed={this.state.collapsed}
         onCollapse={this.onCollapse}
       >
-        <div className="logo">Nebula</div>
+        <div className="logo">Plato</div>
         <Menu
           theme="dark"
           defaultSelectedKeys={["1"]}
