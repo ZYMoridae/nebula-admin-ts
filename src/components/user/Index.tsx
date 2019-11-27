@@ -41,6 +41,7 @@ const columns = [
 type IndexState = {
   offset: number;
   pagination: any;
+  selectedRowKeys: Array<any>,
 };
 
 type IndexProps = {
@@ -57,7 +58,7 @@ type IndexProps = {
 class Index extends React.Component<IndexProps, IndexState> {
   constructor(props: any) {
     super(props);
-    this.state = { offset: 0, pagination: {} };
+    this.state = { offset: 0, pagination: {}, selectedRowKeys: []};
   }
 
   componentDidMount() {
@@ -102,6 +103,11 @@ class Index extends React.Component<IndexProps, IndexState> {
     fetchAllUser(pagination.current, pagination.pageSize, "id");
   };
 
+  onSelectChange = (selectedRowKeys: any) => {
+    console.log('selectedRowKeys changed: ', selectedRowKeys);
+    this.setState({ selectedRowKeys });
+  };
+
   render() {
     const {
       users,
@@ -113,6 +119,11 @@ class Index extends React.Component<IndexProps, IndexState> {
 
     const onDeleteClick = (user: any) => {
       window.location.href = "/users/" + user.id;
+    };
+
+    const rowSelection = {
+      selectedRowKeys: this.state.selectedRowKeys,
+      onChange: this.onSelectChange,
     };
 
     return (
@@ -130,6 +141,7 @@ class Index extends React.Component<IndexProps, IndexState> {
           }}
         >
           <Table
+            rowSelection={rowSelection}
             columns={columns}
             dataSource={users}
             rowKey={record => record.id}

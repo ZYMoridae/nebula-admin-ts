@@ -9,6 +9,12 @@ import Constants from "../../utils/Constants";
 import Form from "./Form";
 import { Theme, createStyles } from "@material-ui/core";
 
+// Ant Design
+import Footer from "../Footer";
+import { Layout, Table, Breadcrumb } from "antd";
+
+const { Content } = Layout;
+
 const styles = (theme: Theme) =>
   createStyles({
     container: {
@@ -90,24 +96,50 @@ class Edit extends React.Component<EditProps, EditState> {
     } = this.props;
 
     return (
-      <Fade in={true} timeout={1000}>
-        <Grid container>
-          <Grid item xs={1} sm={1}></Grid>
-          <Grid item xs={10} sm={8} className={classes.container}>
-            {fetchUserPending && <CircularProgress />}
-            {fetchUserFulfilled && user && (
-              <Form
-                user={user}
-                mode={Constants.FORM.MODE.UPDATE}
-                action={updateUser}
-                actionPending={updateUserPending}
-                actionFulfilled={updateUserFulfilled}
-              ></Form>
-            )}
-          </Grid>
-          <Grid item xs={1} sm={1}></Grid>
-        </Grid>
-      </Fade>
+      <Layout style={{ padding: "0 24px 24px" }}>
+        <Breadcrumb style={{ margin: "16px 0" }}>
+          <Breadcrumb.Item>User</Breadcrumb.Item>
+          <Breadcrumb.Item>List</Breadcrumb.Item>
+        </Breadcrumb>
+        <Content
+          style={{
+            background: "#fff",
+            padding: 24,
+            margin: 0,
+            minHeight: 280
+          }}
+        >
+          {fetchUserFulfilled && user && (
+            <Form
+              user={user}
+              mode={Constants.FORM.MODE.UPDATE}
+              action={updateUser}
+              actionPending={updateUserPending}
+              actionFulfilled={updateUserFulfilled}
+            ></Form>
+          )}
+        </Content>
+        <Footer></Footer>
+      </Layout>
+
+      // <Fade in={true} timeout={1000}>
+      //   <Grid container>
+      //     <Grid item xs={1} sm={1}></Grid>
+      //     <Grid item xs={10} sm={8} className={classes.container}>
+      //       {fetchUserPending && <CircularProgress />}
+      //       {fetchUserFulfilled && user && (
+      //         <Form
+      //           user={user}
+      //           mode={Constants.FORM.MODE.UPDATE}
+      //           action={updateUser}
+      //           actionPending={updateUserPending}
+      //           actionFulfilled={updateUserFulfilled}
+      //         ></Form>
+      //       )}
+      //     </Grid>
+      //     <Grid item xs={1} sm={1}></Grid>
+      //   </Grid>
+      // </Fade>
     );
   }
 }
