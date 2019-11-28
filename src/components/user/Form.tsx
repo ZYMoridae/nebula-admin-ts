@@ -309,33 +309,37 @@ class UserForm extends React.Component<FormProps> {
   // }
 
   fetchRoles = debounce((value: any) => {
-    console.log("fetching user", value);
-    // this.lastFetchId += 1;
-    // const fetchId = this.lastFetchId;
-    this.setState({ data: [], fetching: true });
-    let token = sessionStorage.getItem("token");
-    fetch(`/api/users/roles${"?keyword=" + value}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json"
-      }
-    })
-      .then(response => response.json())
-      .then(body => {
-        // if (fetchId !== this.lastFetchId) {
-        //   // for fetch callback order
-        //   return;
-        // }
-        // console.log(body);
-        const data = _.isNil(body._embedded)
-          ? []
-          : body._embedded.roleList.map((item: any) => ({
-              text: `${item.code}`,
-              value: item.id
-            }));
-        this.setState({ data, fetching: false });
-      });
+    if (value === "") {
+      this.setState({ data: [], fetching: false });
+    } else {
+      console.log("fetching user", value);
+      // this.lastFetchId += 1;
+      // const fetchId = this.lastFetchId;
+      this.setState({ data: [], fetching: true });
+      let token = sessionStorage.getItem("token");
+      fetch(`/api/users/roles${"?keyword=" + value}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json"
+        }
+      })
+        .then(response => response.json())
+        .then(body => {
+          // if (fetchId !== this.lastFetchId) {
+          //   // for fetch callback order
+          //   return;
+          // }
+          // console.log(body);
+          const data = _.isNil(body._embedded)
+            ? []
+            : body._embedded.roleList.map((item: any) => ({
+                text: `${item.code}`,
+                value: item.id
+              }));
+          this.setState({ data, fetching: false });
+        });
+    }
   }, 800);
 
   handleChange = (value: any) => {
@@ -390,11 +394,13 @@ class UserForm extends React.Component<FormProps> {
       }
     });
   };
+
   state: any = {
     data: [],
     value: [],
     fetching: false
   };
+
   // lastFetchId: number = 0;
   render() {
     const { user, mode, actionPending, actionFulfilled } = this.props;
@@ -512,6 +518,7 @@ class UserForm extends React.Component<FormProps> {
               rules: [{ required: true, message: "Please input your roles!" }]
             })(
               <Select
+                allowClear={true}
                 style={{ width: "100%" }}
                 // value={this.props.form.getFieldValue("roles")}
                 labelInValue
