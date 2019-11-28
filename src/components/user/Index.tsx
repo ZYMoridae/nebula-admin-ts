@@ -2,7 +2,9 @@ import * as React from "react";
 
 // Ant Design
 import Footer from "../Footer";
-import { Layout, Table, Breadcrumb } from "antd";
+import { Layout, Table, Breadcrumb, Button, Icon } from "antd";
+
+import { Row, Col } from "antd";
 
 const { Content } = Layout;
 
@@ -41,7 +43,7 @@ const columns = [
 type IndexState = {
   offset: number;
   pagination: any;
-  selectedRowKeys: Array<any>,
+  selectedRowKeys: Array<any>;
 };
 
 type IndexProps = {
@@ -58,7 +60,7 @@ type IndexProps = {
 class Index extends React.Component<IndexProps, IndexState> {
   constructor(props: any) {
     super(props);
-    this.state = { offset: 0, pagination: {}, selectedRowKeys: []};
+    this.state = { offset: 0, pagination: {}, selectedRowKeys: [] };
   }
 
   componentDidMount() {
@@ -104,7 +106,7 @@ class Index extends React.Component<IndexProps, IndexState> {
   };
 
   onSelectChange = (selectedRowKeys: any) => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
+    console.log("selectedRowKeys changed: ", selectedRowKeys);
     this.setState({ selectedRowKeys });
   };
 
@@ -123,7 +125,7 @@ class Index extends React.Component<IndexProps, IndexState> {
 
     const rowSelection = {
       selectedRowKeys: this.state.selectedRowKeys,
-      onChange: this.onSelectChange,
+      onChange: this.onSelectChange
     };
 
     return (
@@ -140,6 +142,20 @@ class Index extends React.Component<IndexProps, IndexState> {
             minHeight: 280
           }}
         >
+          <Row gutter={8} style={{ marginBottom: "8px" }}>
+            <Col span={2} offset={22}>
+              <Button
+                type="primary"
+                onClick={() => {
+                  window.location.href = "/users/new";
+                }}
+              >
+                <Icon type="plus" />
+                Add
+              </Button>
+            </Col>
+          </Row>
+
           <Table
             rowSelection={rowSelection}
             columns={columns}
