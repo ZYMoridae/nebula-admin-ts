@@ -109,13 +109,13 @@ class SideDrawer extends React.Component<SideDrawerProps, SideDrawerState> {
   }
 
   onCollapse = (collapsed: any) => {
-    console.log(collapsed);
+    // console.log(collapsed);
     this.setState({ collapsed });
   };
 
   componentDidMount() {
     // this.checkSelectedItem();
-    console.log(this.state);
+    // console.log(this.state);
   }
 
   componentWillMount() {
@@ -141,24 +141,24 @@ class SideDrawer extends React.Component<SideDrawerProps, SideDrawerState> {
     let openKeys: any = [];
 
     for (i = 0; i < allItems.length; i++) {
-      console.log(window.location.pathname, allItems[i].path);
+      // console.log(window.location.pathname, allItems[i].path);
       if (window.location.pathname === allItems[i].path) {
         selectedKeys = [`${allItems[i].key}`];
         openKeys = [allItems[i].subKey];
-        console.log(selectedKeys, openKeys);
+        // console.log(selectedKeys, openKeys);
         // this.setState({
         //   selectedKeys,
         //   openKeys
         // });
-        console.log(this.state);
+        // console.log(this.state);
         break;
       }
       if (window.location.pathname.startsWith(`${allItems[i].path}`)) {
         selectedKeys = [`${allItems[i].key}`];
         openKeys = [allItems[i].subKey];
-        console.log(selectedKeys, openKeys);
+        // console.log(selectedKeys, openKeys);
 
-        console.log(this.state);
+        // console.log(this.state);
         // break;
       }
     }
@@ -182,7 +182,7 @@ class SideDrawer extends React.Component<SideDrawerProps, SideDrawerState> {
       }
     };
 
-    console.log(this.state);
+    // console.log(this.state);
     return (
       <Sider
         collapsible

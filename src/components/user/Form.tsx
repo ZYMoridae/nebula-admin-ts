@@ -21,6 +21,8 @@ import ZValidator from "../utils/form/ZValidator";
 // import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 
+import debounce from "lodash/debounce";
+
 import {
   Layout,
   Form,
@@ -29,7 +31,8 @@ import {
   Button,
   Checkbox,
   Typography,
-  Select
+  Select,
+  Spin
 } from "antd";
 import { FormComponentProps } from "antd/lib/form/Form";
 import { Row, Col } from "antd";
@@ -47,21 +50,8 @@ const styles = (theme: Theme) =>
   });
 
 interface FormState {
-  username: string;
-  email: string;
-  id?: number;
-  firstname: string;
-  lastname: string;
-  address1: string;
-  address2: string;
-  telephone: string;
-  genderOptions: any;
-  roleOptions: any;
-  gender: any;
-  validationErrors: any;
-  isFormValid: boolean;
-  useDefaultPwd: boolean;
-  password?: string;
+  data: Array<any>;
+  fetching: boolean;
 }
 
 interface FormProps extends FormComponentProps {
@@ -318,26 +308,94 @@ class UserForm extends React.Component<FormProps> {
   //   return !_.isNil(this.state.validationErrors[field]);
   // }
 
+  fetchRoles = debounce((value: any) => {
+    console.log("fetching user", value);
+    // this.lastFetchId += 1;
+    // const fetchId = this.lastFetchId;
+    this.setState({ data: [], fetching: true });
+    let token = sessionStorage.getItem("token");
+    fetch(`/api/users/roles${"?keyword=" + value}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json"
+      }
+    })
+      .then(response => response.json())
+      .then(body => {
+        // if (fetchId !== this.lastFetchId) {
+        //   // for fetch callback order
+        //   return;
+        // }
+        // console.log(body);
+        const data = _.isNil(body._embedded)
+          ? []
+          : body._embedded.roleList.map((item: any) => ({
+              text: `${item.code}`,
+              value: item.id
+            }));
+        this.setState({ data, fetching: false });
+      });
+  }, 800);
+
+  handleChange = (value: any) => {
+    console.log(value);
+
+    this.setState({
+      data: [],
+      fetching: false
+    });
+
+    console.warn(this.props.form);
+
+    this.props.form.setFieldsValue({
+      roles: value
+    });
+  };
+
   handleSubmit = (e: any) => {
     event.preventDefault();
 
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        // this.props.dispatch(
-        //   fetchAuthInfo({
-        //     headers: {
-        //       Authorization: `Basic ${btoa(
-        //         `${values.username}:${values.password}`
-        //       )}`
-        //     }
-        //   })
-        // );
+        if (this.props.mode == Constants.FORM.MODE.UPDATE) {
+          let _user: any = _.cloneDeep(values);
+          console.log(_user);
+
+          _user.roles = _user.roles.map((roleOption: any) => {
+            return {
+              id: roleOption.key,
+              code: roleOption.label
+            };
+          });
+
+          this.props.action(_user);
+        } else if (this.props.mode == Constants.FORM.MODE.NEW) {
+          // FIXME: Remove Id
+          let _user: any = _.cloneDeep(values);
+          console.log(_user);
+
+          _user.roles = _user.roles.map((roleOption: any) => {
+            return {
+              id: roleOption.key,
+              code: roleOption.label
+            };
+          });
+
+          this.props.action(_user);
+        }
+
         console.log("Received values of form: ", values);
       }
     });
   };
-
+  state: any = {
+    data: [],
+    value: [],
+    fetching: false
+  };
+  // lastFetchId: number = 0;
   render() {
     const { user, mode, actionPending, actionFulfilled } = this.props;
     const { getFieldDecorator } = this.props.form;
@@ -352,11 +410,27 @@ class UserForm extends React.Component<FormProps> {
       }
     };
 
+    const tailFormItemLayout = {
+      wrapperCol: {
+        xs: {
+          span: 24,
+          offset: 0
+        },
+        sm: {
+          span: 16,
+          offset: 8
+        }
+      }
+    };
+
+    const { fetching, data, value } = this.state;
+
     return (
-      <div style={{ maxWidth: "500px" }}>
+      <div style={{ maxWidth: "700px" }}>
         <Form {...formItemLayout} onSubmit={this.handleSubmit}>
           <Form.Item label="Id">
             {getFieldDecorator("id", {
+              initialValue: user.id,
               rules: [
                 { required: true, message: "Please input your username!" }
               ]
@@ -364,6 +438,7 @@ class UserForm extends React.Component<FormProps> {
           </Form.Item>
           <Form.Item label="Username">
             {getFieldDecorator("username", {
+              initialValue: user.username,
               rules: [
                 { required: true, message: "Please input your username!" }
               ]
@@ -371,11 +446,13 @@ class UserForm extends React.Component<FormProps> {
           </Form.Item>
           <Form.Item label="Email">
             {getFieldDecorator("email", {
+              initialValue: user.email,
               rules: [{ required: true, message: "Please input your email!" }]
             })(<Input />)}
           </Form.Item>
           <Form.Item label="Telephone">
             {getFieldDecorator("telephone", {
+              initialValue: user.telephone,
               rules: [
                 { required: true, message: "Please input your telephone!" }
               ]
@@ -383,31 +460,34 @@ class UserForm extends React.Component<FormProps> {
           </Form.Item>
           <Form.Item label="Gender">
             {getFieldDecorator("gender", {
-              initialValue: "M",
+              initialValue: user.gender,
               rules: [{ required: true, message: "Please input your gender!" }]
             })(
               <Select style={{ width: "100%" }}>
                 <Option value="M">Male</Option>
-                <Option value="F">female</Option>
+                <Option value="F">Female</Option>
               </Select>
             )}
           </Form.Item>
           <Form.Item label="First Name">
-            {getFieldDecorator("firstName", {
+            {getFieldDecorator("firstname", {
+              initialValue: user.firstname,
               rules: [
-                { required: true, message: "Please input your firstname!" }
+                { required: true, message: "Please input your first name!" }
               ]
             })(<Input />)}
           </Form.Item>
           <Form.Item label="Last Name">
-            {getFieldDecorator("lastName", {
+            {getFieldDecorator("lastname", {
+              initialValue: user.lastname,
               rules: [
-                { required: true, message: "Please input your lastname!" }
+                { required: true, message: "Please input your last name!" }
               ]
             })(<Input />)}
           </Form.Item>
           <Form.Item label="Address1">
             {getFieldDecorator("address1", {
+              initialValue: user.address1,
               rules: [
                 { required: true, message: "Please input your address1!" }
               ]
@@ -415,6 +495,7 @@ class UserForm extends React.Component<FormProps> {
           </Form.Item>
           <Form.Item label="Address2">
             {getFieldDecorator("address2", {
+              initialValue: user.address2,
               rules: [
                 { required: true, message: "Please input your address2!" }
               ]
@@ -422,22 +503,33 @@ class UserForm extends React.Component<FormProps> {
           </Form.Item>
           <Form.Item label="Role">
             {getFieldDecorator("roles", {
-              initialValue: [],
+              initialValue: user.roles.map((role: any) => {
+                return {
+                  key: role.id,
+                  label: role.code
+                };
+              }),
               rules: [{ required: true, message: "Please input your roles!" }]
             })(
-              <Select style={{ width: "100%" }} mode="multiple">
-                <Option value="USER">USER</Option>
-                <Option value="ADMIN">ADMIN</Option>
-                <Option value="VENDOR">VENDOR</Option>
-                <Option value="TEACHER">TEACHER</Option>
+              <Select
+                style={{ width: "100%" }}
+                // value={this.props.form.getFieldValue("roles")}
+                labelInValue
+                mode="multiple"
+                placeholder="Select roles"
+                filterOption={false}
+                onSearch={this.fetchRoles}
+                onChange={this.handleChange}
+                notFoundContent={fetching ? <Spin size="small" /> : null}
+              >
+                {data.map((d: any) => (
+                  <Option key={d.value}>{d.text}</Option>
+                ))}
               </Select>
             )}
           </Form.Item>
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-            >
+          <Form.Item {...tailFormItemLayout}>
+            <Button type="primary" htmlType="submit">
               Save
             </Button>
           </Form.Item>

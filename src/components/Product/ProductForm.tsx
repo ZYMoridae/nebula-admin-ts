@@ -19,7 +19,7 @@ import TextField from "@material-ui/core/TextField";
 import AsyncSelect from "react-select/async";
 
 import "./ProductForm.css";
-import "../utils/Form.css";
+// import "../utils/Form.css";
 
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
