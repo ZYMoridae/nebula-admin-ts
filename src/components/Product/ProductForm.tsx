@@ -4,9 +4,9 @@ import _ from "lodash";
 import { Form, Input, Button, Select, Spin, Checkbox } from "antd";
 import { FormComponentProps } from "antd/lib/form/Form";
 import Constants from "./../../utils/Constants";
-
+import debounce from "lodash/debounce";
 const { TextArea } = Input;
-
+const { Option } = Select;
 interface FormProps extends FormComponentProps {
   product?: any;
   mode: string;
@@ -29,6 +29,54 @@ class ProductForm extends React.Component<FormProps> {
         console.log("Received values of form: ", values);
       }
     });
+  };
+
+  fetchCategories = debounce((value: any) => {
+    if (value === "") {
+      this.setState({ data: [], isFetchingCategory: false });
+    } else {
+      this.setState({ data: [], isFetchingCategory: true });
+      let token = sessionStorage.getItem("token");
+      fetch(`/api/product-categories${"?keyword=" + value}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json"
+        }
+      })
+        .then(response => response.json())
+        .then(body => {
+          const data = _.isNil(body._embedded)
+            ? []
+            : body._embedded.productCategoryList.map((item: any) => ({
+                text: `${item.name}`,
+                value: item.id
+              }));
+          this.setState({ data, isFetchingCategory: false });
+        });
+    }
+  }, 800);
+
+  handleCategoryChange = (value: any) => {
+    console.log(value);
+
+    this.setState({
+      data: [],
+      isFetchingCategory: false
+    });
+
+    console.warn(this.props.form);
+
+
+    this.props.form.setFieldsValue({
+      productCategory: value
+    });
+  };
+
+  state: any = {
+    data: [],
+    productCategory: [],
+    isFetchingCategory: false
   };
 
   render() {
@@ -58,7 +106,7 @@ class ProductForm extends React.Component<FormProps> {
         }
       }
     };
-
+    const { isFetchingCategory, data, productCategory } = this.state;
     return (
       <div style={{ maxWidth: "700px" }}>
         <Form {...formItemLayout} onSubmit={this.handleSubmit}>
@@ -93,38 +141,40 @@ class ProductForm extends React.Component<FormProps> {
               ]
             })(<TextArea rows={4} />)}
           </Form.Item>
-        </Form>
 
-        {/* <Form.Item label="Role">
+          <Form.Item label="Role">
             {getFieldDecorator("roles", {
-              initialValue: user
-                ? user.roles.map((role: any) => {
-                    return {
-                      key: role.id,
-                      label: role.code
-                    };
-                  })
+              initialValue: product
+                ? {
+                    key: product.productCategory.id,
+                    label: product.productCategory.name
+                  }
                 : [],
-              rules: [{ required: true, message: "Please input your category!" }]
+              rules: [
+                { required: true, message: "Please input your category!" }
+              ]
             })(
               <Select
                 allowClear={true}
                 style={{ width: "100%" }}
                 // value={this.props.form.getFieldValue("roles")}
                 labelInValue
-                mode="multiple"
+                // mode="multiple"  
                 placeholder="Select roles"
                 filterOption={false}
-                onSearch={this.fetchRoles}
-                onChange={this.handleChange}
-                notFoundContent={fetching ? <Spin size="small" /> : null}
+                onSearch={this.fetchCategories}
+                onChange={this.handleCategoryChange}
+                notFoundContent={
+                  isFetchingCategory ? <Spin size="small" /> : null
+                }
               >
                 {data.map((d: any) => (
                   <Option key={d.value}>{d.text}</Option>
                 ))}
               </Select>
             )}
-          </Form.Item> */}
+          </Form.Item>
+        </Form>
       </div>
     );
   }
