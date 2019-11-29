@@ -64,7 +64,7 @@
     "typescript": "^3.5.1",
     "webpack": "^4.32.2",
     "webpack-cli": "^3.3.2",
-    "webpack-dev-server": "^3.5.1"
+    "webpack-dev-server": "^3.9.0"
   },
   "devDependencies": {
     "@types/react": "^16.8.19",
@@ -84,7 +84,7 @@
   },
   "scripts": {
     "test": "jest --coverage",
-    "start": "webpack-dev-server --hot --port 3001 --config webpack.config.js",
+    "start": "./node_modules/.bin/webpack-dev-server --hot --port 3001 --config webpack.config.js",
     "build": "webpack --config webpack.config.js && cp ./index.html ./nebula_client/"
   },
   "author": "",

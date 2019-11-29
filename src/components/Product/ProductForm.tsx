@@ -159,7 +159,7 @@ class ProductForm extends React.Component<FormProps> {
                 style={{ width: "100%" }}
                 // value={this.props.form.getFieldValue("roles")}
                 labelInValue
-                // mode="multiple"  
+                mode="multiple"  
                 placeholder="Select roles"
                 filterOption={false}
                 onSearch={this.fetchCategories}

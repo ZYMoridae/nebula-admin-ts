@@ -12,7 +12,7 @@ module.exports = {
   // Enable sourcemaps for debugging webpack's output.
   devtool: "source-map",
   devServer: {
-    // contentBase: path.join(__dirname, 'src'),
+    // contentBase: path.join(__dirname, './src'),
     // watchContentBase: true,
     inline: true,
     port: 3000,
