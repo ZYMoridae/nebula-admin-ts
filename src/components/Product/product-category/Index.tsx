@@ -1,7 +1,9 @@
 import * as React from "react";
 
 import Footer from "../../Footer";
-import { Layout, Table, Divider, Tag, Breadcrumb } from "antd";
+import { Layout, Table, Divider, Tag, Breadcrumb, Button, Icon } from "antd";
+
+import { Row, Col } from "antd";
 
 const { Header, Content, Sider } = Layout;
 

@@ -112,8 +112,10 @@ class ProductInfo extends React.Component<ProductInfoProps, ProductInfoState> {
         <div>
           <ProductForm
             product={info}
-            updateProduct={updateProduct}
+            action={updateProduct}
             mode="update"
+            actionPending={isFetchingProductInfo}
+            actionFulfilled={isFetchedProductInfo}
           ></ProductForm>
         </div>
       );

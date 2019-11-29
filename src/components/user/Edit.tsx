@@ -41,7 +41,7 @@ class Edit extends React.Component<EditProps> {
       <Layout style={{ padding: "0 24px 24px" }}>
         <Breadcrumb style={{ margin: "16px 0" }}>
           <Breadcrumb.Item>User</Breadcrumb.Item>
-          <Breadcrumb.Item>Update</Breadcrumb.Item>
+          <Breadcrumb.Item>Edit</Breadcrumb.Item>
         </Breadcrumb>
         <Content
           style={{

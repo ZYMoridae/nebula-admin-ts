@@ -57,12 +57,7 @@ class New extends React.Component<NewProps, NewState> {
 
     productInfoBlock = (
       <div>
-        <ProductForm
-          product={info}
-          updateProduct={updateProduct}
-          createProduct={createProduct}
-          mode="new"
-        ></ProductForm>
+
       </div>
     );
 

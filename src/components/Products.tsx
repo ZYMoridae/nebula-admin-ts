@@ -1,6 +1,8 @@
 import * as React from "react";
 import Footer from "./Footer";
-import { Layout, Table, Divider, Tag, Breadcrumb } from "antd";
+import { Layout, Table, Divider, Tag, Breadcrumb, Button, Icon } from "antd";
+
+import { Row, Col } from "antd";
 
 const { Header, Content, Sider } = Layout;
 
@@ -138,6 +140,20 @@ class Products extends React.Component<ProductsProps, ProductsState> {
             minHeight: 280
           }}
         >
+          <Row gutter={8} style={{ marginBottom: "8px" }}>
+            <Col span={2} offset={22}>
+              <Button
+                type="primary"
+                onClick={() => {
+                  window.location.href = "/products/new";
+                }}
+              >
+                <Icon type="plus" />
+                Add
+              </Button>
+            </Col>
+          </Row>
+
           <Table
             columns={columns}
             dataSource={info}

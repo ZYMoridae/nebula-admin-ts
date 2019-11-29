@@ -13,8 +13,16 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import ContentNotFound from "../utils/ContentNotFound";
 
 import Constants from "../../utils/Constants";
-import ProductForm from "./ProductForm";
+import Form from "./ProductForm";
 import { Theme, createStyles } from "@material-ui/core";
+
+// import Constants from "../../utils/Constants";
+// import Form from "./Form";
+
+import Footer from "../Footer";
+import { Layout, Breadcrumb } from "antd";
+
+const { Content } = Layout;
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -101,51 +109,47 @@ class ProductInfo extends React.Component<ProductInfoProps, ProductInfoState> {
 
     let productInfoBlock: any = "";
 
-    if (fetchProductInfoError != undefined) {
-      productInfoBlock = renderProductNotFoundBlock();
-    } else {
-      productInfoBlock = (
-        <div>
-          <ProductForm
-            product={info}
-            updateProduct={updateProduct}
-            mode="update"
-          ></ProductForm>
-        </div>
-      );
-    }
+    // if (fetchProductInfoError != undefined) {
+    //   productInfoBlock = renderProductNotFoundBlock();
+    // } else {
+    //   productInfoBlock = (
+    //     <div>
+    //       <ProductForm
+    //         product={info}
+    //         action={updateProduct}
+    //         mode="update"
+    //       ></ProductForm>
+    //     </div>
+    //   );
+    // }
 
     return (
       <div>
-        {/* <Snackbar
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left"
-          }}
-          open={isShowSuccessToast}
-          autoHideDuration={1500}
-          onClose={hideSuccessToast}
-        >
-          <MySnackbarContent
-            onClose={hideSuccessToast}
-            variant="success"
-            message="Item has been added!"
-          />
-        </Snackbar> */}
-
-        <Fade in={true} timeout={1000}>
-          <Grid container>
-            <Grid item xs={1} sm={1}>
-              {/* <ProductCategorySideBarContainer></ProductCategorySideBarContainer> */}
-            </Grid>
-
-            <Grid item xs={10} sm={8} className={classes.container}>
-              {isFetchingProductInfo && <CircularProgress />}
-              {isFetchedProductInfo && info && productInfoBlock}
-            </Grid>
-            <Grid item xs={1} sm={1}></Grid>
-          </Grid>
-        </Fade>
+        <Layout style={{ padding: "0 24px 24px" }}>
+          <Breadcrumb style={{ margin: "16px 0" }}>
+            <Breadcrumb.Item>Product</Breadcrumb.Item>
+            <Breadcrumb.Item>Edit</Breadcrumb.Item>
+          </Breadcrumb>
+          <Content
+            style={{
+              background: "#fff",
+              padding: 24,
+              margin: 0,
+              minHeight: 280
+            }}
+          >
+            {isFetchedProductInfo && info && (
+              <Form
+                product={info}
+                mode={Constants.FORM.MODE.UPDATE}
+                action={updateProduct}
+                // actionPending={updateUserPending}
+                // actionFulfilled={updateUserFulfilled}
+              ></Form>
+            )}
+          </Content>
+          <Footer></Footer>
+        </Layout>
       </div>
     );
   }
