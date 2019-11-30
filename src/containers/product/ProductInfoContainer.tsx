@@ -2,15 +2,15 @@ import { connect } from "react-redux";
 import {
   fetchProductInfo,
   hideSuccessToast
-} from "../actions/ProductInfoActions";
+} from "../../actions/ProductInfoActions";
 
-import { updateProduct, createProduct } from "../actions/ProductsActions";
+import { updateProduct, createProduct } from "../../actions/ProductsActions";
 
-import ProductInfo from "../components/product/ProductInfo";
+import Edit from "../../components/product/Edit";
 
 const mapStateToProps = (state: any) => {
   return {
-    info: state.ProductInfoReducer.info,
+    product: state.ProductInfoReducer.product,
     isFetchingProductInfo: state.ProductInfoReducer.isFetchingProductInfo,
     isFetchedProductInfo: state.ProductInfoReducer.isFetchedProductInfo,
     fetchProductInfoError: state.ProductInfoReducer.fetchProductInfoError,
@@ -51,6 +51,6 @@ const mapDispatchToProps = (dispatch: any) => {
 const ProductInfoContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProductInfo);
+)(Edit);
 
 export default ProductInfoContainer;

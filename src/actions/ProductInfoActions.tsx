@@ -15,7 +15,7 @@ export const receieveProductInfo = (result: any) => {
     type: ActionType.PRODUCT.GET.FULFILLED,
     isFetchingProductInfo: false,
     isFetchedProductInfo: true,
-    info: result
+    product: result
   }
 }
 

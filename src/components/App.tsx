@@ -20,7 +20,7 @@ import HomeContainer from "../containers/HomeContainer";
 import LoginContainer from "../containers/LoginContainer";
 import ProductsContainer from "../containers/ProductsContainer";
 import HeaderBarContainer from "../containers/HeaderBarContainer";
-import ProductInfoContainer from "../containers/ProductInfoContainer";
+import ProductInfoContainer from "../containers/product/ProductInfoContainer";
 import NewProductContainer from "../containers/product/NewProductContainer";
 import ProductCategoryContainer from "../containers/product/product-category/ProductCategoryContainer";
 import SkuAttributeCategoryContainer from "../containers/sku/sku-attribute-category/SkuAttributeCategoryContainer";
@@ -28,7 +28,6 @@ import UserContainer from "../containers/user/UserContainer";
 import EditUserContainer from "../containers/user/EditUserContainer";
 
 import NewUserContainer from "../containers/user/NewUserContainer";
-import LoginForm from "./LoginForm";
 
 import "./App.css";
 // Ant Design
@@ -92,10 +91,10 @@ const Users = () => {
   );
 };
 
-const ProductInfo = ({ match }: { match: any }) => {
+const EditProduct = ({ match }: { match: any }) => {
   return (
     <div>
-      <ProductInfoContainer productId={match.params.id}></ProductInfoContainer>
+      <ProductInfoContainer id={match.params.id}></ProductInfoContainer>
     </div>
   );
 };
@@ -181,9 +180,9 @@ class App extends React.Component {
               <PrivateRoute
                 exact
                 path={Routes.PRODUCT.EDIT}
-                component={ProductInfo}
+                component={EditProduct}
               />
-              <Route exact path="/test" component={LoginForm} />
+              {/* <Route exact path="/test" component={LoginForm} /> */}
               <Route exact path={Routes.USER.LOGIN} component={Login} />
               <Redirect to={Routes.USER.LOGIN} />
             </Switch>

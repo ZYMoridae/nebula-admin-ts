@@ -7,7 +7,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import MySnackbarContent from "../MySnackbarContent";
 import Fade from "@material-ui/core/Fade";
 import Constants from "../../utils/Constants";
-import ProductForm from "./ProductForm";
+import ProductForm from "./Form";
 
 import { Theme, createStyles } from "@material-ui/core";
 

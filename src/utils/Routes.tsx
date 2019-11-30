@@ -9,7 +9,7 @@ const Routes = {
   PRODUCT: {
     INDEX: "/products",
     NEW: "/products/new",
-    EDIT: "/products/:id",
+    EDIT: "/products/:id(\\d+)",
     CATEGORY: {
       INDEX: "/products/categories",
       NEW: "/products/categories/new",

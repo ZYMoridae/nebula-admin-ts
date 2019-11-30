@@ -116,7 +116,7 @@ class UserForm extends React.Component<FormProps> {
 
   render() {
     const { user, mode, actionPending, actionFulfilled } = this.props;
-    const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator, getFieldError } = this.props.form;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -157,7 +157,11 @@ class UserForm extends React.Component<FormProps> {
             </Form.Item>
           )}
 
-          <Form.Item label="Username">
+          <Form.Item
+            label="Username"
+            hasFeedback
+            validateStatus={getFieldError("username") ? "error" : "success"}
+          >
             {getFieldDecorator("username", {
               initialValue: user ? user.username : "",
               rules: [

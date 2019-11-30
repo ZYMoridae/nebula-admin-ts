@@ -9,7 +9,7 @@ let initState: any = {
   isShowSuccessToast: false,
   isFetchingProductComments: false,
   isFetchedProductComments: false,
-  info: "null",
+  product: null,
   productComments: [],
   isUpdatingProduct: false,
   isUpdatedProduct: false,
@@ -33,7 +33,7 @@ const productInfoReducer = (state = initState, action: any) => {
       return Object.assign({}, state, {
         isFetchedProductInfo: action.isFetchedProductInfo,
         isFetchingProductInfo: action.isFetchingProductInfo,
-        info: action.info
+        product: action.product
       });
     case ActionType.HIDE_SUCCESS_TOAST:
       return Object.assign({}, state, {
@@ -54,7 +54,7 @@ const productInfoReducer = (state = initState, action: any) => {
       return Object.assign({}, state, {
         isUpdatingProduct: action.isUpdatingProduct,
         isUpdatedProduct: action.isUpdatedProduct,
-        info: action.info
+        product: action.product
       });
 
     // Fetch sku attribute category
@@ -96,7 +96,7 @@ const productInfoReducer = (state = initState, action: any) => {
       return Object.assign({}, state, {
         isCreatingProduct: action.isCreatingProduct,
         isCreatedProdudct: action.isCreatedProdudct,
-        info: action.info
+        product: action.product
       });
 
     default:

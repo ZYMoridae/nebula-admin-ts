@@ -1,7 +1,7 @@
 import * as React from "react";
 import _ from "lodash";
 
-import { Form, Input, Button, Select, Spin, Checkbox } from "antd";
+import { Form, Input, Button, Select, Spin, Checkbox, Icon } from "antd";
 import { FormComponentProps } from "antd/lib/form/Form";
 import Constants from "./../../utils/Constants";
 import debounce from "lodash/debounce";
@@ -14,6 +14,8 @@ interface FormProps extends FormComponentProps {
   actionPending?: boolean;
   actionFulfilled?: boolean;
 }
+
+let id = 0;
 
 class ProductForm extends React.Component<FormProps> {
   handleSubmit = (e: any) => {
@@ -67,7 +69,6 @@ class ProductForm extends React.Component<FormProps> {
 
     console.warn(this.props.form);
 
-
     this.props.form.setFieldsValue({
       productCategory: value
     });
@@ -79,9 +80,35 @@ class ProductForm extends React.Component<FormProps> {
     isFetchingCategory: false
   };
 
+  remove = (k: any) => {
+    const { form } = this.props;
+    // can use data-binding to get
+    const keys = form.getFieldValue("keys");
+    // We need at least one passenger
+    if (keys.length === 1) {
+      return;
+    }
+
+    // can use data-binding to set
+    form.setFieldsValue({
+      keys: keys.filter((key: any) => key !== k)
+    });
+  };
+
+  add = () => {
+    const { form } = this.props;
+    // can use data-binding to get
+    const keys = form.getFieldValue("keys");
+    const nextKeys = keys.concat(id++);
+    // can use data-binding to set
+    // important! notify form to detect changes
+    form.setFieldsValue({
+      keys: nextKeys
+    });
+  };
   render() {
     const { mode, product } = this.props;
-    const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator, getFieldError, getFieldValue } = this.props.form;
 
     const formItemLayout = {
       labelCol: {
@@ -106,6 +133,46 @@ class ProductForm extends React.Component<FormProps> {
         }
       }
     };
+    const formItemLayoutWithOutLabel = {
+      wrapperCol: {
+        xs: { span: 24, offset: 0 },
+        sm: { span: 20, offset: 4 }
+      }
+    };
+    getFieldDecorator("keys", { initialValue: [] });
+    const keys = getFieldValue("keys");
+    const skuFormItems = keys.map((k: any, index: any) => (
+      <Form.Item
+        {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+        label={index === 0 ? "Passengers" : ""}
+        required={false}
+        key={k}
+      >
+        {getFieldDecorator(`names[${k}]`, {
+          validateTrigger: ["onChange", "onBlur"],
+          rules: [
+            {
+              required: true,
+              whitespace: true,
+              message: "Please input passenger's name or delete this field."
+            }
+          ]
+        })(
+          <Input
+            placeholder="passenger name"
+            style={{ width: "60%", marginRight: 8 }}
+          />
+        )}
+        {keys.length > 1 ? (
+          <Icon
+            className="dynamic-delete-button"
+            type="minus-circle-o"
+            onClick={() => this.remove(k)}
+          />
+        ) : null}
+      </Form.Item>
+    ));
+
     const { isFetchingCategory, data, productCategory } = this.state;
     return (
       <div style={{ maxWidth: "700px" }}>
@@ -121,16 +188,24 @@ class ProductForm extends React.Component<FormProps> {
             </Form.Item>
           )}
 
-          <Form.Item label="Name">
+          <Form.Item
+            label="Name"
+            hasFeedback
+            validateStatus={getFieldError("name") ? "error" : "success"}
+          >
             {getFieldDecorator("name", {
               initialValue: product ? product.name : "",
               rules: [
                 { required: true, message: "Please input your last name!" }
               ]
-            })(<Input />)}
+            })(<Input id="success" />)}
           </Form.Item>
 
-          <Form.Item label="Description">
+          <Form.Item
+            label="Description"
+            hasFeedback
+            validateStatus={getFieldError("description") ? "error" : "success"}
+          >
             {getFieldDecorator("description", {
               initialValue: product ? product.description : "",
               rules: [
@@ -142,26 +217,33 @@ class ProductForm extends React.Component<FormProps> {
             })(<TextArea rows={4} />)}
           </Form.Item>
 
-          <Form.Item label="Role">
-            {getFieldDecorator("roles", {
+          <Form.Item label="Category">
+            {getFieldDecorator("productCategory", {
               initialValue: product
                 ? {
                     key: product.productCategory.id,
                     label: product.productCategory.name
                   }
-                : [],
+                : {},
               rules: [
                 { required: true, message: "Please input your category!" }
               ]
             })(
               <Select
+                showSearch
+                filterOption={(input: any, option: any) =>
+                  option.props.children
+                    .toLowerCase()
+                    .indexOf(input.toLowerCase()) >= 0
+                }
+                // optionFilterProp="children"
                 allowClear={true}
                 style={{ width: "100%" }}
                 // value={this.props.form.getFieldValue("roles")}
                 labelInValue
-                mode="multiple"  
-                placeholder="Select roles"
-                filterOption={false}
+                // mode="multiple"
+                placeholder="Select product category"
+                // filterOption={false}
                 onSearch={this.fetchCategories}
                 onChange={this.handleCategoryChange}
                 notFoundContent={
@@ -173,6 +255,14 @@ class ProductForm extends React.Component<FormProps> {
                 ))}
               </Select>
             )}
+          </Form.Item>
+
+          <div>{...skuFormItems}</div>
+
+          <Form.Item {...formItemLayoutWithOutLabel}>
+            <Button type="dashed" onClick={this.add} style={{ width: "60%" }}>
+              <Icon type="plus" /> Add field
+            </Button>
           </Form.Item>
         </Form>
       </div>
