@@ -159,8 +159,8 @@ class UserForm extends React.Component<FormProps> {
 
           <Form.Item
             label="Username"
-            hasFeedback
-            validateStatus={getFieldError("username") ? "error" : "success"}
+            // hasFeedback
+            // validateStatus={getFieldError("username") ? "error" : "success"}
           >
             {getFieldDecorator("username", {
               initialValue: user ? user.username : "",

@@ -1,12 +1,25 @@
 import * as React from "react";
 import _ from "lodash";
 
-import { Form, Input, Button, Select, Spin, Checkbox, Icon } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  Select,
+  Spin,
+  Checkbox,
+  Icon,
+  Typography,
+  Collapse,
+  Badge
+} from "antd";
 import { FormComponentProps } from "antd/lib/form/Form";
 import Constants from "./../../utils/Constants";
 import debounce from "lodash/debounce";
 const { TextArea } = Input;
 const { Option } = Select;
+const { Text } = Typography;
+const { Panel } = Collapse;
 interface FormProps extends FormComponentProps {
   product?: any;
   mode: string;
@@ -106,6 +119,118 @@ class ProductForm extends React.Component<FormProps> {
       keys: nextKeys
     });
   };
+
+  removeSkuAttribute = (skuIndex: number, k: any) => {
+    const { form } = this.props;
+    // can use data-binding to get
+    const keys = form.getFieldValue(`skuAttributekeys[${skuIndex}]`);
+    // We need at least one passenger
+    if (keys.length === 1) {
+      return;
+    }
+
+    let fieldName = `skuAttributekeys[${skuIndex}]`;
+
+    // can use data-binding to set
+    form.setFieldsValue({
+      [fieldName]: keys.filter((key: any) => key !== k)
+    });
+  };
+
+  addSkuAttribute = (skuIndex: number) => {
+    const { form } = this.props;
+    // can use data-binding to get
+    const keys = form.getFieldValue(`skuAttributekeys[${skuIndex}]`);
+    const nextKeys = keys.concat(id++);
+
+    let fieldName = `skuAttributekeys[${skuIndex}]`;
+    // can use data-binding to set
+    // important! notify form to detect changes
+    form.setFieldsValue({
+      [fieldName]: nextKeys
+    });
+  };
+
+  renderSkuAttribute(skuIndex: number) {
+    const { getFieldDecorator, getFieldValue } = this.props.form;
+
+    getFieldDecorator(`skuAttributekeys[${skuIndex}]`, { initialValue: [] });
+    const keys = getFieldValue(`skuAttributekeys[${skuIndex}]`);
+
+    return (
+      <div>
+        {keys.map((k: any, index: any) => (
+          <div key={k}>
+            <Form.Item {...this.tailFormItemLayout}>
+              <Badge
+                count={index + 1}
+                style={{
+                  backgroundColor: "#fff",
+                  color: "#999",
+                  boxShadow: "0 0 0 1px #d9d9d9 inset"
+                }}
+              />
+              <Text style={{ marginLeft: "8px" }}>Sku Attribute</Text>
+            </Form.Item>
+
+            <Form.Item label="Name">
+              {getFieldDecorator(`sku[${skuIndex}].attribute[${k}][name]`, {
+                initialValue: "",
+                rules: [
+                  {
+                    required: true,
+                    message: "Please input name"
+                  }
+                ]
+              })(<Input />)}
+            </Form.Item>
+
+            <Form.Item label="Value">
+              {getFieldDecorator(`sku[${skuIndex}].attribute[${k}][value]`, {
+                initialValue: "",
+                rules: [
+                  {
+                    required: true,
+                    // whitespace: true,
+                    message: "Please input value"
+                  }
+                ]
+              })(<Input />)}
+            </Form.Item>
+
+            <Form.Item {...this.tailFormItemLayout}>
+              {keys.length > 1 ? (
+                <Button
+                  type="danger"
+                  onClick={() => this.removeSkuAttribute(skuIndex, k)}
+                >
+                  Remove
+                </Button>
+              ) : null}
+            </Form.Item>
+          </div>
+        ))}
+      </div>
+    );
+  }
+  tailFormItemLayout = {
+    wrapperCol: {
+      xs: {
+        span: 24,
+        offset: 0
+      },
+      sm: {
+        span: 16,
+        offset: 8
+      }
+    }
+  };
+  formItemLayoutWithOutLabel = {
+    wrapperCol: {
+      xs: { span: 24, offset: 0 },
+      sm: { span: 20, offset: 4 }
+    }
+  };
   render() {
     const { mode, product } = this.props;
     const { getFieldDecorator, getFieldError, getFieldValue } = this.props.form;
@@ -141,37 +266,74 @@ class ProductForm extends React.Component<FormProps> {
     };
     getFieldDecorator("keys", { initialValue: [] });
     const keys = getFieldValue("keys");
-    const skuFormItems = keys.map((k: any, index: any) => (
-      <Form.Item
-        {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-        label={index === 0 ? "Passengers" : ""}
-        required={false}
-        key={k}
-      >
-        {getFieldDecorator(`names[${k}]`, {
-          validateTrigger: ["onChange", "onBlur"],
-          rules: [
-            {
-              required: true,
-              whitespace: true,
-              message: "Please input passenger's name or delete this field."
-            }
-          ]
-        })(
-          <Input
-            placeholder="passenger name"
-            style={{ width: "60%", marginRight: 8 }}
-          />
-        )}
-        {keys.length > 1 ? (
-          <Icon
-            className="dynamic-delete-button"
-            type="minus-circle-o"
-            onClick={() => this.remove(k)}
-          />
-        ) : null}
-      </Form.Item>
-    ));
+
+    // Sku form items
+    const skuFormItems = (
+      <div>
+        {keys.map((k: any, index: any) => (
+          <div key={k}>
+            <Form.Item {...tailFormItemLayout}>
+              <Badge
+                count={index + 1}
+                style={{
+                  backgroundColor: "#fff",
+                  color: "#999",
+                  boxShadow: "0 0 0 1px #d9d9d9 inset"
+                }}
+              />
+              <Text style={{ marginLeft: "8px" }}>Sku</Text>
+            </Form.Item>
+
+            <Form.Item label="Price">
+              {getFieldDecorator(`sku[${k}][price]`, {
+                initialValue: "",
+                rules: [
+                  {
+                    required: true,
+                    message: "Please input price"
+                  }
+                ]
+              })(<Input />)}
+            </Form.Item>
+
+            <Form.Item label="Stock">
+              {getFieldDecorator(`sku[${k}][stock]`, {
+                initialValue: "",
+                rules: [
+                  {
+                    required: true,
+                    // whitespace: true,
+                    message: "Please input stock"
+                  }
+                ]
+              })(<Input />)}
+            </Form.Item>
+
+            {this.renderSkuAttribute(k)}
+
+            <Form.Item {...tailFormItemLayout}>
+              <Button
+                type="dashed"
+                onClick={() => {
+                  this.addSkuAttribute(k);
+                }}
+                style={{ width: "60%" }}
+              >
+                <Icon type="plus" /> Add Sku Attribute
+              </Button>
+            </Form.Item>
+
+            <Form.Item {...tailFormItemLayout}>
+              {keys.length > 1 ? (
+                <Button type="danger" onClick={() => this.remove(k)}>
+                  Remove
+                </Button>
+              ) : null}
+            </Form.Item>
+          </div>
+        ))}
+      </div>
+    );
 
     const { isFetchingCategory, data, productCategory } = this.state;
     return (
@@ -190,8 +352,8 @@ class ProductForm extends React.Component<FormProps> {
 
           <Form.Item
             label="Name"
-            hasFeedback
-            validateStatus={getFieldError("name") ? "error" : "success"}
+            // hasFeedback
+            // validateStatus={getFieldError("name") ? "error" : "success"}
           >
             {getFieldDecorator("name", {
               initialValue: product ? product.name : "",
@@ -203,8 +365,8 @@ class ProductForm extends React.Component<FormProps> {
 
           <Form.Item
             label="Description"
-            hasFeedback
-            validateStatus={getFieldError("description") ? "error" : "success"}
+            // hasFeedback
+            // validateStatus={getFieldError("description") ? "error" : "success"}
           >
             {getFieldDecorator("description", {
               initialValue: product ? product.description : "",
@@ -257,11 +419,17 @@ class ProductForm extends React.Component<FormProps> {
             )}
           </Form.Item>
 
-          <div>{...skuFormItems}</div>
+          {skuFormItems}
 
-          <Form.Item {...formItemLayoutWithOutLabel}>
+          <Form.Item {...tailFormItemLayout}>
             <Button type="dashed" onClick={this.add} style={{ width: "60%" }}>
-              <Icon type="plus" /> Add field
+              <Icon type="plus" /> Add Sku
+            </Button>
+          </Form.Item>
+
+          <Form.Item {...tailFormItemLayout}>
+            <Button type="primary" htmlType="submit">
+              Save
             </Button>
           </Form.Item>
         </Form>
