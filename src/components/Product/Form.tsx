@@ -31,6 +31,27 @@ interface FormProps extends FormComponentProps {
 let id = 0;
 
 class ProductForm extends React.Component<FormProps> {
+  // componentWillMount() {
+  //   const { product, mode } = this.props;
+
+  //   const { getFieldDecorator } = this.props.form;
+
+  //   if (mode == Constants.FORM.MODE.UPDATE) {
+  //     let initialValue: any = [];
+  //     product.skus.forEach((sku: any) => {
+  //       let temp = {
+  //         price: sku.price,
+  //         skuCode: sku.skuCode,
+  //         stock: sku.stock
+  //       };
+
+  //       initialValue.push(temp);
+  //     });
+
+  //     getFieldDecorator("keys", { initialValue: initialValue });
+  //   }
+  // }
+
   handleSubmit = (e: any) => {
     event.preventDefault();
 
@@ -90,7 +111,9 @@ class ProductForm extends React.Component<FormProps> {
   state: any = {
     data: [],
     productCategory: [],
-    isFetchingCategory: false
+    isFetchingCategory: false,
+    data2: [],
+    isFetchingSkuAttributeCategory: false
   };
 
   remove = (k: any) => {
@@ -151,11 +174,62 @@ class ProductForm extends React.Component<FormProps> {
     });
   };
 
+  fetchSkuAttributeCategories = debounce((value: any) => {
+    if (value === "") {
+      this.setState({ data2: [], isFetchingSkuAttributeCategory: false });
+    } else {
+      this.setState({ data2: [], isFetchingSkuAttributeCategory: true });
+      let token = sessionStorage.getItem("token");
+      fetch(`/api/skus//attributes/categories${"?keyword=" + value}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json"
+        }
+      })
+        .then(response => response.json())
+        .then(body => {
+          const data2 = _.isNil(body._embedded)
+            ? []
+            : body._embedded.skuAttributeCategoryList.map((item: any) => ({
+                text: `${item.name}`,
+                value: item.id
+              }));
+          this.setState({ data2, isFetchingSkuAttributeCategory: false });
+        });
+    }
+  }, 800);
+
+  handleSkuAttributeCategoryChange = (
+    value: any,
+    option: any,
+    fieldName: string
+  ) => {
+    this.setState({
+      data2: [],
+      isFetchingSkuAttributeCategory: false
+    });
+
+    console.warn(this.props.form);
+
+    this.props.form.setFieldsValue({
+      [fieldName]: value
+    });
+  };
+
   renderSkuAttribute(skuIndex: number) {
-    const { getFieldDecorator, getFieldValue } = this.props.form;
+    const {
+      getFieldDecorator,
+      getFieldValue,
+      getFieldsValue
+    } = this.props.form;
+
+    const { isFetchingSkuAttributeCategory, data2 } = this.state;
 
     getFieldDecorator(`skuAttributekeys[${skuIndex}]`, { initialValue: [] });
     const keys = getFieldValue(`skuAttributekeys[${skuIndex}]`);
+
+    console.log("test", keys);
 
     return (
       <div>
@@ -196,6 +270,51 @@ class ProductForm extends React.Component<FormProps> {
                   }
                 ]
               })(<Input />)}
+            </Form.Item>
+
+            <Form.Item label="Category">
+              {getFieldDecorator(
+                `sku[${skuIndex}].attribute[${k}][skuAttributeCategory]`,
+                {
+                  rules: [
+                    { required: true, message: "Please input your category!" }
+                  ]
+                }
+              )(
+                <Select
+                  showSearch
+                  filterOption={(input: any, option: any) =>
+                    option.props.children
+                      .toLowerCase()
+                      .indexOf(input.toLowerCase()) >= 0
+                  }
+                  // optionFilterProp="children"
+                  allowClear={true}
+                  style={{ width: "100%" }}
+                  // value={this.props.form.getFieldValue("roles")}
+                  labelInValue
+                  // mode="multiple"
+                  placeholder="Select product category"
+                  // filterOption={false}
+                  onSearch={this.fetchSkuAttributeCategories}
+                  onChange={(value, option) => {
+                    this.handleSkuAttributeCategoryChange(
+                      value,
+                      option,
+                      `sku[${skuIndex}].attribute[${k}][skuAttributeCategory]`
+                    );
+                  }}
+                  notFoundContent={
+                    isFetchingSkuAttributeCategory ? (
+                      <Spin size="small" />
+                    ) : null
+                  }
+                >
+                  {data2.map((d: any) => (
+                    <Option key={d.value}>{d.text}</Option>
+                  ))}
+                </Select>
+              )}
             </Form.Item>
 
             <Form.Item {...this.tailFormItemLayout}>
@@ -264,8 +383,11 @@ class ProductForm extends React.Component<FormProps> {
         sm: { span: 20, offset: 4 }
       }
     };
+
     getFieldDecorator("keys", { initialValue: [] });
     const keys = getFieldValue("keys");
+
+    console.log("form", this.props.form.getFieldsValue());
 
     // Sku form items
     const skuFormItems = (
@@ -286,7 +408,7 @@ class ProductForm extends React.Component<FormProps> {
 
             <Form.Item label="Price">
               {getFieldDecorator(`sku[${k}][price]`, {
-                initialValue: "",
+                initialValue: k.price ? k.price : "",
                 rules: [
                   {
                     required: true,
@@ -298,7 +420,7 @@ class ProductForm extends React.Component<FormProps> {
 
             <Form.Item label="Stock">
               {getFieldDecorator(`sku[${k}][stock]`, {
-                initialValue: "",
+                initialValue: k.stock ? k.stock : "",
                 rules: [
                   {
                     required: true,
