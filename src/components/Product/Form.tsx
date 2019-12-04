@@ -34,22 +34,10 @@ class ProductForm extends React.Component<FormProps> {
   // componentWillMount() {
   //   const { product, mode } = this.props;
 
-  //   const { getFieldDecorator } = this.props.form;
+  //   const { getFieldDecorator, setFieldsValue } = this.props.form;
 
-  //   if (mode == Constants.FORM.MODE.UPDATE) {
-  //     let initialValue: any = [];
-  //     product.skus.forEach((sku: any) => {
-  //       let temp = {
-  //         price: sku.price,
-  //         skuCode: sku.skuCode,
-  //         stock: sku.stock
-  //       };
+  //   console.log(product);
 
-  //       initialValue.push(temp);
-  //     });
-
-  //     getFieldDecorator("keys", { initialValue: initialValue });
-  //   }
   // }
 
   handleSubmit = (e: any) => {
@@ -143,8 +131,8 @@ class ProductForm extends React.Component<FormProps> {
     });
   };
 
-  removeSkuAttribute = (skuIndex: number, k: any) => {
-    const { form } = this.props;
+  removeSkuAttribute = (skuIndex: number, k: any, skuAttribute: any) => {
+    const { form, product } = this.props;
     // can use data-binding to get
     const keys = form.getFieldValue(`skuAttributekeys[${skuIndex}]`);
     // We need at least one passenger
@@ -154,10 +142,20 @@ class ProductForm extends React.Component<FormProps> {
 
     let fieldName = `skuAttributekeys[${skuIndex}]`;
 
+    let newKeys = keys.filter((key: any) => key !== k);
+
     // can use data-binding to set
     form.setFieldsValue({
-      [fieldName]: keys.filter((key: any) => key !== k)
+      [fieldName]: newKeys
     });
+
+    if(!_.isNil(skuAttribute)) {
+      console.log("sku", product.skus[skuIndex].skuAttributes, skuAttribute.id);
+      product.skus[skuIndex].skuAttributes = product.skus[skuIndex].skuAttributes.filter((item: any) => {
+        return item.id != skuAttribute.id;
+      });
+      console.log("afterSku", skuAttribute);
+    }
   };
 
   addSkuAttribute = (skuIndex: number) => {
@@ -217,7 +215,7 @@ class ProductForm extends React.Component<FormProps> {
     });
   };
 
-  renderSkuAttribute(skuIndex: number) {
+  renderSkuAttribute(skuIndex: number, sku: any) {
     const {
       getFieldDecorator,
       getFieldValue,
@@ -226,7 +224,39 @@ class ProductForm extends React.Component<FormProps> {
 
     const { isFetchingSkuAttributeCategory, data2 } = this.state;
 
-    getFieldDecorator(`skuAttributekeys[${skuIndex}]`, { initialValue: [] });
+    console.log("sku", sku);
+
+    if (!_.isNil(sku)) {
+      let initialValue: any = [];
+      let keyInitalValue: any = []
+
+      let currentSkuAttribute = getFieldValue(`sku[${skuIndex}]`);
+
+      console.log("current", currentSkuAttribute);
+
+      sku.skuAttributes.forEach((skuAttribute: any, index: number) => {
+        let temp = {
+          // name: skuAttribute.name,
+          // skuCode: sku.skuCode,
+          value: skuAttribute.value
+        };
+
+        initialValue.push(temp);
+        keyInitalValue.push(index);
+        skuAttribute._index = id;
+        id++;
+      });
+
+      getFieldDecorator(`skuAttributekeys[${skuIndex}]`, { initialValue: keyInitalValue});
+      
+      // getFieldDecorator("sku", {initialValue: initialValue});
+      console.log(this.props.form.getFieldsValue());
+    }else {
+      getFieldDecorator(`skuAttributekeys[${skuIndex}]`, { initialValue: [] });
+    }
+
+
+    // getFieldDecorator(`skuAttributekeys[${skuIndex}]`, { initialValue: [] });
     const keys = getFieldValue(`skuAttributekeys[${skuIndex}]`);
 
     console.log("test", keys);
@@ -247,9 +277,9 @@ class ProductForm extends React.Component<FormProps> {
               <Text style={{ marginLeft: "8px" }}>Sku Attribute</Text>
             </Form.Item>
 
-            <Form.Item label="Name">
-              {getFieldDecorator(`sku[${skuIndex}].attribute[${k}][name]`, {
-                initialValue: "",
+            {/* <Form.Item label="Name">
+              {getFieldDecorator(`sku[${skuIndex}].attribute[${k}].sk`, {
+                initialValue: !_.isNil(sku) && !_.isNil(sku.skuAttributes[index]) ? sku.skuAttributes[index].name : "",
                 rules: [
                   {
                     required: true,
@@ -257,11 +287,11 @@ class ProductForm extends React.Component<FormProps> {
                   }
                 ]
               })(<Input />)}
-            </Form.Item>
+            </Form.Item> */}
 
             <Form.Item label="Value">
-              {getFieldDecorator(`sku[${skuIndex}].attribute[${k}][value]`, {
-                initialValue: "",
+              {getFieldDecorator(`sku[${skuIndex}].attribute[${k}].value`, {
+                initialValue: !_.isNil(sku) && !_.isNil(sku.skuAttributes[index]) ? sku.skuAttributes[index].value : "",
                 rules: [
                   {
                     required: true,
@@ -274,7 +304,7 @@ class ProductForm extends React.Component<FormProps> {
 
             <Form.Item label="Category">
               {getFieldDecorator(
-                `sku[${skuIndex}].attribute[${k}][skuAttributeCategory]`,
+                `sku[${skuIndex}].attribute[${k}].skuAttributeCategory`,
                 {
                   rules: [
                     { required: true, message: "Please input your category!" }
@@ -321,7 +351,7 @@ class ProductForm extends React.Component<FormProps> {
               {keys.length > 1 ? (
                 <Button
                   type="danger"
-                  onClick={() => this.removeSkuAttribute(skuIndex, k)}
+                  onClick={() => this.removeSkuAttribute(skuIndex, k, sku.skuAttributes[index])}
                 >
                   Remove
                 </Button>
@@ -384,10 +414,35 @@ class ProductForm extends React.Component<FormProps> {
       }
     };
 
-    getFieldDecorator("keys", { initialValue: [] });
+
+    if (mode == Constants.FORM.MODE.UPDATE) {
+      let initialValue: any = [];
+      let keyInitalValue: any = []
+      product.skus.forEach((sku: any, index: number) => {
+        let temp = {
+          price: sku.price,
+          // skuCode: sku.skuCode,
+          stock: sku.stock
+        };
+
+        initialValue.push(temp);
+        keyInitalValue.push(index);
+        id++;
+      });
+
+      getFieldDecorator("keys", { initialValue: keyInitalValue});
+      
+      // getFieldDecorator("sku", {initialValue: initialValue});
+      console.log(this.props.form.getFieldsValue());
+    }
+
+
+    // getFieldDecorator("keys", { initialValue: [] });
     const keys = getFieldValue("keys");
 
     console.log("form", this.props.form.getFieldsValue());
+
+    // console.log(product);
 
     // Sku form items
     const skuFormItems = (
@@ -407,8 +462,8 @@ class ProductForm extends React.Component<FormProps> {
             </Form.Item>
 
             <Form.Item label="Price">
-              {getFieldDecorator(`sku[${k}][price]`, {
-                initialValue: k.price ? k.price : "",
+              {getFieldDecorator(`sku[${k}].price`, {
+                initialValue: !_.isNil(product.skus[k]) && !_.isNil(product.skus[k].price) ? product.skus[k].price : "",
                 rules: [
                   {
                     required: true,
@@ -419,8 +474,8 @@ class ProductForm extends React.Component<FormProps> {
             </Form.Item>
 
             <Form.Item label="Stock">
-              {getFieldDecorator(`sku[${k}][stock]`, {
-                initialValue: k.stock ? k.stock : "",
+              {getFieldDecorator(`sku[${k}].stock`, {
+                initialValue: !_.isNil(product.skus[k]) && !_.isNil(product.skus[k].stock) ? product.skus[k].stock : "",
                 rules: [
                   {
                     required: true,
@@ -431,7 +486,7 @@ class ProductForm extends React.Component<FormProps> {
               })(<Input />)}
             </Form.Item>
 
-            {this.renderSkuAttribute(k)}
+            {this.renderSkuAttribute(k, product.skus[k])}
 
             <Form.Item {...tailFormItemLayout}>
               <Button
