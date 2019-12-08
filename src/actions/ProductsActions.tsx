@@ -98,7 +98,7 @@ export const updateProductFulfilled = (results: any) => {
     type: ActionType.PRODUCT.UPDATE.FULFILLED,
     isUpdatingProduct: false,
     isUpdatedProduct: true,
-    info: results
+    product: results
   };
 };
 
@@ -145,6 +145,7 @@ export const updateProduct = (product: any) => {
       url: `/api/products/${product.id}`,
       option: Utils.addToken(options),
       successCallback: (response: any) => {
+        console.log(response.data);
         dispatch(updateProductFulfilled(response.data));
       },
       failureCallback: (error: any) => {

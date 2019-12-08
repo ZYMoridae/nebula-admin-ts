@@ -1,99 +1,72 @@
 import * as React from "react";
-import { withStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
+
 import _ from "lodash";
-import "react-image-gallery/styles/css/image-gallery.css";
-import Snackbar from "@material-ui/core/Snackbar";
-import MySnackbarContent from "../MySnackbarContent";
-import Fade from "@material-ui/core/Fade";
+
 import Constants from "../../utils/Constants";
-import ProductForm from "./Form";
+import Form from "./Form";
 
-import { Theme, createStyles } from "@material-ui/core";
+import Footer from "../Footer";
+import { Layout, Breadcrumb } from "antd";
 
-const styles = (theme: Theme) =>
-  createStyles({
-    container: {
-      paddingTop: theme.spacing(5),
-      marginBottom: theme.spacing(2)
-    },
-    main: {
-      marginLeft: `${Constants.styles.sidebar.width}px`
-    }
-  });
-type NewState = {};
+const { Content } = Layout;
 
 type NewProps = {
-  classes: any;
-  info: any;
-  isShowSuccessToast: any;
-  hideSuccessToast: any;
-  updateProduct: any;
+  fetchProductInfo: any;
+  // id: number;
+  // product: any;
+  fetchProductInfoError: any;
+  isFetchedProductInfo: any;
+  isFetchingProductInfo: any;
   createProduct: any;
+  isCreatingProduct: any;
+  isCreatedProdudct: any;
 };
 
-class New extends React.Component<NewProps, NewState> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      age: "",
-      name: "hai",
-      labelWidth: 0,
-      quantity: 1
-    };
-  }
+class New extends React.Component<NewProps> {
+  // componentDidMount() {
+  //   const { fetchProductInfo, id } = this.props;
+  //   fetchProductInfo(id);
+  // }
 
   render() {
     const {
-      classes,
-      info,
-      isShowSuccessToast,
-      hideSuccessToast,
-      updateProduct,
-      createProduct
+      // product,
+      fetchProductInfoError,
+      isFetchedProductInfo,
+      isFetchingProductInfo,
+      createProduct,
+      isCreatingProduct,
+      isCreatedProdudct
     } = this.props;
-
-    let productInfoBlock: any = "";
-
-    productInfoBlock = (
-      <div>
-
-      </div>
-    );
 
     return (
       <div>
-        <Snackbar
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left"
-          }}
-          open={isShowSuccessToast}
-          autoHideDuration={1500}
-          onClose={hideSuccessToast}
-        >
-          <MySnackbarContent
-            onClose={hideSuccessToast}
-            variant="success"
-            message="Item has been added!"
-          />
-        </Snackbar>
-
-        <Fade in={true} timeout={1000}>
-          <Grid container className={classes.main}>
-            <Grid item xs={1} sm={1}>
-              {/* <ProductCategorySideBarContainer></ProductCategorySideBarContainer> */}
-            </Grid>
-
-            <Grid item xs={10} sm={8} className={classes.container}>
-              {productInfoBlock}
-            </Grid>
-            <Grid item xs={1} sm={1}></Grid>
-          </Grid>
-        </Fade>
+        <Layout style={{ padding: "0 24px 24px" }}>
+          <Breadcrumb style={{ margin: "16px 0" }}>
+            <Breadcrumb.Item>Product</Breadcrumb.Item>
+            <Breadcrumb.Item>New</Breadcrumb.Item>
+          </Breadcrumb>
+          <Content
+            style={{
+              background: "#fff",
+              padding: 24,
+              margin: 0,
+              minHeight: 280
+            }}
+          >
+            <Form
+              // product={product}
+              mode={Constants.FORM.MODE.NEW}
+              action={createProduct}
+              actionPending={isCreatingProduct}
+              actionFulfilled={isCreatedProdudct}
+            ></Form>
+          </Content>
+          <Footer></Footer>
+        </Layout>
       </div>
     );
   }
 }
 
-export default withStyles(styles, { withTheme: true })(New);
+export default New;

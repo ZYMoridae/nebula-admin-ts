@@ -16,6 +16,7 @@ import {
 import { FormComponentProps } from "antd/lib/form/Form";
 import Constants from "./../../utils/Constants";
 import debounce from "lodash/debounce";
+import Utils from "../../utils/Utils";
 const { TextArea } = Input;
 const { Option } = Select;
 const { Text } = Typography;
@@ -31,23 +32,89 @@ interface FormProps extends FormComponentProps {
 let id = 0;
 
 class ProductForm extends React.Component<FormProps> {
-  // componentWillMount() {
-  //   const { product, mode } = this.props;
-
-  //   const { getFieldDecorator, setFieldsValue } = this.props.form;
-
-  //   console.log(product);
-
-  // }
-
   handleSubmit = (e: any) => {
     event.preventDefault();
 
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        console.log(values);
         if (this.props.mode == Constants.FORM.MODE.UPDATE) {
+          let _product = _.cloneDeep(values);
+
+          console.log(this.props.product);
+
+          _product.vendorId = this.props.product.vendor.id;
+
+          _product.categoryId = values.productCategory.key;
+
+          _product.sku = _product.sku.filter((sku: any) => {
+            return !_.isNil(sku);
+          });
+
+          _product.sku.forEach((sku: any) => {
+            sku.attribute = sku.attribute.filter((skuAttribute: any) => {
+              return !_.isNil(skuAttribute);
+            });
+
+            sku.attribute.forEach((skuAttribute: any) => {
+              skuAttribute.skuAttributeCategoryId = _.cloneDeep(
+                skuAttribute.skuAttributeCategory.key
+              );
+              skuAttribute.skuCode = sku.skuCode;
+              delete skuAttribute.skuAttributeCategory;
+            });
+            sku.productId = _product.id;
+            sku.createdUserId = this.props.product.vendor.id;
+            sku.skuAttributes = _.cloneDeep(sku.attribute);
+            delete sku.attribute;
+          });
+          _product.skus = _.cloneDeep(_product.sku);
+
+          delete _product.productCategory;
+          delete _product.sku;
+          delete _product.skuAttributekeys;
+          delete _product.keys;
+
+          this.props.action(_product);
         } else if (this.props.mode == Constants.FORM.MODE.NEW) {
+          let _product = _.cloneDeep(values);
+
+          console.log(this.props.product);
+
+          _product.vendorId = Utils.getCurrentUser().id;
+
+          _product.categoryId = values.productCategory.key;
+
+          _product.sku = _product.sku.filter((sku: any) => {
+            return !_.isNil(sku);
+          });
+
+          _product.sku.forEach((sku: any) => {
+            sku.attribute = sku.attribute.filter((skuAttribute: any) => {
+              return !_.isNil(skuAttribute);
+            });
+
+            sku.attribute.forEach((skuAttribute: any) => {
+              skuAttribute.skuAttributeCategoryId = _.cloneDeep(
+                skuAttribute.skuAttributeCategory.key
+              );
+              // skuAttribute.skuCode = sku.skuCode;
+              delete skuAttribute.skuAttributeCategory;
+            });
+            // sku.productId = _product.id;
+            // sku.createdUserId = this.props.product.vendor.id;
+            sku.skuAttributes = _.cloneDeep(sku.attribute);
+            delete sku.attribute;
+          });
+          _product.skus = _.cloneDeep(_product.sku);
+
+          delete _product.productCategory;
+          delete _product.sku;
+          delete _product.skuAttributekeys;
+          delete _product.keys;
+
+          this.props.action(_product);
         }
 
         console.log("Received values of form: ", values);
@@ -82,14 +149,14 @@ class ProductForm extends React.Component<FormProps> {
   }, 800);
 
   handleCategoryChange = (value: any) => {
-    console.log(value);
+    // console.log(value);
 
     this.setState({
       data: [],
       isFetchingCategory: false
     });
 
-    console.warn(this.props.form);
+    // console.warn(this.props.form);
 
     this.props.form.setFieldsValue({
       productCategory: value
@@ -149,12 +216,14 @@ class ProductForm extends React.Component<FormProps> {
       [fieldName]: newKeys
     });
 
-    if(!_.isNil(skuAttribute)) {
-      console.log("sku", product.skus[skuIndex].skuAttributes, skuAttribute.id);
-      product.skus[skuIndex].skuAttributes = product.skus[skuIndex].skuAttributes.filter((item: any) => {
+    if (!_.isNil(skuAttribute)) {
+      // console.log("sku", product.skus[skuIndex].skuAttributes, skuAttribute.id);
+      product.skus[skuIndex].skuAttributes = product.skus[
+        skuIndex
+      ].skuAttributes.filter((item: any) => {
         return item.id != skuAttribute.id;
       });
-      console.log("afterSku", skuAttribute);
+      // console.log("afterSku", skuAttribute);
     }
   };
 
@@ -208,7 +277,7 @@ class ProductForm extends React.Component<FormProps> {
       isFetchingSkuAttributeCategory: false
     });
 
-    console.warn(this.props.form);
+    // console.warn(this.props.form);
 
     this.props.form.setFieldsValue({
       [fieldName]: value
@@ -224,15 +293,15 @@ class ProductForm extends React.Component<FormProps> {
 
     const { isFetchingSkuAttributeCategory, data2 } = this.state;
 
-    console.log("sku", sku);
+    // console.log("sku", sku);
 
     if (!_.isNil(sku)) {
       let initialValue: any = [];
-      let keyInitalValue: any = []
+      let keyInitalValue: any = [];
 
       let currentSkuAttribute = getFieldValue(`sku[${skuIndex}]`);
 
-      console.log("current", currentSkuAttribute);
+      // console.log("current", currentSkuAttribute);
 
       sku.skuAttributes.forEach((skuAttribute: any, index: number) => {
         let temp = {
@@ -247,119 +316,175 @@ class ProductForm extends React.Component<FormProps> {
         id++;
       });
 
-      getFieldDecorator(`skuAttributekeys[${skuIndex}]`, { initialValue: keyInitalValue});
-      
+      getFieldDecorator(`skuAttributekeys[${skuIndex}]`, {
+        initialValue: keyInitalValue
+      });
+
       // getFieldDecorator("sku", {initialValue: initialValue});
-      console.log(this.props.form.getFieldsValue());
-    }else {
+      // console.log(this.props.form.getFieldsValue());
+    } else {
       getFieldDecorator(`skuAttributekeys[${skuIndex}]`, { initialValue: [] });
     }
-
 
     // getFieldDecorator(`skuAttributekeys[${skuIndex}]`, { initialValue: [] });
     const keys = getFieldValue(`skuAttributekeys[${skuIndex}]`);
 
-    console.log("test", keys);
-
+    // console.log("test", keys);
+    const customPanelStyle = {
+      background: "#f7f7f7",
+      borderRadius: 4,
+      marginBottom: 24,
+      border: 0,
+      overflow: "hidden"
+    };
     return (
-      <div>
-        {keys.map((k: any, index: any) => (
-          <div key={k}>
-            <Form.Item {...this.tailFormItemLayout}>
-              <Badge
-                count={index + 1}
-                style={{
-                  backgroundColor: "#fff",
-                  color: "#999",
-                  boxShadow: "0 0 0 1px #d9d9d9 inset"
-                }}
-              />
-              <Text style={{ marginLeft: "8px" }}>Sku Attribute</Text>
-            </Form.Item>
+      <Form.Item>
+        <Collapse
+          bordered={false}
+          defaultActiveKey={["1"]}
+          expandIcon={({ isActive }) => (
+            <Icon type="caret-right" rotate={isActive ? 90 : 0} />
+          )}
+        >
+          <Panel header="Sku Attributes" key="1" style={customPanelStyle}>
+            <div>
+              {keys.map((k: any, index: any) => (
+                <div key={k}>
+                  <Form.Item>
+                    <Badge
+                      count={index + 1}
+                      style={{
+                        backgroundColor: "#fff",
+                        color: "#999",
+                        boxShadow: "0 0 0 1px #d9d9d9 inset"
+                      }}
+                    />
+                    <Text style={{ marginLeft: "8px" }}>Sku Attribute</Text>
+                  </Form.Item>
 
-            {/* <Form.Item label="Name">
-              {getFieldDecorator(`sku[${skuIndex}].attribute[${k}].sk`, {
-                initialValue: !_.isNil(sku) && !_.isNil(sku.skuAttributes[index]) ? sku.skuAttributes[index].name : "",
-                rules: [
-                  {
-                    required: true,
-                    message: "Please input name"
-                  }
-                ]
-              })(<Input />)}
-            </Form.Item> */}
+                  {!_.isNil(sku) && !_.isNil(sku.skuAttributes[index]) && (
+                    <Form.Item label="Id">
+                      {getFieldDecorator(
+                        `sku[${skuIndex}].attribute[${k}].id`,
+                        {
+                          initialValue: sku.skuAttributes[index].id,
+                          rules: [
+                            {
+                              required: true,
+                              message: "Please input name"
+                            }
+                          ]
+                        }
+                      )(<Input disabled={true} />)}
+                    </Form.Item>
+                  )}
 
-            <Form.Item label="Value">
-              {getFieldDecorator(`sku[${skuIndex}].attribute[${k}].value`, {
-                initialValue: !_.isNil(sku) && !_.isNil(sku.skuAttributes[index]) ? sku.skuAttributes[index].value : "",
-                rules: [
-                  {
-                    required: true,
-                    // whitespace: true,
-                    message: "Please input value"
-                  }
-                ]
-              })(<Input />)}
-            </Form.Item>
+                  <Form.Item label="Category">
+                    {getFieldDecorator(
+                      `sku[${skuIndex}].attribute[${k}].skuAttributeCategory`,
+                      !_.isNil(sku) && !_.isNil(sku.skuAttributes[index])
+                        ? {
+                            initialValue: {
+                              key:
+                                sku.skuAttributes[index].skuAttributeCategory
+                                  .id,
+                              label:
+                                sku.skuAttributes[index].skuAttributeCategory
+                                  .name
+                            },
+                            rules: [
+                              {
+                                required: true,
+                                message: "Please input your category!"
+                              }
+                            ]
+                          }
+                        : {
+                            rules: [
+                              {
+                                required: true,
+                                message: "Please input your category!"
+                              }
+                            ]
+                          }
+                    )(
+                      <Select
+                        showSearch
+                        filterOption={(input: any, option: any) =>
+                          option.props.children
+                            .toLowerCase()
+                            .indexOf(input.toLowerCase()) >= 0
+                        }
+                        // optionFilterProp="children"
+                        allowClear={true}
+                        style={{ width: "100%" }}
+                        // value={this.props.form.getFieldValue("roles")}
+                        labelInValue
+                        // mode="multiple"
+                        placeholder="Select product category"
+                        // filterOption={false}
+                        onSearch={this.fetchSkuAttributeCategories}
+                        onChange={(value, option) => {
+                          this.handleSkuAttributeCategoryChange(
+                            value,
+                            option,
+                            `sku[${skuIndex}].attribute[${k}].skuAttributeCategory`
+                          );
+                        }}
+                        notFoundContent={
+                          isFetchingSkuAttributeCategory ? (
+                            <Spin size="small" />
+                          ) : null
+                        }
+                      >
+                        {data2.map((d: any) => (
+                          <Option key={d.value}>{d.text}</Option>
+                        ))}
+                      </Select>
+                    )}
+                  </Form.Item>
 
-            <Form.Item label="Category">
-              {getFieldDecorator(
-                `sku[${skuIndex}].attribute[${k}].skuAttributeCategory`,
-                {
-                  rules: [
-                    { required: true, message: "Please input your category!" }
-                  ]
-                }
-              )(
-                <Select
-                  showSearch
-                  filterOption={(input: any, option: any) =>
-                    option.props.children
-                      .toLowerCase()
-                      .indexOf(input.toLowerCase()) >= 0
-                  }
-                  // optionFilterProp="children"
-                  allowClear={true}
-                  style={{ width: "100%" }}
-                  // value={this.props.form.getFieldValue("roles")}
-                  labelInValue
-                  // mode="multiple"
-                  placeholder="Select product category"
-                  // filterOption={false}
-                  onSearch={this.fetchSkuAttributeCategories}
-                  onChange={(value, option) => {
-                    this.handleSkuAttributeCategoryChange(
-                      value,
-                      option,
-                      `sku[${skuIndex}].attribute[${k}][skuAttributeCategory]`
-                    );
-                  }}
-                  notFoundContent={
-                    isFetchingSkuAttributeCategory ? (
-                      <Spin size="small" />
-                    ) : null
-                  }
-                >
-                  {data2.map((d: any) => (
-                    <Option key={d.value}>{d.text}</Option>
-                  ))}
-                </Select>
-              )}
-            </Form.Item>
+                  <Form.Item label="Value">
+                    {getFieldDecorator(
+                      `sku[${skuIndex}].attribute[${k}].value`,
+                      {
+                        initialValue:
+                          !_.isNil(sku) && !_.isNil(sku.skuAttributes[index])
+                            ? sku.skuAttributes[index].value
+                            : "",
+                        rules: [
+                          {
+                            required: true,
+                            // whitespace: true,
+                            message: "Please input value"
+                          }
+                        ]
+                      }
+                    )(<Input />)}
+                  </Form.Item>
 
-            <Form.Item {...this.tailFormItemLayout}>
-              {keys.length > 1 ? (
-                <Button
-                  type="danger"
-                  onClick={() => this.removeSkuAttribute(skuIndex, k, sku.skuAttributes[index])}
-                >
-                  Remove
-                </Button>
-              ) : null}
-            </Form.Item>
-          </div>
-        ))}
-      </div>
+                  <Form.Item>
+                    {keys.length > 1 ? (
+                      <Button
+                        type="danger"
+                        onClick={() =>
+                          this.removeSkuAttribute(
+                            skuIndex,
+                            k,
+                            sku.skuAttributes[index]
+                          )
+                        }
+                      >
+                        Remove
+                      </Button>
+                    ) : null}
+                  </Form.Item>
+                </div>
+              ))}
+            </div>
+          </Panel>
+        </Collapse>
+      </Form.Item>
     );
   }
   tailFormItemLayout = {
@@ -383,6 +508,8 @@ class ProductForm extends React.Component<FormProps> {
   render() {
     const { mode, product } = this.props;
     const { getFieldDecorator, getFieldError, getFieldValue } = this.props.form;
+
+    // console.log("PRODUCT", product);
 
     const formItemLayout = {
       labelCol: {
@@ -414,10 +541,9 @@ class ProductForm extends React.Component<FormProps> {
       }
     };
 
-
     if (mode == Constants.FORM.MODE.UPDATE) {
       let initialValue: any = [];
-      let keyInitalValue: any = []
+      let keyInitalValue: any = [];
       product.skus.forEach((sku: any, index: number) => {
         let temp = {
           price: sku.price,
@@ -430,17 +556,18 @@ class ProductForm extends React.Component<FormProps> {
         id++;
       });
 
-      getFieldDecorator("keys", { initialValue: keyInitalValue});
-      
-      // getFieldDecorator("sku", {initialValue: initialValue});
-      console.log(this.props.form.getFieldsValue());
-    }
+      getFieldDecorator("keys", { initialValue: keyInitalValue });
 
+      // getFieldDecorator("sku", {initialValue: initialValue});
+      // console.log(this.props.form.getFieldsValue());
+    } else {
+      getFieldDecorator("keys", { initialValue: [] });
+    }
 
     // getFieldDecorator("keys", { initialValue: [] });
     const keys = getFieldValue("keys");
 
-    console.log("form", this.props.form.getFieldsValue());
+    // console.log("form", this.props.form.getFieldsValue());
 
     // console.log(product);
 
@@ -449,7 +576,7 @@ class ProductForm extends React.Component<FormProps> {
       <div>
         {keys.map((k: any, index: any) => (
           <div key={k}>
-            <Form.Item {...tailFormItemLayout}>
+            <Form.Item>
               <Badge
                 count={index + 1}
                 style={{
@@ -461,9 +588,48 @@ class ProductForm extends React.Component<FormProps> {
               <Text style={{ marginLeft: "8px" }}>Sku</Text>
             </Form.Item>
 
+            {!_.isNil(product) &&
+              !_.isNil(product.skus[k]) &&
+              !_.isNil(product.skus[k].id) && (
+                <Form.Item label="Id">
+                  {getFieldDecorator(`sku[${k}].id`, {
+                    initialValue: product.skus[k].id,
+                    rules: [
+                      {
+                        required: true,
+                        // whitespace: true,
+                        message: "Please input id"
+                      }
+                    ]
+                  })(<Input disabled={true} />)}
+                </Form.Item>
+              )}
+
+            {!_.isNil(product) &&
+              !_.isNil(product.skus[k]) &&
+              !_.isNil(product.skus[k].skuCode) && (
+                <Form.Item label="Sku Code">
+                  {getFieldDecorator(`sku[${k}].skuCode`, {
+                    initialValue: product.skus[k].skuCode,
+                    rules: [
+                      {
+                        required: true,
+                        // whitespace: true,
+                        message: "Please input skuCode"
+                      }
+                    ]
+                  })(<Input disabled={true} />)}
+                </Form.Item>
+              )}
+
             <Form.Item label="Price">
               {getFieldDecorator(`sku[${k}].price`, {
-                initialValue: !_.isNil(product.skus[k]) && !_.isNil(product.skus[k].price) ? product.skus[k].price : "",
+                initialValue:
+                  !_.isNil(product) &&
+                  !_.isNil(product.skus[k]) &&
+                  !_.isNil(product.skus[k].price)
+                    ? product.skus[k].price
+                    : "",
                 rules: [
                   {
                     required: true,
@@ -475,7 +641,12 @@ class ProductForm extends React.Component<FormProps> {
 
             <Form.Item label="Stock">
               {getFieldDecorator(`sku[${k}].stock`, {
-                initialValue: !_.isNil(product.skus[k]) && !_.isNil(product.skus[k].stock) ? product.skus[k].stock : "",
+                initialValue:
+                  !_.isNil(product) &&
+                  !_.isNil(product.skus[k]) &&
+                  !_.isNil(product.skus[k].stock)
+                    ? product.skus[k].stock
+                    : "",
                 rules: [
                   {
                     required: true,
@@ -486,9 +657,9 @@ class ProductForm extends React.Component<FormProps> {
               })(<Input />)}
             </Form.Item>
 
-            {this.renderSkuAttribute(k, product.skus[k])}
+            {this.renderSkuAttribute(k, product ? product.skus[k] : undefined)}
 
-            <Form.Item {...tailFormItemLayout}>
+            <Form.Item>
               <Button
                 type="dashed"
                 onClick={() => {
@@ -500,7 +671,7 @@ class ProductForm extends React.Component<FormProps> {
               </Button>
             </Form.Item>
 
-            <Form.Item {...tailFormItemLayout}>
+            <Form.Item>
               {keys.length > 1 ? (
                 <Button type="danger" onClick={() => this.remove(k)}>
                   Remove
@@ -515,7 +686,7 @@ class ProductForm extends React.Component<FormProps> {
     const { isFetchingCategory, data, productCategory } = this.state;
     return (
       <div style={{ maxWidth: "700px" }}>
-        <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit}>
           {mode == Constants.FORM.MODE.UPDATE && (
             <Form.Item label="Id">
               {getFieldDecorator("id", {
@@ -557,17 +728,26 @@ class ProductForm extends React.Component<FormProps> {
           </Form.Item>
 
           <Form.Item label="Category">
-            {getFieldDecorator("productCategory", {
-              initialValue: product
+            {getFieldDecorator(
+              "productCategory",
+              product
                 ? {
-                    key: product.productCategory.id,
-                    label: product.productCategory.name
+                    initialValue: product
+                      ? {
+                          key: product.productCategory.id,
+                          label: product.productCategory.name
+                        }
+                      : {},
+                    rules: [
+                      { required: true, message: "Please input your category!" }
+                    ]
                   }
-                : {},
-              rules: [
-                { required: true, message: "Please input your category!" }
-              ]
-            })(
+                : {
+                    rules: [
+                      { required: true, message: "Please input your category!" }
+                    ]
+                  }
+            )(
               <Select
                 showSearch
                 filterOption={(input: any, option: any) =>
@@ -598,13 +778,13 @@ class ProductForm extends React.Component<FormProps> {
 
           {skuFormItems}
 
-          <Form.Item {...tailFormItemLayout}>
+          <Form.Item>
             <Button type="dashed" onClick={this.add} style={{ width: "60%" }}>
               <Icon type="plus" /> Add Sku
             </Button>
           </Form.Item>
 
-          <Form.Item {...tailFormItemLayout}>
+          <Form.Item>
             <Button type="primary" htmlType="submit">
               Save
             </Button>
