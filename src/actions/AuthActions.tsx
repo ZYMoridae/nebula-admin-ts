@@ -1,6 +1,8 @@
 import Zjax from "../utils/zjax";
 import ActionType from "./ActionType";
 import Utils from "../utils/Utils";
+import { notification, Icon } from "antd";
+import * as React from "react";
 
 // ANCHOR SSO Authentication
 export const receieveAuth = (json: any) => {
@@ -57,6 +59,11 @@ export const fetchAuthInfo = (data: any) => {
         }
       },
       failureCallback: (error: any) => {
+        notification.open({
+          message: "Error",
+          description: "Please try again later!",
+          icon: <Icon type="exclamation-circle" style={{ color: "#ff4d4f" }} />
+        });
         dispatch(fetchingAuthError());
       }
     });

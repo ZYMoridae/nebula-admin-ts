@@ -18,6 +18,7 @@ interface LoginProps extends FormComponentProps {
   info: any;
   hideLoginError: any;
   isShowLoginError: boolean;
+  isFetchingAuth: boolean;
 }
 
 class Login extends React.Component<LoginProps> {
@@ -47,7 +48,8 @@ class Login extends React.Component<LoginProps> {
       classes,
       info,
       hideLoginError,
-      isShowLoginError
+      isShowLoginError,
+      isFetchingAuth
     } = this.props;
 
     if (
@@ -109,6 +111,7 @@ class Login extends React.Component<LoginProps> {
                 type="primary"
                 htmlType="submit"
                 className="login-form-button"
+                loading={isFetchingAuth}
               >
                 Log in
               </Button>
