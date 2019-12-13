@@ -9,7 +9,10 @@ let initState: any = {
 
   fetchLogisticProviderPending: false,
   fetchLogisticProviderFulfilled: false,
-  logisticProvider: undefined
+  logisticProvider: undefined,
+
+  updateLogisticProviderPending: false,
+  updateLogisticProviderFulfilled: false
 };
 const LogisticProviderReducer = (state = initState, action: any) => {
   switch (action.type) {
@@ -51,6 +54,23 @@ const LogisticProviderReducer = (state = initState, action: any) => {
         fetchLogisticProviderFulfilled: action.fetchLogisticProviderFulfilled,
         fetchLogisticProviderPending: action.fetchLogisticProviderPending,
         logisticProvider: action.logisticProvider
+      });
+    // UPDATE logistic provider action
+    case ActionType.LOGISTIC_PROVIDER.UPDATE.PENDING:
+      return Object.assign({}, state, {
+        updateLogisticProviderFulfilled: action.updateLogisticProviderFulfilled,
+        updateLogisticProviderPending: action.updateLogisticProviderPending
+      });
+    case ActionType.LOGISTIC_PROVIDER.UPDATE.ERROR:
+      return Object.assign({}, state, {
+        updateLogisticProviderFulfilled: action.updateLogisticProviderFulfilled,
+        updateLogisticProviderPending: action.updateLogisticProviderPending
+      });
+    case ActionType.LOGISTIC_PROVIDER.UPDATE.FULFILLED:
+      return Object.assign({}, state, {
+        updateLogisticProviderFulfilled: action.updateLogisticProviderFulfilled,
+        updateLogisticProviderPending: action.updateLogisticProviderPending
+        // user: action.user
       });
     default:
       return state;

@@ -29,7 +29,8 @@ const Routes = {
     }
   },
   LOGISTIC_PROVIDER: {
-    INDEX: "/logistic-providers"
+    INDEX: "/logistic-providers",
+    EDIT: "/logistic-providers/:id(\\d+)"
   }
 };
 

@@ -30,6 +30,8 @@ import EditUserContainer from "../containers/user/EditUserContainer";
 import NewUserContainer from "../containers/user/NewUserContainer";
 
 import LogisticProviderContainer from "../containers/logistic-provider/LogisticProviderContainer";
+import EditLogisticProviderContainer from "../containers/logistic-provider/EditLogisticProviderContainer";
+
 
 import "./App.css";
 // Ant Design
@@ -127,6 +129,14 @@ const EditUser = ({ match }: { match: any }) => {
   );
 };
 
+const EditLogisticProvider = ({ match }: { match: any }) => {
+  return (
+    <div>
+      <EditLogisticProviderContainer id={match.params.id}></EditLogisticProviderContainer>
+    </div>
+  );
+};
+
 const NewUser = () => {
   return (
     <div>
@@ -187,6 +197,12 @@ class App extends React.Component {
                 exact
                 path={Routes.LOGISTIC_PROVIDER.INDEX}
                 component={LogisticProviders}
+              />
+
+              <PrivateRoute 
+                exact
+                path={Routes.LOGISTIC_PROVIDER.EDIT}
+                component={EditLogisticProvider}
               />
 
               <PrivateRoute

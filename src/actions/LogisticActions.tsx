@@ -114,3 +114,52 @@ export const fetchLogisticProvider = (id: any) => {
     });
   };
 };
+
+// ANCHOR Update logistic provider by id
+export const updateLogisticProviderFulfilled = (logisticProvider: any) => {
+  return {
+    type: ActionType.LOGISTIC_PROVIDER.UPDATE.FULFILLED,
+    updateLogisticProviderPending: false,
+    updateLogisticProviderFulfilled: true,
+    logisticProvider: logisticProvider
+  };
+};
+
+export const updateLogisticProviderPending = () => {
+  return {
+    type: ActionType.LOGISTIC_PROVIDER.UPDATE.PENDING,
+    updateLogisticProviderPending: true,
+    updateLogisticProviderFulfilled: false
+  };
+};
+
+export const updateLogisticProviderError = (error: any) => {
+  return {
+    type: ActionType.LOGISTIC_PROVIDER.UPDATE.ERROR,
+    updateLogisticProviderPending: false,
+    updateLogisticProviderFulfilled: true,
+    error: error
+  };
+};
+
+export const updateLogisticProvider = (logisticProvider: any) => {
+  return function(dispatch: any) {
+    dispatch(updateLogisticProviderPending());
+
+    let options = {
+      method: Zjax.HTTP.METHOD.PUT,
+      data: logisticProvider
+    };
+
+    Zjax.request({
+      url: `/api/logistics-provider`,
+      option: Utils.addToken(options),
+      successCallback: (response: any) => {
+        dispatch(updateLogisticProviderFulfilled(response.data));
+      },
+      failureCallback: (error: any) => {
+        dispatch(updateLogisticProviderError(error));
+      }
+    });
+  };
+};
