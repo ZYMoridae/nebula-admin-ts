@@ -29,6 +29,8 @@ import EditUserContainer from "../containers/user/EditUserContainer";
 
 import NewUserContainer from "../containers/user/NewUserContainer";
 
+import LogisticProviderContainer from "../containers/logistic-provider/LogisticProviderContainer";
+
 import "./App.css";
 // Ant Design
 import { Layout, Menu, Breadcrumb, Icon } from "antd";
@@ -75,6 +77,16 @@ const SkuAttributeCategories = () => {
       <SkuAttributeCategoryContainer
         {...Utils.getPaginationParameter({})}
       ></SkuAttributeCategoryContainer>
+    </div>
+  );
+};
+
+const LogisticProviders = () => {
+  return (
+    <div>
+      <LogisticProviderContainer
+        {...Utils.getPaginationParameter({})}
+      ></LogisticProviderContainer>
     </div>
   );
 };
@@ -134,9 +146,9 @@ class App extends React.Component {
 
           <Layout id="content-sidebar-wrapper">
             {location.pathname !== Routes.USER.LOGIN &&
-            location.pathname !== "/" && (
-              <HeaderBarContainer></HeaderBarContainer>
-            )}
+              location.pathname !== "/" && (
+                <HeaderBarContainer></HeaderBarContainer>
+              )}
 
             <Switch>
               <Route exact path={Routes.USER.LOGIN} component={Login} />
@@ -169,6 +181,12 @@ class App extends React.Component {
                 exact
                 path={Routes.SKU.ATTRIBUTE.CATEGORY.INDEX}
                 component={SkuAttributeCategories}
+              />
+
+              <PrivateRoute 
+                exact
+                path={Routes.LOGISTIC_PROVIDER.INDEX}
+                component={LogisticProviders}
               />
 
               <PrivateRoute

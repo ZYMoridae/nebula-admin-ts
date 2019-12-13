@@ -60,7 +60,7 @@ const productBlock = [
 
 const skuBlock = [
   {
-    name: "Sku Category",
+    name: "Attribute Category",
     path: "/skus/attributes/categories",
     key: 7,
     subKey: "sub3"
@@ -79,8 +79,8 @@ const supportBlock = [
     key: 10
   },
   {
-    name: "Shipper",
-    path: "/shippers",
+    name: "Logistic Provider",
+    path: "/logistic-providers",
     key: 11
   },
   {

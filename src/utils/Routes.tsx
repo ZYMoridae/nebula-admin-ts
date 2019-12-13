@@ -27,6 +27,9 @@ const Routes = {
         EDIT: "/skus/attributes/categories/:id"
       }
     }
+  },
+  LOGISTIC_PROVIDER: {
+    INDEX: "/logistic-providers"
   }
 };
 
