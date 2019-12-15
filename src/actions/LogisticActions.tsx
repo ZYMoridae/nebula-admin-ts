@@ -152,13 +152,63 @@ export const updateLogisticProvider = (logisticProvider: any) => {
     };
 
     Zjax.request({
-      url: `/api/logistics-provider`,
+      url: `/api/logistics-provider/${logisticProvider.id}`,
       option: Utils.addToken(options),
       successCallback: (response: any) => {
         dispatch(updateLogisticProviderFulfilled(response.data));
       },
       failureCallback: (error: any) => {
         dispatch(updateLogisticProviderError(error));
+      }
+    });
+  };
+};
+
+// ANCHOR New logistic provider
+export const createLogisticProviderFulfilled = (logisticProvider: any) => {
+  return {
+    type: ActionType.LOGISTIC_PROVIDER.CREATE.FULFILLED,
+    createLogisticProviderPending: false,
+    createLogisticProviderFulfilled: true,
+    logisticProvider: logisticProvider
+  };
+};
+
+export const createLogisticProviderPending = () => {
+  return {
+    type: ActionType.LOGISTIC_PROVIDER.CREATE.PENDING,
+    createLogisticProviderPending: true,
+    createLogisticProviderFulfilled: false
+  };
+};
+
+export const createLogisticProviderError = (error: any) => {
+  return {
+    type: ActionType.LOGISTIC_PROVIDER.CREATE.ERROR,
+    createLogisticProviderPending: false,
+    createLogisticProviderFulfilled: true,
+    error: error
+  };
+};
+
+export const createLogisticProvider = (logisticProvider: any) => {
+  return function(dispatch: any) {
+    dispatch(createLogisticProviderPending());
+
+    let options = {
+      method: Zjax.HTTP.METHOD.POST,
+      data: logisticProvider
+    };
+
+    Zjax.request({
+      url: `/api/logistics-provider`,
+      option: Utils.addToken(options),
+      successCallback: (response: any) => {
+        window.location.href = `/logistic-providers/${response.data.id}`;
+        dispatch(createLogisticProviderFulfilled(response.data));
+      },
+      failureCallback: (error: any) => {
+        dispatch(createLogisticProviderError(error));
       }
     });
   };

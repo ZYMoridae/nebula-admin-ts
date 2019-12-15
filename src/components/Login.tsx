@@ -67,7 +67,7 @@ class Login extends React.Component<LoginProps> {
     const { getFieldDecorator } = this.props.form;
     return (
       <Row id="form-container" type="flex" justify="center">
-        <Col span={4}>
+        <Col span={3}>
           <Form onSubmit={this.handleSubmit} className="login-form">
             <Title className="login-title" level={4}>Plato Admin</Title>
             <Form.Item>

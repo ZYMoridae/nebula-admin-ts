@@ -31,7 +31,7 @@ import NewUserContainer from "../containers/user/NewUserContainer";
 
 import LogisticProviderContainer from "../containers/logistic-provider/LogisticProviderContainer";
 import EditLogisticProviderContainer from "../containers/logistic-provider/EditLogisticProviderContainer";
-
+import NewLogisticProviderContainer from "../containers/logistic-provider/NewLogisticProviderContainer";
 
 import "./App.css";
 // Ant Design
@@ -93,6 +93,14 @@ const LogisticProviders = () => {
   );
 };
 
+const NewLogisticProviders = () => {
+  return (
+    <div>
+      <NewLogisticProviderContainer />
+    </div>
+  );
+};
+
 const Users = () => {
   return (
     <div>
@@ -132,7 +140,9 @@ const EditUser = ({ match }: { match: any }) => {
 const EditLogisticProvider = ({ match }: { match: any }) => {
   return (
     <div>
-      <EditLogisticProviderContainer id={match.params.id}></EditLogisticProviderContainer>
+      <EditLogisticProviderContainer
+        id={match.params.id}
+      ></EditLogisticProviderContainer>
     </div>
   );
 };
@@ -193,16 +203,22 @@ class App extends React.Component {
                 component={SkuAttributeCategories}
               />
 
-              <PrivateRoute 
+              <PrivateRoute
                 exact
                 path={Routes.LOGISTIC_PROVIDER.INDEX}
                 component={LogisticProviders}
               />
 
-              <PrivateRoute 
+              <PrivateRoute
                 exact
                 path={Routes.LOGISTIC_PROVIDER.EDIT}
                 component={EditLogisticProvider}
+              />
+
+              <PrivateRoute
+                exact
+                path={Routes.LOGISTIC_PROVIDER.NEW}
+                component={NewLogisticProviders}
               />
 
               <PrivateRoute

@@ -8,6 +8,7 @@ import TokenReducer from "./TokenReducer";
 import ProductCategoryReducer from "./ProductCategoryReducer";
 import SkuAttributeCategoryReducer from "./SkuAttributeCategoryReducer";
 import LogisticProviderReducer from "./LogisticProviderReducer";
+import AnalyticsReducer from "./AnalyticsReducer";
 
 const appReducer = combineReducers({
   LoginReducer,
@@ -18,7 +19,8 @@ const appReducer = combineReducers({
   TokenReducer,
   ProductCategoryReducer,
   SkuAttributeCategoryReducer,
-  LogisticProviderReducer
+  LogisticProviderReducer,
+  AnalyticsReducer
 });
 
 export default appReducer;

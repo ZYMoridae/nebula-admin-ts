@@ -5,3 +5,4 @@ export * from './ProductCategoryActions';
 export * from './UserActions';
 export * from './SkuActions';
 export * from './LogisticActions';
+export * from './AnalyticsActions';

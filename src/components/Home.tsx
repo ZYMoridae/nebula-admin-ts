@@ -1,110 +1,43 @@
 import React, { Component } from "react";
-import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core/styles";
 import "react-animated-slider/build/horizontal.css";
-import ChevronRight from "@material-ui/icons/ChevronRight";
-import Grid from "@material-ui/core/Grid";
-import Fade from "@material-ui/core/Fade";
-
-import ContentLoader from "react-content-loader";
 import _ from "lodash";
-import AutorenewIcon from "@material-ui/icons/Autorenew";
-
-import { Bar } from "react-chartjs-2";
-
-import { useTranslation } from "react-i18next";
-
-import Constants from "../utils/Constants";
-
-import { Theme, createStyles } from "@material-ui/core";
 import Footer from "./Footer";
 // Ant Design
 
-import { Layout, Menu, Breadcrumb, Icon } from "antd";
+import {
+  Layout,
+  Menu,
+  Breadcrumb,
+  Icon,
+  Statistic,
+  Row,
+  Col,
+  Button,
+  Card,
+  Skeleton
+} from "antd";
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
-const styles = (theme: Theme) =>
-  createStyles({
-    root: {
-      width: "100%"
-    },
-    heading: {
-      fontSize: theme.typography.pxToRem(15),
-      fontWeight: theme.typography.fontWeightRegular
-    },
-    subHeader: {
-      fontWeight: 600
-    },
-    promotionMetaContainer: {
-      textAlign: "center",
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)"
-    },
-    title: {
-      color: "#3d3d3d"
-    },
-    nav: {
-      color: "#3d3d3d"
-    },
-    blockContainer: {
-      marginTop: theme.spacing(3),
-      marginBottom: theme.spacing(3)
-    },
-    productsHero: {
-      width: "100%",
-      borderBottom: "1px solid #d3d3d3",
-      display: "flex",
-      justifyContent: "space-between"
-    },
-    fetchedProductsContainer: {
-      marginBottom: theme.spacing(3)
-    },
-    renewIcon: {
-      paddingTop: "4px",
-      textAlign: "right",
-      color: theme.palette.primary.main,
-      transition: "all 0.5s",
-      "&:hover": {
-        color: "#d14d12",
-        transition: "all 0.5s"
-      }
-    },
-    wrapperTop: {
-      marginTop: theme.spacing(5)
-    },
-    moreIcon: {
-      fontSize: "0.75rem",
-      lineHeight: "1.66",
-      verticalAlign: "text-top"
-    },
-    // toolbar: theme.mixins.toolbar,
-    content: {
-      marginLeft: Constants.styles.sidebar.width,
-      flexGrow: 1,
-      backgroundColor: theme.palette.background.default,
-      padding: theme.spacing(3)
-    }
-  });
+interface HomeProps {
+  fetchAnalytics: any;
+  fetchAnalyticsPending: boolean;
+  analytics: any;
+}
 
-type HomeState = {};
-
-type HomeProps = {
-  classes: any;
-};
-
-class Home extends React.Component {
+class Home extends React.Component<HomeProps> {
   constructor(props: any) {
     super(props);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    const { fetchAnalytics } = this.props;
+    fetchAnalytics();
+  }
 
   render() {
-    // const { classes } = this.props;
+    const { fetchAnalyticsPending, analytics } = this.props;
 
     const data = {
       labels: ["January", "February", "March", "April", "May", "June", "July"],
@@ -122,58 +55,9 @@ class Home extends React.Component {
     };
 
     return (
-      // <div className={classes.root}>
-      //   <Fade in={true} timeout={1000}>
-      //     <div>
-      //       <main className={classes.content}>
-      //         <div className={classes.toolbar} />
-
-      //         <Bar
-      //           data={data}
-      //           width={100}
-      //           height={50}
-      //           options={{ maintainAspectRatio: false }}
-      //         />
-      //         <Typography paragraph>
-      //           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-      //           eiusmod tempor incididunt ut labore et dolore magna aliqua.
-      //           Rhoncus dolor purus non enim praesent elementum facilisis leo
-      //           vel. Risus at ultrices mi tempus imperdiet. Semper risus in
-      //           hendrerit gravida rutrum quisque non tellus. Convallis convallis
-      //           tellus id interdum velit laoreet id donec ultrices. Odio morbi
-      //           quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-      //           adipiscing bibendum est ultricies integer quis. Cursus euismod
-      //           quis viverra nibh cras. Metus vulputate eu scelerisque felis
-      //           imperdiet proin fermentum leo. Mauris commodo quis imperdiet
-      //           massa tincidunt. Cras tincidunt lobortis feugiat vivamus at
-      //           augue. At augue eget arcu dictum varius duis at consectetur
-      //           lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-      //           sapien faucibus et molestie ac.
-      //         </Typography>
-      //         <Typography paragraph>
-      //           Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
-      //           ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-      //           elementum integer enim neque volutpat ac tincidunt. Ornare
-      //           suspendisse sed nisi lacus sed viverra tellus. Purus sit amet
-      //           volutpat consequat mauris. Elementum eu facilisis sed odio
-      //           morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
-      //           tincidunt ornare massa eget egestas purus viverra accumsan in.
-      //           In hendrerit gravida rutrum quisque non tellus orci ac.
-      //           Pellentesque nec nam aliquam sem et tortor. Habitant morbi
-      //           tristique senectus et. Adipiscing elit duis tristique
-      //           sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-      //           eleifend. Commodo viverra maecenas accumsan lacus vel facilisis.
-      //           Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
-      //         </Typography>
-      //       </main>
-      //     </div>
-      //   </Fade>
-      // </div>
       <Layout style={{ padding: "0 24px 24px" }}>
         <Breadcrumb style={{ margin: "16px 0" }}>
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>List</Breadcrumb.Item>
-          <Breadcrumb.Item>App</Breadcrumb.Item>
+          <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
         </Breadcrumb>
         <Content
           style={{
@@ -183,21 +67,53 @@ class Home extends React.Component {
             minHeight: 280
           }}
         >
-          Content
           <div>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
-            dolor purus non enim praesent elementum facilisis leo vel. Risus at
-            ultrices mi tempus imperdiet. Semper risus in hendrerit gravida
-            rutrum quisque non tellus. Convallis convallis tellus id interdum
-            velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean
-            sed adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies
-            integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
-            eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo
-            quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
-            vivamus at augue. At augue eget arcu dictum varius duis at
-            consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-            donec massa sapien faucibus et molestie ac.
+            <Row gutter={16}>
+              <Col span={12}>
+                <Card>
+                  {fetchAnalyticsPending ? (
+                    <Skeleton />
+                  ) : (
+                    <Statistic
+                      title="Active Users"
+                      prefix={<Icon type="user" />}
+                      valueStyle={{ color: "#1890ff" }}
+                      value={!_.isNil(analytics) ? analytics.activeUsers : 0}
+                    />
+                  )}
+                </Card>
+              </Col>
+              <Col span={12}>
+                <Card>
+                  {fetchAnalyticsPending ? (
+                    <Skeleton />
+                  ) : (
+                    <Statistic
+                      title="Transaction"
+                      prefix={<Icon type="transaction" />}
+                      valueStyle={{ color: "#1890ff" }}
+                      value={!_.isNil(analytics) ? analytics.transaction : 0}
+                    />
+                  )}
+                </Card>
+              </Col>
+            </Row>
+            <Row gutter={[16, 32]}>
+              <Col span={12}>
+                <Card>
+                  {fetchAnalyticsPending ? (
+                    <Skeleton />
+                  ) : (
+                    <Statistic
+                      title="Orders"
+                      prefix={<Icon type="shopping-cart" />}
+                      valueStyle={{ color: "#1890ff" }}
+                      value={!_.isNil(analytics) ? analytics.totalOrders : 0}
+                    />
+                  )}
+                </Card>
+              </Col>
+            </Row>
           </div>
         </Content>
         <Footer></Footer>
@@ -206,4 +122,4 @@ class Home extends React.Component {
   }
 }
 
-export default withStyles(styles)(Home);
+export default Home;

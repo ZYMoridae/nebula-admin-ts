@@ -2,7 +2,8 @@ import { connect } from "react-redux";
 import Home from "../components/Home";
 import {
   // fetchHomeBannerInfo,
-  fetchProductsInfo
+  fetchProductsInfo,
+  fetchAnalytics
 } from "../actions";
 
 const mapStateToProps = (state: any) => {
@@ -14,7 +15,11 @@ const mapStateToProps = (state: any) => {
     isFetchingProducts: state.HomeReducer.isFetchingProducts,
     isFetchedProducts: state.HomeReducer.isFetchedProducts,
     fetchProductsError: state.HomeReducer.fetchProductsError,
-    fetchHomeBannerError: state.HomeReducer.fetchHomeBannerError
+    fetchHomeBannerError: state.HomeReducer.fetchHomeBannerError,
+
+    fetchAnalyticsPending: state.AnalyticsReducer.fetchAnalyticsPending,
+    fetchAnalyticsFulfilled: state.AnalyticsReducer.fetchAnalyticsFulfilled,
+    analytics: state.AnalyticsReducer.analytics
   };
 };
 
@@ -26,6 +31,9 @@ const mapDispatchToProps = (dispatch: any) => {
     // },
     fetchFeaturedProducts: (page: number, perPage: number) => {
       dispatch(fetchProductsInfo(page, perPage, "updatedAt"));
+    },
+    fetchAnalytics: () => {
+      dispatch(fetchAnalytics());
     }
   };
 };

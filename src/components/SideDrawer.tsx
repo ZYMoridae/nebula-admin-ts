@@ -171,6 +171,7 @@ class SideDrawer extends React.Component<SideDrawerProps, SideDrawerState> {
 
   render() {
     const itemClickHandler = (item: any) => {
+      console.log(item);
       if (item.name == "home") {
         window.location.href = "/home";
       } else {
@@ -198,9 +199,16 @@ class SideDrawer extends React.Component<SideDrawerProps, SideDrawerState> {
           defaultOpenKeys={this.state.openKeys}
           // onClick={this.handleClick}
         >
-          <Menu.Item key="1">
+          <Menu.Item
+            key="1"
+            onClick={() => {
+              itemClickHandler({
+                name: "home"
+              });
+            }}
+          >
             <Icon type="pie-chart" />
-            <span>Home</span>
+            <span>Dashboard</span>
           </Menu.Item>
           {/* <Menu.Item key="2">
           <Icon type="desktop" />
