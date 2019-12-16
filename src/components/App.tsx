@@ -33,6 +33,8 @@ import LogisticProviderContainer from "../containers/logistic-provider/LogisticP
 import EditLogisticProviderContainer from "../containers/logistic-provider/EditLogisticProviderContainer";
 import NewLogisticProviderContainer from "../containers/logistic-provider/NewLogisticProviderContainer";
 
+import PageNotFound from "./PageNotFound";
+
 import "./App.css";
 // Ant Design
 import { Layout, Menu, Breadcrumb, Icon } from "antd";
@@ -234,7 +236,11 @@ class App extends React.Component {
               />
               {/* <Route exact path="/test" component={LoginForm} /> */}
               <Route exact path={Routes.USER.LOGIN} component={Login} />
-              <Redirect to={Routes.USER.LOGIN} />
+              {/* <Redirect to={Routes.USER.LOGIN} /> */}
+
+              <Route path="*">
+                <PageNotFound />
+              </Route>
             </Switch>
 
             {/* {location.pathname !== Routes.USER.LOGIN && <Footer></Footer>} */}
