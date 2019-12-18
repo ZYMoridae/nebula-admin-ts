@@ -3,6 +3,7 @@ import "react-animated-slider/build/horizontal.css";
 import _ from "lodash";
 import Footer from "./Footer";
 // Ant Design
+import QueueAnim from "rc-queue-anim";
 
 import {
   Layout,
@@ -56,67 +57,77 @@ class Home extends React.Component<HomeProps> {
 
     return (
       <Layout style={{ padding: "0 24px 24px" }}>
-        <Breadcrumb style={{ margin: "16px 0" }}>
-          <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
-        </Breadcrumb>
-        <Content
-          style={{
-            background: "#fff",
-            padding: 24,
-            margin: 0,
-            minHeight: 280
-          }}
-        >
-          <div>
-            <Row gutter={16}>
-              <Col span={12}>
-                <Card>
-                  {fetchAnalyticsPending ? (
-                    <Skeleton />
-                  ) : (
-                    <Statistic
-                      title="Active Users"
-                      prefix={<Icon type="user" />}
-                      valueStyle={{ color: "#1890ff" }}
-                      value={!_.isNil(analytics) ? analytics.activeUsers : 0}
-                    />
-                  )}
-                </Card>
-              </Col>
-              <Col span={12}>
-                <Card>
-                  {fetchAnalyticsPending ? (
-                    <Skeleton />
-                  ) : (
-                    <Statistic
-                      title="Transaction"
-                      prefix={<Icon type="transaction" />}
-                      valueStyle={{ color: "#1890ff" }}
-                      value={!_.isNil(analytics) ? analytics.transaction : 0}
-                    />
-                  )}
-                </Card>
-              </Col>
-            </Row>
-            <Row gutter={[16, 32]}>
-              <Col span={12}>
-                <Card>
-                  {fetchAnalyticsPending ? (
-                    <Skeleton />
-                  ) : (
-                    <Statistic
-                      title="Orders"
-                      prefix={<Icon type="shopping-cart" />}
-                      valueStyle={{ color: "#1890ff" }}
-                      value={!_.isNil(analytics) ? analytics.totalOrders : 0}
-                    />
-                  )}
-                </Card>
-              </Col>
-            </Row>
+        <QueueAnim delay={300} className="queue-simple">
+          <div key="a">
+            <Breadcrumb style={{ margin: "16px 0" }}>
+              <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
+            </Breadcrumb>
+            <Content
+              style={{
+                background: "#fff",
+                padding: 24,
+                margin: 0,
+                minHeight: 280
+              }}
+            >
+              <div>
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <Card>
+                      {fetchAnalyticsPending ? (
+                        <Skeleton />
+                      ) : (
+                        <Statistic
+                          title="Active Users"
+                          prefix={<Icon type="user" />}
+                          valueStyle={{ color: "#1890ff" }}
+                          value={
+                            !_.isNil(analytics) ? analytics.activeUsers : 0
+                          }
+                        />
+                      )}
+                    </Card>
+                  </Col>
+                  <Col span={12}>
+                    <Card>
+                      {fetchAnalyticsPending ? (
+                        <Skeleton />
+                      ) : (
+                        <Statistic
+                          title="Transaction"
+                          prefix={<Icon type="transaction" />}
+                          valueStyle={{ color: "#1890ff" }}
+                          value={
+                            !_.isNil(analytics) ? analytics.transaction : 0
+                          }
+                        />
+                      )}
+                    </Card>
+                  </Col>
+                </Row>
+                <Row gutter={[16, 32]}>
+                  <Col span={12}>
+                    <Card>
+                      {fetchAnalyticsPending ? (
+                        <Skeleton />
+                      ) : (
+                        <Statistic
+                          title="Orders"
+                          prefix={<Icon type="shopping-cart" />}
+                          valueStyle={{ color: "#1890ff" }}
+                          value={
+                            !_.isNil(analytics) ? analytics.totalOrders : 0
+                          }
+                        />
+                      )}
+                    </Card>
+                  </Col>
+                </Row>
+              </div>
+            </Content>
+            <Footer></Footer>
           </div>
-        </Content>
-        <Footer></Footer>
+        </QueueAnim>
       </Layout>
     );
   }

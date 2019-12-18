@@ -141,7 +141,7 @@ class Products extends React.Component<ProductsProps, ProductsState> {
           }}
         >
           <Row gutter={8} style={{ marginBottom: "8px" }}>
-            <Col span={2} offset={22}>
+            <Col style={{float: "right"}}>
               <Button
                 type="primary"
                 onClick={() => {

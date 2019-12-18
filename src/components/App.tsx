@@ -35,6 +35,8 @@ import NewLogisticProviderContainer from "../containers/logistic-provider/NewLog
 
 import PageNotFound from "./PageNotFound";
 
+import QueueAnim from "rc-queue-anim";
+
 import "./App.css";
 // Ant Design
 import { Layout, Menu, Breadcrumb, Icon } from "antd";
@@ -166,85 +168,95 @@ class App extends React.Component {
           {location.pathname !== Routes.USER.LOGIN &&
             location.pathname !== "/" && <SideDrawer></SideDrawer>}
 
-          <Layout id="content-sidebar-wrapper">
-            {location.pathname !== Routes.USER.LOGIN &&
-              location.pathname !== "/" && (
-                <HeaderBarContainer></HeaderBarContainer>
-              )}
+          {/* <QueueAnim delay={300} className="queue-simple"> */}
+            <Layout id="content-sidebar-wrapper">
+              {location.pathname !== Routes.USER.LOGIN &&
+                location.pathname !== "/" && (
+                  <HeaderBarContainer></HeaderBarContainer>
+                )}
 
-            <Switch>
-              <Route exact path={Routes.USER.LOGIN} component={Login} />
+              <Switch>
+                <Route exact path={Routes.USER.LOGIN} component={Login} />
 
-              <PrivateRoute exact path={Routes.HOME} component={Home} />
+                <PrivateRoute exact path={Routes.HOME} component={Home} />
 
-              <PrivateRoute exact path={Routes.USER.INDEX} component={Users} />
+                <PrivateRoute
+                  exact
+                  path={Routes.USER.INDEX}
+                  component={Users}
+                />
 
-              <PrivateRoute exact path={Routes.USER.NEW} component={NewUser} />
+                <PrivateRoute
+                  exact
+                  path={Routes.USER.NEW}
+                  component={NewUser}
+                />
 
-              <PrivateRoute
-                exact
-                path={Routes.USER.EDIT}
-                component={EditUser}
-              />
+                <PrivateRoute
+                  exact
+                  path={Routes.USER.EDIT}
+                  component={EditUser}
+                />
 
-              <PrivateRoute
-                exact
-                path={Routes.PRODUCT.INDEX}
-                component={Products}
-              />
+                <PrivateRoute
+                  exact
+                  path={Routes.PRODUCT.INDEX}
+                  component={Products}
+                />
 
-              <PrivateRoute
-                exact
-                path={Routes.PRODUCT.CATEGORY.INDEX}
-                component={ProductCategories}
-              />
+                <PrivateRoute
+                  exact
+                  path={Routes.PRODUCT.CATEGORY.INDEX}
+                  component={ProductCategories}
+                />
 
-              <PrivateRoute
-                exact
-                path={Routes.SKU.ATTRIBUTE.CATEGORY.INDEX}
-                component={SkuAttributeCategories}
-              />
+                <PrivateRoute
+                  exact
+                  path={Routes.SKU.ATTRIBUTE.CATEGORY.INDEX}
+                  component={SkuAttributeCategories}
+                />
 
-              <PrivateRoute
-                exact
-                path={Routes.LOGISTIC_PROVIDER.INDEX}
-                component={LogisticProviders}
-              />
+                <PrivateRoute
+                  exact
+                  path={Routes.LOGISTIC_PROVIDER.INDEX}
+                  component={LogisticProviders}
+                />
 
-              <PrivateRoute
-                exact
-                path={Routes.LOGISTIC_PROVIDER.EDIT}
-                component={EditLogisticProvider}
-              />
+                <PrivateRoute
+                  exact
+                  path={Routes.LOGISTIC_PROVIDER.EDIT}
+                  component={EditLogisticProvider}
+                />
 
-              <PrivateRoute
-                exact
-                path={Routes.LOGISTIC_PROVIDER.NEW}
-                component={NewLogisticProviders}
-              />
+                <PrivateRoute
+                  exact
+                  path={Routes.LOGISTIC_PROVIDER.NEW}
+                  component={NewLogisticProviders}
+                />
 
-              <PrivateRoute
-                exact
-                path={Routes.PRODUCT.NEW}
-                component={NewProuctComponent}
-              />
+                <PrivateRoute
+                  exact
+                  path={Routes.PRODUCT.NEW}
+                  component={NewProuctComponent}
+                />
 
-              <PrivateRoute
-                exact
-                path={Routes.PRODUCT.EDIT}
-                component={EditProduct}
-              />
-              {/* <Route exact path="/test" component={LoginForm} /> */}
-              <Route exact path={Routes.USER.LOGIN} component={Login} />
-              {/* <Redirect to={Routes.USER.LOGIN} /> */}
+                <PrivateRoute
+                  exact
+                  path={Routes.PRODUCT.EDIT}
+                  component={EditProduct}
+                />
+                {/* <Route exact path="/test" component={LoginForm} /> */}
+                <Route exact path={Routes.USER.LOGIN} component={Login} />
+                {/* <Redirect to={Routes.USER.LOGIN} /> */}
 
-              <Route path="*">
-                <PageNotFound />
-              </Route>
-            </Switch>
+                <Route path="*">
+                  <PageNotFound />
+                </Route>
+              </Switch>
 
-            {/* {location.pathname !== Routes.USER.LOGIN && <Footer></Footer>} */}
-          </Layout>
+              {/* {location.pathname !== Routes.USER.LOGIN && <Footer></Footer>} */}
+            </Layout>
+          {/* </QueueAnim> */}
           {/* </MuiThemeProvider> */}
         </Layout>
       </Router>
