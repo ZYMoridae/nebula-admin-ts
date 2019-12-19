@@ -89,7 +89,7 @@ class MyFooter extends React.Component{
       //     </Typography>
       //   </div>
       // </div>
-    <Footer style={{ textAlign: 'center' }}>Plato Tech ©{new Date().getFullYear()}</Footer>
+    <Footer style={{ textAlign: 'center' }}>iEuclid Tech ©{new Date().getFullYear()}</Footer>
     );
   }
 }
